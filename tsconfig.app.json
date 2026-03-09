@@ -7,11 +7,14 @@
 
     "paths": {
       "@/*": ["./src/*"],
-      "@layouts/*": ["./src/layouts/*"],
-      "@views/*": ["./src/views/*"],
       "@components/*": ["./src/components/*"],
-      "@styles/*": ["./src/styles/*"]
-
+      "@layouts/*": ["./src/layouts/*"],
+      "@services/*": ["./src/services/*"],
+      "@stores/*": ["./src/stores/*"],
+      "@styles/*": ["./src/styles/*"],
+      "@views/*": ["./src/views/*"],
+      "@interfaces/*": ["./src/interfaces/*"],
+      "@seeders/*": ["./src/seeders/*"],
     }
   }
 }

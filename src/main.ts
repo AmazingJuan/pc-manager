@@ -1,15 +1,27 @@
-// Own imports
-import App from './App.vue'
-import router from './router'
-import './assets/main.css'
+// -------------------------------
+// Own Imports
+// -------------------------------
+import App from './App.vue';
+import './assets/main.css';
+import { ServiceInitializer } from './bootstrap/ServiceInitializer';
+import router from './router';
 
+// -------------------------------
 // Third-Party Imports
-import { createPinia } from 'pinia'
-import { createApp } from 'vue'
+// -------------------------------
+import { createPinia } from 'pinia';
+import { createApp } from 'vue';
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 
-const app = createApp(App)
+const app = createApp(App);
 
-app.use(createPinia())
-app.use(router)
+// He we use a third party pinia plugin to use localStorage persistence.
+const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
 
-app.mount('#app')
+app.use(pinia);
+app.use(router);
+
+ServiceInitializer.initialize();
+
+app.mount('#app');
