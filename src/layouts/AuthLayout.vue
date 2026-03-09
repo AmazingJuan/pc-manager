@@ -1,13 +1,15 @@
 <script setup lang="ts">
+// -------------------------------
 // Third-Party Imports
-import { computed } from 'vue'
-import { Monitor } from 'lucide-vue-next'
-import { useRoute } from 'vue-router'
+// -------------------------------
+import { computed } from 'vue';
+import { Monitor } from 'lucide-vue-next';
+import { useRoute } from 'vue-router';
 
 // Gather title and subtitle
-const route = useRoute()
-const title = computed(() => route.meta.title)
-const subtitle = computed(() => route.meta.subtitle)
+const route = useRoute();
+const title = computed(() => route.meta.title);
+const subtitle = computed(() => route.meta.subtitle);
 </script>
 
 <template>
