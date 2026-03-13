@@ -1,3 +1,5 @@
-// No imports needed
-
-export interface ComputerInterface {}
+export interface ComputerInterface {
+  id: number;
+  name: string;
+  status: 'active' | 'inactive' | 'maintenance';
+}

@@ -10,64 +10,66 @@ import { useUsersStore } from '@stores/UsersStore';
 // Third-Party Imports
 // -------------------------------
 export class UserService {
-  private store: ReturnType<typeof useUsersStore>;
+  private usersStore: ReturnType<typeof useUsersStore>;
   private static instance: UserService;
 
-  private constructor(store: ReturnType<typeof useUsersStore>) {
-    this.store = store;
+  private constructor(usersStore: ReturnType<typeof useUsersStore>) {
+    this.usersStore = usersStore;
   }
 
-  static getInstance(store?: ReturnType<typeof useUsersStore>): UserService {
+  static getInstance(usersStore?: ReturnType<typeof useUsersStore>): UserService {
     if (!this.instance) {
-      if (!store) {
+      if (!usersStore) {
         throw new Error('You should put a store here');
       }
-      this.instance = new UserService(store);
+      this.instance = new UserService(usersStore);
     }
     return this.instance;
   }
 
   login(credentials: LoginDTO): boolean {
-    const user = this.store.users.find(
+    const user = this.usersStore.users.find(
       (currentUser) =>
         currentUser.username === credentials.username &&
         currentUser.password === credentials.password,
     );
 
     if (user) {
-      this.store.setLoggedInUser(user);
+      this.usersStore.setLoggedInUser(user);
       return true;
     }
 
     return false;
   }
 
-  register(data: RegisterDTO): boolean {
-    const userExists = this.store.users.some(
-      (currentUser) => currentUser.username === data.username || currentUser.email === data.email,
+  register(registerData: RegisterDTO): boolean {
+    const userExists = this.usersStore.users.some(
+      (currentUser) =>
+        currentUser.username === registerData.username ||
+        currentUser.email === registerData.email,
     );
 
     if (userExists) {
       return false;
     }
 
-    const newId = this.store.users.length
-      ? Math.max(...this.store.users.map((user) => user.id)) + 1
+    const newId = this.usersStore.users.length
+      ? Math.max(...this.usersStore.users.map((user) => user.id)) + 1
       : 1;
 
     const newUser: UserInterface = {
       id: newId,
-      name: data.name,
-      username: data.username,
-      email: data.email,
-      password: data.password,
+      name: registerData.name,
+      username: registerData.username,
+      email: registerData.email,
+      password: registerData.password,
       role: 'user',
       createdAt: new Date(),
       computers: null,
     };
 
-    this.store.users.push(newUser);
-    this.store.setLoggedInUser(newUser);
+    this.usersStore.users.push(newUser);
+    this.usersStore.setLoggedInUser(newUser);
 
     return true;
   }

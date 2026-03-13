@@ -1,7 +1,7 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import type { ComputerInterface } from '@/interfaces/Computer';
+import type { ComputerInterface } from '@/interfaces/ComputerInterface';
 
 export interface UserInterface {
   id: number;
