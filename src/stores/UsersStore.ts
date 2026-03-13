@@ -1,8 +1,8 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import type { UserInterface } from '@interfaces/UserInterface';
 import { users } from '@seeders/UserSeeder';
+import type { UserInterface } from '@interfaces/UserInterface';
 
 // -------------------------------
 // Third-Party Imports

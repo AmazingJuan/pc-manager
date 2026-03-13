@@ -2,8 +2,8 @@
 // -------------------------------
 // Third-Party Imports
 // -------------------------------
-import { computed } from 'vue';
 import { Monitor } from 'lucide-vue-next';
+import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 
 // Gather title and subtitle

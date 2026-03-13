@@ -7,14 +7,20 @@
 
     "paths": {
       "@/*": ["./src/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@bootstrap/*": ["./src/bootstrap/*"],
       "@components/*": ["./src/components/*"],
+      "@dtos/*": ["./src/dtos/*"],
+      "@interfaces/*": ["./src/interfaces/*"],
       "@layouts/*": ["./src/layouts/*"],
+      "@router/*": ["./src/router/*"],
+      "@schemas/*": ["./src/schemas/*"],
+      "@seeders/*": ["./src/seeders/*"],
       "@services/*": ["./src/services/*"],
       "@stores/*": ["./src/stores/*"],
       "@styles/*": ["./src/styles/*"],
-      "@views/*": ["./src/views/*"],
-      "@interfaces/*": ["./src/interfaces/*"],
-      "@seeders/*": ["./src/seeders/*"],
+      "@types/*": ["./src/types/*"],
+      "@views/*": ["./src/views/*"]
     }
   }
 }
