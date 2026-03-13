@@ -3,4 +3,4 @@
 // -------------------------------
 import type { UserInterface } from '@interfaces/UserInterface';
 
-export type LoginDTO = Pick<UserInterface, 'username' | 'password'>;
+export type RegisterDTO = Omit<UserInterface, 'id' | 'role' | 'createdAt' | 'computers'>;

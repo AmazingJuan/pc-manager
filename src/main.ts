@@ -1,10 +1,10 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import App from './App.vue';
-import './assets/main.css';
-import { ServiceInitializer } from './bootstrap/ServiceInitializer';
-import router from './router';
+import App from '@/App.vue';
+import { ServiceInitializer } from '@bootstrap/ServiceInitializer';
+import router from '@/router';
+import '@assets/main.css';
 
 // -------------------------------
 // Third-Party Imports
