@@ -1,4 +1,112 @@
 <!-- Author: Juan Manuel Zapata -->
+
+<script setup lang="ts">
+// -------------------------------
+// Own Imports
+// -------------------------------
+import StatCard from '@components/StatCard.vue';
+import { getComponents, getPCs, getUsers } from '@services/localStorage';
+
+// -------------------------------
+// Third-Party Imports
+// -------------------------------
+
+import { computed, onMounted, ref } from 'vue';
+import {
+  Monitor,
+  Cpu,
+  Users,
+  Activity,
+  TrendingUp,
+  AlertTriangle,
+} from 'lucide-vue-next';
+
+
+interface Stats {
+  totalPCs: number;
+  activePCs: number;
+  totalComponents: number;
+  availableComponents: number;
+  totalUsers: number;
+  maintenancePCs: number;
+}
+
+const stats = ref<Stats>({
+  totalPCs: 0,
+  activePCs: 0,
+  totalComponents: 0,
+  availableComponents: 0,
+  totalUsers: 0,
+  maintenancePCs: 0,
+});
+
+const chartData = ref<Array<{ name: string; count: number }>>([
+  { name: 'Activos', count: 0 },
+  { name: 'Inactivos', count: 0 },
+  { name: 'Mantenimiento', count: 0 },
+]);
+const pieData = ref<Array<{ name: string; value: number }>>([
+  { name: 'Disponibles', value: 0 },
+  { name: 'En Uso', value: 0 },
+  { name: 'Mantenimiento', value: 0 },
+  { name: 'Dañados', value: 0 },
+]);
+
+const pieColors = ['#dc2626', '#ef4444', '#f87171', '#fca5a5'];
+
+const loadDashboardStats = () => {
+  const pcs = getPCs();
+  const components = getComponents();
+  const users = getUsers();
+
+  stats.value = {
+    totalPCs: pcs.length,
+    activePCs: pcs.filter((pc) => pc.status === 'active').length,
+    totalComponents: components.length,
+    availableComponents: components.filter((c) => c.status === 'available').length,
+    totalUsers: users.length,
+    maintenancePCs: pcs.filter((pc) => pc.status === 'maintenance').length,
+  };
+
+  chartData.value = [
+    { name: 'Activos', count: pcs.filter((pc) => pc.status === 'active').length },
+    { name: 'Inactivos', count: pcs.filter((pc) => pc.status === 'inactive').length },
+    { name: 'Mantenimiento', count: pcs.filter((pc) => pc.status === 'maintenance').length },
+  ];
+
+  pieData.value = [
+    { name: 'Disponibles', value: components.filter((c) => c.status === 'available').length },
+    { name: 'En Uso', value: components.filter((c) => c.status === 'in-use').length },
+    { name: 'Mantenimiento', value: components.filter((c) => c.status === 'maintenance').length },
+    { name: 'Dañados', value: components.filter((c) => c.status === 'damaged').length },
+  ];
+};
+
+const maxBarCount = computed(() => Math.max(...chartData.value.map((item) => item.count), 1));
+
+const barWidth = (count: number) => `${Math.round((count / maxBarCount.value) * 100)}%`;
+
+const barColor = (name: string) => {
+  if (name === 'Activos') return 'bg-emerald-500';
+  if (name === 'Inactivos') return 'bg-slate-400';
+  return 'bg-amber-400';
+};
+
+const piePercent = (value: number) => {
+  const total = pieData.value.reduce((sum, item) => sum + item.value, 0);
+  if (total === 0) return 0;
+  return Math.round((value / total) * 100);
+};
+
+const availabilityRate = computed(() => {
+  if (stats.value.totalPCs === 0) return 0;
+  return ((stats.value.activePCs / stats.value.totalPCs) * 100).toFixed(1);
+});
+
+onMounted(loadDashboardStats);
+</script>
+
+
 <template>
   <div class="space-y-10">
     <div class="mb-6">
@@ -143,100 +251,3 @@
 
   </div>
 </template>
-
-<script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
-import {
-  Monitor,
-  Cpu,
-  Users,
-  Activity,
-  TrendingUp,
-  AlertTriangle,
-} from 'lucide-vue-next';
-import StatCard from '@components/StatCard.vue';
-import { getComponents, getPCs, getUsers } from '@services/localStorage';
-
-interface Stats {
-  totalPCs: number;
-  activePCs: number;
-  totalComponents: number;
-  availableComponents: number;
-  totalUsers: number;
-  maintenancePCs: number;
-}
-
-const stats = ref<Stats>({
-  totalPCs: 0,
-  activePCs: 0,
-  totalComponents: 0,
-  availableComponents: 0,
-  totalUsers: 0,
-  maintenancePCs: 0,
-});
-
-const chartData = ref<Array<{ name: string; count: number }>>([
-  { name: 'Activos', count: 0 },
-  { name: 'Inactivos', count: 0 },
-  { name: 'Mantenimiento', count: 0 },
-]);
-const pieData = ref<Array<{ name: string; value: number }>>([
-  { name: 'Disponibles', value: 0 },
-  { name: 'En Uso', value: 0 },
-  { name: 'Mantenimiento', value: 0 },
-  { name: 'Dañados', value: 0 },
-]);
-
-const pieColors = ['#dc2626', '#ef4444', '#f87171', '#fca5a5'];
-
-const loadDashboardStats = () => {
-  const pcs = getPCs();
-  const components = getComponents();
-  const users = getUsers();
-
-  stats.value = {
-    totalPCs: pcs.length,
-    activePCs: pcs.filter((pc) => pc.status === 'active').length,
-    totalComponents: components.length,
-    availableComponents: components.filter((c) => c.status === 'available').length,
-    totalUsers: users.length,
-    maintenancePCs: pcs.filter((pc) => pc.status === 'maintenance').length,
-  };
-
-  chartData.value = [
-    { name: 'Activos', count: pcs.filter((pc) => pc.status === 'active').length },
-    { name: 'Inactivos', count: pcs.filter((pc) => pc.status === 'inactive').length },
-    { name: 'Mantenimiento', count: pcs.filter((pc) => pc.status === 'maintenance').length },
-  ];
-
-  pieData.value = [
-    { name: 'Disponibles', value: components.filter((c) => c.status === 'available').length },
-    { name: 'En Uso', value: components.filter((c) => c.status === 'in-use').length },
-    { name: 'Mantenimiento', value: components.filter((c) => c.status === 'maintenance').length },
-    { name: 'Dañados', value: components.filter((c) => c.status === 'damaged').length },
-  ];
-};
-
-const maxBarCount = computed(() => Math.max(...chartData.value.map((item) => item.count), 1));
-
-const barWidth = (count: number) => `${Math.round((count / maxBarCount.value) * 100)}%`;
-
-const barColor = (name: string) => {
-  if (name === 'Activos') return 'bg-emerald-500';
-  if (name === 'Inactivos') return 'bg-slate-400';
-  return 'bg-amber-400';
-};
-
-const piePercent = (value: number) => {
-  const total = pieData.value.reduce((sum, item) => sum + item.value, 0);
-  if (total === 0) return 0;
-  return Math.round((value / total) * 100);
-};
-
-const availabilityRate = computed(() => {
-  if (stats.value.totalPCs === 0) return 0;
-  return ((stats.value.activePCs / stats.value.totalPCs) * 100).toFixed(1);
-});
-
-onMounted(loadDashboardStats);
-</script>

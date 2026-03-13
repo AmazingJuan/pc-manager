@@ -1,4 +1,69 @@
 <!-- Author: Juan Manuel Zapata -->
+<script setup lang="ts">
+
+// -------------------------------
+// Own Imports
+// -------------------------------
+import type { ComponentInterface } from '@interfaces/ComponentInterface';
+import { getComponents, addComponent, updateComponent, deleteComponent } from '@services/localStorage';
+
+// -------------------------------
+// Third-Party Imports
+// -------------------------------
+
+import { onMounted, ref } from 'vue';
+
+const componentList = ref<ComponentInterface[]>([]);
+
+const editingComponent = ref<ComponentInterface | null>(null);
+const componentForm = ref<{ name: string; status: ComponentInterface['status'] }>({
+  name: '',
+  status: 'available',
+});
+
+const loadInventoryComponents = () => {
+  componentList.value = getComponents();
+};
+
+const resetComponentForm = () => {
+  editingComponent.value = null;
+  componentForm.value = { name: '', status: 'available' };
+};
+
+const editComponent = (component: ComponentInterface) => {
+  editingComponent.value = component;
+  componentForm.value = { name: component.name, status: component.status };
+};
+
+const saveComponent = () => {
+  if (!componentForm.value.name.trim()) return;
+
+  if (editingComponent.value) {
+    updateComponent(editingComponent.value.id, {
+      name: componentForm.value.name,
+      status: componentForm.value.status,
+    });
+  } else {
+    addComponent({
+      name: componentForm.value.name,
+      status: componentForm.value.status,
+    });
+  }
+
+  loadComponents();
+  resetComponentForm();
+};
+
+const removeComponent = (id: number) => {
+  deleteComponent(id);
+  if (editingComponent.value?.id === id) resetComponentForm();
+  loadComponents();
+};
+
+onMounted(loadInventoryComponents);
+</script>
+
+
 <template>
   <div class="space-y-6">
     <div class="flex items-center justify-between">
@@ -98,58 +163,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import type { ComponentInterface } from '@interfaces/ComponentInterface';
-import { onMounted, ref } from 'vue';
-import { getComponents, addComponent, updateComponent, deleteComponent } from '@services/localStorage';
-
-const componentList = ref<ComponentInterface[]>([]);
-
-const editingComponent = ref<ComponentInterface | null>(null);
-const componentForm = ref<{ name: string; status: ComponentInterface['status'] }>({
-  name: '',
-  status: 'available',
-});
-
-const loadInventoryComponents = () => {
-  componentList.value = getComponents();
-};
-
-const resetComponentForm = () => {
-  editingComponent.value = null;
-  componentForm.value = { name: '', status: 'available' };
-};
-
-const editComponent = (component: ComponentInterface) => {
-  editingComponent.value = component;
-  componentForm.value = { name: component.name, status: component.status };
-};
-
-const saveComponent = () => {
-  if (!componentForm.value.name.trim()) return;
-
-  if (editingComponent.value) {
-    updateComponent(editingComponent.value.id, {
-      name: componentForm.value.name,
-      status: componentForm.value.status,
-    });
-  } else {
-    addComponent({
-      name: componentForm.value.name,
-      status: componentForm.value.status,
-    });
-  }
-
-  loadComponents();
-  resetComponentForm();
-};
-
-const removeComponent = (id: number) => {
-  deleteComponent(id);
-  if (editingComponent.value?.id === id) resetComponentForm();
-  loadComponents();
-};
-
-onMounted(loadInventoryComponents);
-</script>

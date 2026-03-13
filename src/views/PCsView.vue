@@ -1,4 +1,69 @@
 <!-- Author: Juan Manuel Zapata -->
+<script setup lang="ts">
+
+// -------------------------------
+// Own Imports
+// -------------------------------
+import type { ComputerInterface } from '@interfaces/ComputerInterface';
+import { getPCs, addPC, updatePC, deletePC } from '@services/localStorage';
+
+// -------------------------------
+// Third-Party Imports
+// -------------------------------
+import { onMounted, ref } from 'vue';
+
+
+const pcList = ref<ComputerInterface[]>([]);
+
+const editingPc = ref<ComputerInterface | null>(null);
+const pcForm = ref<{ name: string; status: ComputerInterface['status'] }>({
+  name: '',
+  status: 'active',
+});
+
+const loadRegisteredPCs = () => {
+  pcList.value = getPCs();
+};
+
+const resetPcForm = () => {
+  editingPc.value = null;
+  pcForm.value = { name: '', status: 'active' };
+};
+
+const editPc = (pc: ComputerInterface) => {
+  editingPc.value = pc;
+  pcForm.value = { name: pc.name, status: pc.status };
+};
+
+const savePc = () => {
+  if (!pcForm.value.name.trim()) return;
+
+  if (editingPc.value) {
+    updatePC(editingPc.value.id, {
+      name: pcForm.value.name,
+      status: pcForm.value.status,
+    });
+  } else {
+    addPC({
+      name: pcForm.value.name,
+      status: pcForm.value.status,
+    });
+  }
+
+  loadPCs();
+  resetPcForm();
+};
+
+const removePc = (id: number) => {
+  deletePC(id);
+  if (editingPc.value?.id === id) resetPcForm();
+  loadPCs();
+};
+
+onMounted(loadRegisteredPCs);
+</script>
+
+
 <template>
   <div class="space-y-6">
     <div class="flex items-center justify-between">
@@ -98,57 +163,3 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import type { ComputerInterface } from '@interfaces/ComputerInterface';
-import { onMounted, ref } from 'vue';
-import { getPCs, addPC, updatePC, deletePC } from '@services/localStorage';
-
-const pcList = ref<ComputerInterface[]>([]);
-
-const editingPc = ref<ComputerInterface | null>(null);
-const pcForm = ref<{ name: string; status: ComputerInterface['status'] }>({
-  name: '',
-  status: 'active',
-});
-
-const loadRegisteredPCs = () => {
-  pcList.value = getPCs();
-};
-
-const resetPcForm = () => {
-  editingPc.value = null;
-  pcForm.value = { name: '', status: 'active' };
-};
-
-const editPc = (pc: ComputerInterface) => {
-  editingPc.value = pc;
-  pcForm.value = { name: pc.name, status: pc.status };
-};
-
-const savePc = () => {
-  if (!pcForm.value.name.trim()) return;
-
-  if (editingPc.value) {
-    updatePC(editingPc.value.id, {
-      name: pcForm.value.name,
-      status: pcForm.value.status,
-    });
-  } else {
-    addPC({
-      name: pcForm.value.name,
-      status: pcForm.value.status,
-    });
-  }
-
-  loadPCs();
-  resetPcForm();
-};
-
-const removePc = (id: number) => {
-  deletePC(id);
-  if (editingPc.value?.id === id) resetPcForm();
-  loadPCs();
-};
-
-onMounted(loadRegisteredPCs);
-</script>

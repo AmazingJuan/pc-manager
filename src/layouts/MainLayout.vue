@@ -1,4 +1,20 @@
 <!-- Author: Juan Manuel Zapata -->
+<script setup lang="ts">
+import { useRoute } from 'vue-router';
+import { Monitor, Cpu, LayoutGrid } from 'lucide-vue-next';
+import { RouterLink, RouterView } from 'vue-router';
+
+const route = useRoute();
+
+const navItems = [
+  { to: '/dashboard', label: 'Dashboard', icon: LayoutGrid },
+  { to: '/pcs', label: 'PCs', icon: Monitor },
+  { to: '/components', label: 'Componentes', icon: Cpu },
+];
+
+const isActive = (to: string) => route.path === to;
+</script>
+
 <template>
   <div class="min-h-screen bg-background flex px-4 py-6 gap-6">
     <aside class="hidden md:flex flex-col w-72 bg-card border-r border-border p-6">
@@ -37,18 +53,3 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { useRoute } from 'vue-router';
-import { Monitor, Cpu, LayoutGrid } from 'lucide-vue-next';
-import { RouterLink, RouterView } from 'vue-router';
-
-const route = useRoute();
-
-const navItems = [
-  { to: '/dashboard', label: 'Dashboard', icon: LayoutGrid },
-  { to: '/pcs', label: 'PCs', icon: Monitor },
-  { to: '/components', label: 'Componentes', icon: Cpu },
-];
-
-const isActive = (to: string) => route.path === to;
-</script>
