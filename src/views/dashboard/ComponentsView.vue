@@ -116,15 +116,18 @@ function closeModal(): void {
 }
 
 // -------------------------------
-// Lifecycle Hooks
+// Watchers
 // -------------------------------
-onMounted(loadData);
 
 onUnmounted(() => {
   if (successTimeout) {
     clearTimeout(successTimeout);
   }
 });
+
+// -------------------------------
+
+onMounted(loadData);
 </script>
 
 <template>
