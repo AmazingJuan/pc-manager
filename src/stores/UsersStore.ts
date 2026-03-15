@@ -1,8 +1,9 @@
+// Author: Juan Pablo Avendaño
+
 // -------------------------------
 // Own Imports
 // -------------------------------
 import { users } from '@seeders/UserSeeder';
-import type { UserInterface } from '@interfaces/UserInterface';
 
 // -------------------------------
 // Third-Party Imports
@@ -12,12 +13,14 @@ import { defineStore } from 'pinia';
 export const useUsersStore = defineStore('users', {
   state: () => ({
     users: users,
-    loggedInUser: null as UserInterface | null,
+    lastId: users.length,
   }),
-  actions: {
-    setLoggedInUser(user: UserInterface | null) {
-      this.loggedInUser = user;
+  persist: {
+    afterHydrate: (ctx) => {
+      ctx.store.users = ctx.store.users.map((user: { createdAt: string | Date }) => ({
+        ...user,
+        createdAt: new Date(user.createdAt),
+      }));
     },
   },
-  persist: true,
 });

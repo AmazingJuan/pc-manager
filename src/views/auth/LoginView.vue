@@ -1,13 +1,15 @@
+<!-- Author: Juan Pablo Avendaño -->
+
 <script setup lang="ts">
 // -------------------------------
 // Own Imports
 // -------------------------------
+import { AuthService } from '@services/AuthService';
+import type { LoginDTO } from '@dtos/auth/LoginDTO';
 import { LoginSchema } from '@schemas/user/LoginSchema';
-import { UserService } from '@services/UserService';
-import type { LoginDTO } from '@dtos/user/LoginDTO';
 
 // -------------------------------
-// Third-Party Imports
+// Third Party Imports
 // -------------------------------
 import { ErrorMessage, Field, Form } from 'vee-validate';
 import { Lock, User } from 'lucide-vue-next';
@@ -15,37 +17,40 @@ import { ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 
 // -------------------------------
-// Setup
+// Non Reactive Variables
 // -------------------------------
 const router = useRouter();
-const userService = UserService.getInstance();
+const authService = AuthService.getInstance();
 
-const generalError = ref<string>('');
+// -------------------------------
+// Reactive Variables
+// -------------------------------
+const error = ref('');
 
 // -------------------------------
 // Functions
 // -------------------------------
-function onSubmit(values: Record<string, unknown>): void {
+function handleSubmit(values: Record<string, unknown>): void {
   const credentials: LoginDTO = {
-    username: String(values.username ?? ''),
-    password: String(values.password ?? ''),
+    username: String(values.username),
+    password: String(values.password),
   };
 
-  const success = userService.login(credentials);
+  const success = authService.login(credentials);
 
   if (success) {
-    generalError.value = '';
+    error.value = '';
     router.push({ name: 'dashboard' });
     return;
   }
 
-  generalError.value = 'Invalid credentials';
+  error.value = 'Invalid credentials';
 }
 </script>
 
 <template>
   <!-- Login Form -->
-  <Form @submit="onSubmit" :validation-schema="LoginSchema" class="space-y-6">
+  <Form @submit="handleSubmit" :validation-schema="LoginSchema" class="space-y-6">
     <!-- Username field -->
     <div>
       <label class="block text-sm text-foreground mb-2"> Username </label>
@@ -88,13 +93,13 @@ function onSubmit(values: Record<string, unknown>): void {
 
     <!-- Error message card -->
     <div
-      v-if="generalError"
+      v-if="error"
       role="alert"
       aria-live="polite"
       class="mt-4 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3"
     >
       <p class="text-sm font-medium text-destructive-foreground">Login error</p>
-      <p class="mt-1 text-xs text-destructive-foreground/90">{{ generalError }}</p>
+      <p class="mt-1 text-xs text-destructive-foreground/90">{{ error }}</p>
     </div>
 
     <!-- Login Button -->

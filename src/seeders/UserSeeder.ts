@@ -1,3 +1,5 @@
+// Author: Juan Pablo Avendaño
+
 // -------------------------------
 // Own Imports
 // -------------------------------
@@ -12,6 +14,6 @@ export const users: UserInterface[] = [
     password: 'admin',
     role: 'admin',
     createdAt: new Date(),
-    computers: null,
+    computerIds: null,
   },
 ];

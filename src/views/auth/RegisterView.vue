@@ -1,13 +1,15 @@
+<!-- Author: Juan Pablo Avendaño -->
+ 
 <script setup lang="ts">
 // -------------------------------
 // Own Imports
 // -------------------------------
+import { AuthService } from '@services/AuthService';
+import type { RegisterDTO } from '@dtos/auth/RegisterDTO';
 import { RegisterSchema } from '@schemas/user/RegisterSchema';
-import { UserService } from '@services/UserService';
-import type { RegisterDTO } from '@dtos/user/RegisterDTO';
 
 // -------------------------------
-// Third-Party Imports
+// Third Party Imports
 // -------------------------------
 import { ArrowLeft, Lock, Mail, User } from 'lucide-vue-next';
 import { ErrorMessage, Field, Form } from 'vee-validate';
@@ -15,11 +17,14 @@ import { ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 
 // -------------------------------
-// Setup
+// Non Reactive Variables
 // -------------------------------
 const router = useRouter();
-const userService = UserService.getInstance();
+const authService = AuthService.getInstance();
 
+// -------------------------------
+// Reactive Variables
+// -------------------------------
 const error = ref('');
 
 // -------------------------------
@@ -33,7 +38,7 @@ function onSubmit(values: Record<string, unknown>): void {
     password: String(values.password ?? ''),
   };
 
-  const success = userService.register(registerData);
+  const success = authService.register(registerData);
 
   if (success) {
     error.value = '';

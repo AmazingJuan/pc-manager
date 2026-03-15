@@ -1,3 +1,5 @@
+// Author: Juan Pablo Avendaño
+
 // -------------------------------
 // Third-Party Imports
 // -------------------------------
@@ -21,5 +23,3 @@ export const RegisterSchema = yup.object({
     .required('Password is required')
     .min(8, 'Password must be at least 8 characters'),
 });
-
-export type RegisterData = yup.InferType<typeof RegisterSchema>;

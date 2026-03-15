@@ -3,13 +3,13 @@
 // Own Imports
 // -------------------------------
 import AuthLayout from '@layouts/AuthLayout.vue';
+import { AuthService } from '@services/AuthService';
+import MainLayout from '@layouts/MainLayout.vue';
 
-// -------------------------------
-// Third-Party Imports
-// -------------------------------
-import { RouterLink, RouterView } from 'vue-router';
+const authService = AuthService.getInstance();
 </script>
 
 <template>
-  <AuthLayout />
+  <MainLayout v-if="authService.hasLoggedInUser()" />
+  <AuthLayout v-else />
 </template>
