@@ -8,6 +8,7 @@ import ComputersView from '@views/dashboard/ComputersView.vue';
 import IndexView from '@/views/dashboard/IndexView.vue';
 import LoginView from '@views/auth/LoginView.vue';
 import RegisterView from '@views/auth/RegisterView.vue';
+import UsersView from '@views/dashboard/UsersView.vue';
 
 // -------------------------------
 // Third-Party Imports
@@ -22,7 +23,7 @@ const routes = [
   { path: '/dashboard', name: 'dashboard', component: IndexView },
   { path: '/dashboard/computers', name: 'computers', component: ComputersView },
   { path: '/dashboard/components', name: 'components', component: IndexView },
-  { path: '/dashboard/users', name: 'users', component: IndexView },
+  { path: '/dashboard/users', name: 'users', component: UsersView },
   { path: '/dashboard/log', name: 'computers-status-log', component: IndexView },
   { path: '/dashboard/reports', name: 'reports', component: IndexView },
   { path: '/dashboard/inventory', name: 'inventory', component: IndexView },

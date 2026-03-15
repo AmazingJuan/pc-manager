@@ -4,6 +4,8 @@
 // Own Imports
 // -------------------------------
 import type { UserInterface } from '@interfaces/UserInterface';
+import type { CreateUserDTO } from '@dtos/user/CreateUserDTO';
+import type { EditUserDTO } from '@dtos/user/EditUserDTO';
 import { useUsersStore } from '@stores/UsersStore';
 
 export class UserService {
@@ -26,5 +28,21 @@ export class UserService {
 
   getAll(): UserInterface[] {
     return this.usersStore.users;
+  }
+
+  getById(id: number): UserInterface | undefined {
+    return this.usersStore.users.find((user) => user.id === id);
+  }
+
+  create(userData: CreateUserDTO): UserInterface {
+    return this.usersStore.addUser(userData);
+  }
+
+  update(id: number, userData: EditUserDTO): boolean {
+    return this.usersStore.updateUserById(id, userData);
+  }
+
+  delete(id: number): boolean {
+    return this.usersStore.deleteUserById(id);
   }
 }
