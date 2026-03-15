@@ -1,11 +1,12 @@
+<!-- Author: Juan Pablo Avendaño -->
 <script setup lang="ts">
 // -------------------------------
 // Own Imports
 // -------------------------------
-import type { UserInterface } from '@interfaces/UserInterface';
 import type { CreateUserDTO } from '@dtos/user/CreateUserDTO';
-import type { EditUserDTO } from '@dtos/user/EditUserDTO';
 import { createUserSchema } from '@schemas/user/UserSchema';
+import type { EditUserDTO } from '@dtos/user/EditUserDTO';
+import type { UserInterface } from '@interfaces/UserInterface';
 
 // -------------------------------
 // Third Party Imports

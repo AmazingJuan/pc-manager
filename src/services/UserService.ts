@@ -3,9 +3,9 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import type { UserInterface } from '@interfaces/UserInterface';
 import type { CreateUserDTO } from '@dtos/user/CreateUserDTO';
 import type { EditUserDTO } from '@dtos/user/EditUserDTO';
+import type { UserInterface } from '@interfaces/UserInterface';
 import { useUsersStore } from '@stores/UsersStore';
 
 export class UserService {

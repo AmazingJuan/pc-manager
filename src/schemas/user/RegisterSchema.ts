@@ -1,10 +1,14 @@
 // Author: Juan Pablo Avendaño
 
 // -------------------------------
+// Own Imports
+// -------------------------------
+import { UserService } from '@services/UserService';
+
+// -------------------------------
 // Third-Party Imports
 // -------------------------------
 import * as yup from 'yup';
-import { UserService } from '@services/UserService';
 
 function asString(value: unknown): string {
   return String(value ?? '');

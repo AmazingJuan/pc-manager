@@ -5,8 +5,8 @@
 // -------------------------------
 import type { LoginDTO } from '@dtos/auth/LoginDTO';
 import type { RegisterDTO } from '@dtos/auth/RegisterDTO';
-import type { UserInterface } from '@interfaces/UserInterface';
 import { useAuthStore } from '@stores/AuthStore';
+import type { UserInterface } from '@interfaces/UserInterface';
 import { useUsersStore } from '@stores/UsersStore';
 
 export class AuthService {

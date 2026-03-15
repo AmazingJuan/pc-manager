@@ -11,8 +11,8 @@ import { RegisterSchema } from '@schemas/user/RegisterSchema';
 // -------------------------------
 // Third Party Imports
 // -------------------------------
-import { ArrowLeft, Lock, Mail, User } from 'lucide-vue-next';
 import { ErrorMessage, Field, Form } from 'vee-validate';
+import { ArrowLeft, Lock, Mail, User } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 

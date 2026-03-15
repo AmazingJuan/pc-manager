@@ -2,12 +2,12 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import type { UserInterface } from '@interfaces/UserInterface';
-import { UserService } from '@services/UserService';
 import type { CreateUserDTO } from '@dtos/user/CreateUserDTO';
 import type { EditUserDTO } from '@dtos/user/EditUserDTO';
 import ModalComponent from '@components/dashboard/ModalComponent.vue';
 import UserForm from '@components/dashboard/users/UserFormComponent.vue';
+import type { UserInterface } from '@interfaces/UserInterface';
+import { UserService } from '@services/UserService';
 import UserTable from '@components/dashboard/users/UserTableComponent.vue';
 
 // -------------------------------

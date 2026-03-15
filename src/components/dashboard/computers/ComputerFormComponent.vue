@@ -5,12 +5,12 @@
 // -------------------------------
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
 import type { ComputerInterface } from '@interfaces/ComputerInterface';
+import { ComputerSchema } from '@schemas/computer/ComputerSchema';
 import type { ComputerStatus } from '@/types/Computer';
 import type { CreateComputerDTO } from '@dtos/computer/CreateComputerDTO';
 import type { EditComputerDTO } from '@dtos/computer/EditComputerDTO';
-import { ComputerSchema } from '@schemas/computer/ComputerSchema';
-import { Formatter } from '@utils/Formatter';
 import type { UserInterface } from '@interfaces/UserInterface';
+import { Formatter } from '@utils/Formatter';
 
 // -------------------------------
 // Third Party Imports

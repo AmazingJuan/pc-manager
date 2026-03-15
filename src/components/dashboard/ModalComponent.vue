@@ -1,3 +1,4 @@
+<!-- Author: Juan Pablo Avendaño -->
 <script setup lang="ts">
 // -------------------------------
 // Props

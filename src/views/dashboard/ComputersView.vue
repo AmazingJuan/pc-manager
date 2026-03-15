@@ -5,12 +5,12 @@
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
 import { ComponentService } from '@services/ComponentService';
 import ComputerForm from '@components/dashboard/computers/ComputerFormComponent.vue';
-import ComputerTable from '@components/dashboard/computers/ComputerTableComponent.vue';
-import ModalComponent from '@components/dashboard/ModalComponent.vue';
+import type { CreateComputerDTO } from '@dtos/computer/CreateComputerDTO';
 import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import { ComputerService } from '@services/ComputerService';
-import type { CreateComputerDTO } from '@dtos/computer/CreateComputerDTO';
+import ComputerTable from '@components/dashboard/computers/ComputerTableComponent.vue';
 import type { EditComputerDTO } from '@dtos/computer/EditComputerDTO';
+import ModalComponent from '@components/dashboard/ModalComponent.vue';
 import type { UserInterface } from '@interfaces/UserInterface';
 import { UserService } from '@services/UserService';
 
