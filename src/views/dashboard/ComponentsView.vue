@@ -244,23 +244,23 @@ onUnmounted(() => {
           @submit.prevent="editingComponent ? handleUpdate() : handleCreate()"
         >
           <div>
-            <label class="text-sm text-muted-foreground" for="component-name">Name</label>
+            <label class="block text-sm text-foreground mb-2" for="component-name">Name</label>
             <input
               id="component-name"
               v-model="form.name"
               type="text"
-              class="mt-2 w-full rounded-lg border border-border bg-transparent px-4 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-primary"
+              class="mt-2 w-full rounded-lg border border-border bg-input px-4 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-primary"
               placeholder="E.g.: RAM 16GB"
               required
             />
           </div>
 
           <div>
-            <label class="text-sm text-muted-foreground" for="component-status">Status</label>
+            <label class="block text-sm text-foreground mb-2" for="component-status">Status</label>
             <select
               id="component-status"
               v-model="form.status"
-              class="mt-2 w-full rounded-lg border border-border bg-transparent px-4 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-primary"
+              class="mt-2 w-full rounded-lg border border-border bg-input px-4 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-primary"
             >
               <option
                 v-for="option in statusOptions"
