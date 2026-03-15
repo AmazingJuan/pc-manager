@@ -1,7 +1,4 @@
-// -------------------------------
-// Own Imports
-// -------------------------------
-import type { ComputerInterface } from '@interfaces/ComputerInterface';
+// Author: Juan Pablo Avendaño
 
 export interface UserInterface {
   id: number;
@@ -11,5 +8,5 @@ export interface UserInterface {
   password: string;
   role: string;
   createdAt: Date;
-  computers: ComputerInterface[] | null;
+  computerIds: number[] | null;
 }
