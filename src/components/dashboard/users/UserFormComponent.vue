@@ -157,10 +157,7 @@ function handleSubmit(values: Record<string, unknown>): void {
     </div>
 
     <div class="flex gap-3 pt-4">
-      <button
-        type="submit"
-        class="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all"
-      >
+      <button type="submit" class="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all">
         {{ user ? 'Update' : 'Create' }}
       </button>
       <button

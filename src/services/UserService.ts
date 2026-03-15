@@ -41,10 +41,7 @@ export class UserService {
       return true;
     }
 
-    return !this.usersStore.users.some(
-      (user) =>
-        user.id !== excludeUserId && user.username.trim().toLowerCase() === normalizedUsername,
-    );
+    return !this.usersStore.users.some((user) => user.id !== excludeUserId && user.username.trim().toLowerCase() === normalizedUsername);
   }
 
   isUniqueEmail(email: string, excludeUserId?: number): boolean {
@@ -54,9 +51,7 @@ export class UserService {
       return true;
     }
 
-    return !this.usersStore.users.some(
-      (user) => user.id !== excludeUserId && user.email.trim().toLowerCase() === normalizedEmail,
-    );
+    return !this.usersStore.users.some((user) => user.id !== excludeUserId && user.email.trim().toLowerCase() === normalizedEmail);
   }
 
   create(userData: CreateUserDTO): UserInterface {

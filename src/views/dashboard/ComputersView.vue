@@ -135,10 +135,7 @@ onMounted(loadData);
     </div>
 
     <!-- Success Feedback -->
-    <div
-      v-if="successMessage"
-      class="mt-4 mb-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-400"
-    >
+    <div v-if="successMessage" class="mt-4 mb-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-400">
       {{ successMessage }}
     </div>
 
@@ -146,12 +143,7 @@ onMounted(loadData);
     <ComputerTable :computers="computers" :users="users" @edit="openModal" @delete="handleDelete" />
 
     <!-- Create/Edit Modal -->
-    <ModalComponent
-      :is-open="isModalOpen"
-      :title="editingComputer ? 'Edit Computer' : 'Add Computer'"
-      max-width="max-w-3xl"
-      @close="closeModal"
-    >
+    <ModalComponent :is-open="isModalOpen" :title="editingComputer ? 'Edit Computer' : 'Add Computer'" max-width="max-w-3xl" @close="closeModal">
       <ComputerForm
         :computer="editingComputer"
         :users="users"

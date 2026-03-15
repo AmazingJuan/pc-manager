@@ -14,18 +14,12 @@ export class AuthService {
   private authStore: ReturnType<typeof useAuthStore>;
   private static instance: AuthService;
 
-  private constructor(
-    authStore: ReturnType<typeof useAuthStore>,
-    usersStore: ReturnType<typeof useUsersStore>,
-  ) {
+  private constructor(authStore: ReturnType<typeof useAuthStore>, usersStore: ReturnType<typeof useUsersStore>) {
     this.authStore = authStore;
     this.usersStore = usersStore;
   }
 
-  static getInstance(
-    authStore?: ReturnType<typeof useAuthStore>,
-    usersStore?: ReturnType<typeof useUsersStore>,
-  ): AuthService {
+  static getInstance(authStore?: ReturnType<typeof useAuthStore>, usersStore?: ReturnType<typeof useUsersStore>): AuthService {
     if (!this.instance) {
       if (!authStore || !usersStore) {
         throw new Error('You should put authStore and usersStore here');
@@ -38,9 +32,7 @@ export class AuthService {
 
   login(credentials: LoginDTO): boolean {
     const user = this.usersStore.users.find(
-      (currentUser) =>
-        currentUser.username === credentials.username &&
-        currentUser.password === credentials.password,
+      (currentUser) => currentUser.username === credentials.username && currentUser.password === credentials.password,
     );
 
     if (!user) {
@@ -53,8 +45,7 @@ export class AuthService {
 
   register(registerData: RegisterDTO): boolean {
     const userExists = this.usersStore.users.some(
-      (currentUser) =>
-        currentUser.username === registerData.username || currentUser.email === registerData.email,
+      (currentUser) => currentUser.username === registerData.username || currentUser.email === registerData.email,
     );
 
     if (userExists) {

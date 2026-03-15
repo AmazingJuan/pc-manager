@@ -99,10 +99,7 @@ onMounted(loadData);
     </div>
 
     <!-- Success Feedback -->
-    <div
-      v-if="successMessage"
-      class="mt-4 mb-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-400"
-    >
+    <div v-if="successMessage" class="mt-4 mb-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-400">
       {{ successMessage }}
     </div>
 
@@ -110,17 +107,8 @@ onMounted(loadData);
     <UserTable :users="users" @edit="openModal" @delete="handleDelete" />
 
     <!-- Create/Edit Modal -->
-    <ModalComponent
-      :is-open="isModalOpen"
-      :title="editingUser ? 'Edit User' : 'Add User'"
-      @close="closeModal"
-    >
-      <UserForm
-        :user="editingUser"
-        @create="handleCreate"
-        @edit="handleUpdate"
-        @cancel="closeModal"
-      />
+    <ModalComponent :is-open="isModalOpen" :title="editingUser ? 'Edit User' : 'Add User'" @close="closeModal">
+      <UserForm :user="editingUser" @create="handleCreate" @edit="handleUpdate" @cancel="closeModal" />
     </ModalComponent>
   </div>
 </template>

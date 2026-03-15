@@ -36,8 +36,5 @@ export const RegisterSchema = yup.object({
     .test('is-unique-email', 'Email already exists', (value) => {
       return UserService.getInstance().isUniqueEmail(asString(value));
     }),
-  password: yup
-    .string()
-    .required('Password is required')
-    .min(8, 'Password must be at least 8 characters'),
+  password: yup.string().required('Password is required').min(8, 'Password must be at least 8 characters'),
 });

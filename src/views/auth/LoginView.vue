@@ -106,12 +106,7 @@ function handleSubmit(values: Record<string, unknown>): void {
     </div>
 
     <!-- Error message card -->
-    <div
-      v-if="error"
-      role="alert"
-      aria-live="polite"
-      class="mt-4 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3"
-    >
+    <div v-if="error" role="alert" aria-live="polite" class="mt-4 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3">
       <p class="text-sm font-medium text-destructive-foreground">Login error</p>
       <p class="mt-1 text-xs text-destructive-foreground/90">{{ error }}</p>
     </div>
@@ -128,8 +123,6 @@ function handleSubmit(values: Record<string, unknown>): void {
   <!-- Register Anchor -->
   <div class="mt-6 text-center">
     <p class="text-sm text-muted-foreground mb-2">Don't have an account?</p>
-    <RouterLink to="/register" class="text-sm text-primary hover:text-primary/80 transition-colors">
-      Sign up
-    </RouterLink>
+    <RouterLink to="/register" class="text-sm text-primary hover:text-primary/80 transition-colors"> Sign up </RouterLink>
   </div>
 </template>
