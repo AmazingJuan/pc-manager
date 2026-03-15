@@ -4,6 +4,7 @@
 // Own Imports
 // -------------------------------
 import { AuthService } from '@services/AuthService';
+import ComponentsView from '@views/dashboard/ComponentsView.vue';
 import ComputersView from '@views/dashboard/ComputersView.vue';
 import IndexView from '@/views/dashboard/IndexView.vue';
 import LoginView from '@views/auth/LoginView.vue';
@@ -21,7 +22,7 @@ const routes = [
 
   { path: '/dashboard', name: 'dashboard', component: IndexView },
   { path: '/dashboard/computers', name: 'computers', component: ComputersView },
-  { path: '/dashboard/components', name: 'components', component: IndexView },
+  { path: '/dashboard/components', name: 'components', component: ComponentsView },
   { path: '/dashboard/users', name: 'users', component: IndexView },
   { path: '/dashboard/log', name: 'computers-status-log', component: IndexView },
   { path: '/dashboard/reports', name: 'reports', component: IndexView },
