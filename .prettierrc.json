@@ -5,6 +5,7 @@
   "useTabs": false,
   "semi": true,
   "singleQuote": true,
+  "objectWrap": "collapse",
   "quoteProps": "as-needed",
   "trailingComma": "all",
   "arrowParens": "always",

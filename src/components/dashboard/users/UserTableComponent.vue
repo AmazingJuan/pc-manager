@@ -22,10 +22,7 @@ defineProps<Props>();
 // -------------------------------
 // Emitters
 // -------------------------------
-const emit = defineEmits<{
-  edit: [user: UserInterface];
-  delete: [user: UserInterface];
-}>();
+const emit = defineEmits<{ edit: [user: UserInterface]; delete: [user: UserInterface] }>();
 </script>
 
 <template>

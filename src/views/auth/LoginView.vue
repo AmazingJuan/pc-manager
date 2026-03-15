@@ -31,10 +31,7 @@ const error = ref('');
 // Functions
 // -------------------------------
 function handleSubmit(values: Record<string, unknown>): void {
-  const credentials: LoginDTO = {
-    username: String(values.username),
-    password: String(values.password),
-  };
+  const credentials: LoginDTO = { username: String(values.username), password: String(values.password) };
 
   const success = authService.login(credentials);
 

@@ -11,12 +11,8 @@ import type { UserInterface } from '@interfaces/UserInterface';
 import { defineStore } from 'pinia';
 
 export const useAuthStore = defineStore('auth', {
-  state: () => ({
-    loggedInUser: null as UserInterface | null,
-  }),
-  getters: {
-    hasLoggedInUser: (state) => !!state.loggedInUser,
-  },
+  state: () => ({ loggedInUser: null as UserInterface | null }),
+  getters: { hasLoggedInUser: (state) => !!state.loggedInUser },
   actions: {
     setLoggedInUser(user: UserInterface | null) {
       this.loggedInUser = user;
@@ -25,10 +21,7 @@ export const useAuthStore = defineStore('auth', {
   persist: {
     afterHydrate: (ctx) => {
       if (ctx.store.loggedInUser) {
-        ctx.store.loggedInUser = {
-          ...ctx.store.loggedInUser,
-          createdAt: new Date(ctx.store.loggedInUser.createdAt),
-        };
+        ctx.store.loggedInUser = { ...ctx.store.loggedInUser, createdAt: new Date(ctx.store.loggedInUser.createdAt) };
       }
     },
   },

@@ -52,11 +52,7 @@ export class AuthService {
       return false;
     }
 
-    const newUser: UserInterface = this.usersStore.addUser({
-      ...registerData,
-      role: 'user',
-      computerIds: null,
-    });
+    const newUser: UserInterface = this.usersStore.addUser({ ...registerData, role: 'user', computerIds: null });
     this.authStore.setLoggedInUser(newUser);
 
     return true;

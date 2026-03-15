@@ -24,10 +24,7 @@ defineProps<Props>();
 // -------------------------------
 // Emitters
 // -------------------------------
-const emit = defineEmits<{
-  edit: [computer: ComputerInterface];
-  delete: [computer: ComputerInterface];
-}>();
+const emit = defineEmits<{ edit: [computer: ComputerInterface]; delete: [computer: ComputerInterface] }>();
 </script>
 
 <template>
