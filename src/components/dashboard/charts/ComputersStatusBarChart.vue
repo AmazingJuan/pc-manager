@@ -9,7 +9,7 @@ import type { ComputerInterface } from '@interfaces/ComputerInterface';
 // -------------------------------
 import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Tooltip, type ChartOptions } from 'chart.js';
 import { Bar } from 'vue-chartjs';
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
@@ -23,6 +23,17 @@ interface Props {
 const props = defineProps<Props>();
 
 // -------------------------------
+// Reactive Variables
+// -------------------------------
+const isChartReady = ref(false);
+
+const chartValues = computed(() => [
+  props.computers.filter((computer) => computer.status === 'active').length,
+  props.computers.filter((computer) => computer.status === 'inactive').length,
+  props.computers.filter((computer) => computer.status === 'maintenance').length,
+]);
+
+// -------------------------------
 // Computed Variables
 // -------------------------------
 const chartData = computed(() => ({
@@ -30,11 +41,7 @@ const chartData = computed(() => ({
   datasets: [
     {
       label: 'Count',
-      data: [
-        props.computers.filter((computer) => computer.status === 'active').length,
-        props.computers.filter((computer) => computer.status === 'inactive').length,
-        props.computers.filter((computer) => computer.status === 'maintenance').length,
-      ],
+      data: isChartReady.value ? chartValues.value : [0, 0, 0],
       backgroundColor: '#dc2626',
       borderRadius: 8,
       barThickness: 45,
@@ -83,6 +90,15 @@ const options: ChartOptions<'bar'> = {
     },
   },
 };
+
+// -------------------------------
+// Lifecycle
+// -------------------------------
+onMounted(() => {
+  requestAnimationFrame(() => {
+    isChartReady.value = true;
+  });
+});
 </script>
 
 <template>

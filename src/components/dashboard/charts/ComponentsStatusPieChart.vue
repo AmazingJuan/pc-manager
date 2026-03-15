@@ -8,7 +8,7 @@ import type { ComponentInterface } from '@interfaces/ComponentInterface';
 // Third Party Imports
 // -------------------------------
 import { ArcElement, Chart as ChartJS, Legend, Tooltip, type ChartOptions } from 'chart.js';
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { Pie } from 'vue-chartjs';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -30,16 +30,20 @@ const COLORS = ['#dc2626', '#ef4444', '#f87171', '#fca5a5'];
 // -------------------------------
 // Reactive Variables
 // -------------------------------
+const isChartReady = ref(false);
+
+const chartValues = computed(() => [
+  props.components.filter((component) => component.status === 'available').length,
+  props.components.filter((component) => component.status === 'in-use').length,
+  props.components.filter((component) => component.status === 'maintenance').length,
+  props.components.filter((component) => component.status === 'damaged').length,
+]);
+
 const chartData = computed(() => ({
   labels: ['Available', 'In Use', 'Maintenance', 'Damaged'],
   datasets: [
     {
-      data: [
-        props.components.filter((component) => component.status === 'available').length,
-        props.components.filter((component) => component.status === 'in-use').length,
-        props.components.filter((component) => component.status === 'maintenance').length,
-        props.components.filter((component) => component.status === 'damaged').length,
-      ],
+      data: isChartReady.value ? chartValues.value : [0, 0, 0, 0],
       backgroundColor: COLORS,
       borderWidth: 0,
       hoverOffset: 15,
@@ -72,6 +76,15 @@ const options: ChartOptions<'pie'> = {
     },
   },
 };
+
+// -------------------------------
+// Lifecycle
+// -------------------------------
+onMounted(() => {
+  requestAnimationFrame(() => {
+    isChartReady.value = true;
+  });
+});
 </script>
 
 <template>
