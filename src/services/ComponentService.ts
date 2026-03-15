@@ -33,45 +33,14 @@ export class ComponentService {
   }
 
   create(componentData: Omit<ComponentInterface, 'id'>): ComponentInterface {
-    const newId = this.componentsStore.lastId + 1;
-    this.componentsStore.lastId = newId;
-
-    const newComponent: ComponentInterface = {
-      id: newId,
-      name: componentData.name,
-      status: componentData.status,
-    };
-
-    this.componentsStore.components.push(newComponent);
-    return newComponent;
+    return this.componentsStore.addComponent(componentData);
   }
 
   update(id: number, componentData: Partial<Omit<ComponentInterface, 'id'>>): boolean {
-    const component = this.componentsStore.components.find(
-      (currentComponent) => currentComponent.id === id,
-    );
-
-    if (!component) {
-      return false;
-    }
-
-    if (componentData.name !== undefined) {
-      component.name = componentData.name;
-    }
-
-    if (componentData.status !== undefined) {
-      component.status = componentData.status;
-    }
-
-    return true;
+    return this.componentsStore.updateComponentById(id, componentData);
   }
 
   delete(id: number): boolean {
-    const previousLength = this.componentsStore.components.length;
-    this.componentsStore.components = this.componentsStore.components.filter(
-      (component) => component.id !== id,
-    );
-
-    return this.componentsStore.components.length < previousLength;
+    return this.componentsStore.deleteComponentById(id);
   }
 }

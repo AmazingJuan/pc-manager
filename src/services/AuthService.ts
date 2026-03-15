@@ -5,8 +5,8 @@
 // -------------------------------
 import type { LoginDTO } from '@dtos/auth/LoginDTO';
 import type { RegisterDTO } from '@dtos/auth/RegisterDTO';
-import type { UserInterface } from '@interfaces/UserInterface';
 import { useAuthStore } from '@stores/AuthStore';
+import type { UserInterface } from '@interfaces/UserInterface';
 import { useUsersStore } from '@stores/UsersStore';
 
 export class AuthService {
@@ -61,18 +61,11 @@ export class AuthService {
       return false;
     }
 
-    const newId = this.usersStore.lastId + 1;
-    this.usersStore.lastId = newId;
-
-    const newUser: UserInterface = {
-      id: newId,
+    const newUser: UserInterface = this.usersStore.addUser({
       ...registerData,
       role: 'user',
-      createdAt: new Date(),
       computerIds: null,
-    };
-
-    this.usersStore.users.push(newUser);
+    });
     this.authStore.setLoggedInUser(newUser);
 
     return true;
