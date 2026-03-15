@@ -12,10 +12,7 @@ import type { ComponentInterface } from '@interfaces/ComponentInterface';
 import { defineStore } from 'pinia';
 
 export const useComponentsStore = defineStore('components', {
-  state: () => ({
-    components: components,
-    lastId: components.length,
-  }),
+  state: () => ({ components: components, lastId: components.length }),
   actions: {
     getNextComponentId(): number {
       this.lastId += 1;
@@ -23,10 +20,7 @@ export const useComponentsStore = defineStore('components', {
     },
 
     addComponent(componentData: Omit<ComponentInterface, 'id'>): ComponentInterface {
-      const newComponent: ComponentInterface = {
-        id: this.getNextComponentId(),
-        ...componentData,
-      };
+      const newComponent: ComponentInterface = { id: this.getNextComponentId(), ...componentData };
 
       this.components.push(newComponent);
       return newComponent;

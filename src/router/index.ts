@@ -33,10 +33,7 @@ const routes = [
   { path: '/dashboard/log', name: 'computers-status-log', component: IndexView },
 ];
 
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
-});
+const router = createRouter({ history: createWebHistory(import.meta.env.BASE_URL), routes });
 
 // Routes validation
 router.beforeEach((to) => {

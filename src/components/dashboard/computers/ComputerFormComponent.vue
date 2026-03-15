@@ -32,11 +32,7 @@ const props = defineProps<Props>();
 // -------------------------------
 // Emitters
 // -------------------------------
-const emit = defineEmits<{
-  create: [payload: CreateComputerDTO];
-  edit: [payload: EditComputerDTO];
-  cancel: [];
-}>();
+const emit = defineEmits<{ create: [payload: CreateComputerDTO]; edit: [payload: EditComputerDTO]; cancel: [] }>();
 
 // -------------------------------
 // Computed Variables
@@ -75,9 +71,7 @@ function handleSubmit(values: Record<string, unknown>): void {
   };
 
   if (props.computer) {
-    const editPayload: EditComputerDTO = {
-      ...computerData,
-    };
+    const editPayload: EditComputerDTO = { ...computerData };
     emit('edit', editPayload);
     return;
   }

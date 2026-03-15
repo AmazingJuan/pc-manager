@@ -26,11 +26,7 @@ const props = defineProps<Props>();
 // -------------------------------
 // Emitters
 // -------------------------------
-const emit = defineEmits<{
-  create: [payload: CreateUserDTO];
-  edit: [payload: EditUserDTO];
-  cancel: [];
-}>();
+const emit = defineEmits<{ create: [payload: CreateUserDTO]; edit: [payload: EditUserDTO]; cancel: [] }>();
 
 // -------------------------------
 // Computed Variables

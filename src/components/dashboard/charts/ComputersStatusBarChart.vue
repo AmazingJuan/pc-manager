@@ -39,55 +39,21 @@ const chartValues = computed(() => [
 const chartData = computed(() => ({
   labels: ['Active', 'Inactive', 'Maintenance'],
   datasets: [
-    {
-      label: 'Count',
-      data: isChartReady.value ? chartValues.value : [0, 0, 0],
-      backgroundColor: '#dc2626',
-      borderRadius: 8,
-      barThickness: 45,
-    },
+    { label: 'Count', data: isChartReady.value ? chartValues.value : [0, 0, 0], backgroundColor: '#dc2626', borderRadius: 8, barThickness: 45 },
   ],
 }));
 
 const options: ChartOptions<'bar'> = {
   responsive: true,
   maintainAspectRatio: false,
-  animation: {
-    duration: 1500,
-    easing: 'easeOutQuart',
-  },
+  animation: { duration: 1500, easing: 'easeOutQuart' },
   plugins: {
-    legend: {
-      display: false,
-    },
-    tooltip: {
-      backgroundColor: '#1a1a1a',
-      borderColor: '#2a2a2a',
-      borderWidth: 1,
-      padding: 12,
-      titleColor: '#ffffff',
-      bodyColor: '#ffffff',
-    },
+    legend: { display: false },
+    tooltip: { backgroundColor: '#1a1a1a', borderColor: '#2a2a2a', borderWidth: 1, padding: 12, titleColor: '#ffffff', bodyColor: '#ffffff' },
   },
   scales: {
-    x: {
-      grid: {
-        display: false,
-      },
-      ticks: {
-        color: '#a3a3a3',
-      },
-    },
-    y: {
-      beginAtZero: true,
-      grid: {
-        color: '#2a2a2a',
-      },
-      ticks: {
-        color: '#a3a3a3',
-        stepSize: 1,
-      },
-    },
+    x: { grid: { display: false }, ticks: { color: '#a3a3a3' } },
+    y: { beginAtZero: true, grid: { color: '#2a2a2a' }, ticks: { color: '#a3a3a3', stepSize: 1 } },
   },
 };
 

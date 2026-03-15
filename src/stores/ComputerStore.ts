@@ -14,10 +14,7 @@ import type { EditComputerDTO } from '@dtos/computer/EditComputerDTO';
 import { defineStore } from 'pinia';
 
 export const useComputersStore = defineStore('computers', {
-  state: () => ({
-    computers: computers,
-    lastId: computers.length,
-  }),
+  state: () => ({ computers: computers, lastId: computers.length }),
   actions: {
     getNextComputerId(): number {
       this.lastId += 1;
@@ -25,11 +22,7 @@ export const useComputersStore = defineStore('computers', {
     },
 
     addComputer(computerData: CreateComputerDTO): ComputerInterface {
-      const newComputer: ComputerInterface = {
-        id: this.getNextComputerId(),
-        ...computerData,
-        createdAt: new Date(),
-      };
+      const newComputer: ComputerInterface = { id: this.getNextComputerId(), ...computerData, createdAt: new Date() };
 
       this.computers.push(newComputer);
       return newComputer;

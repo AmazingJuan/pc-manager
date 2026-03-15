@@ -41,39 +41,16 @@ const chartValues = computed(() => [
 
 const chartData = computed(() => ({
   labels: ['Available', 'In Use', 'Maintenance', 'Damaged'],
-  datasets: [
-    {
-      data: isChartReady.value ? chartValues.value : [0, 0, 0, 0],
-      backgroundColor: COLORS,
-      borderWidth: 0,
-      hoverOffset: 15,
-    },
-  ],
+  datasets: [{ data: isChartReady.value ? chartValues.value : [0, 0, 0, 0], backgroundColor: COLORS, borderWidth: 0, hoverOffset: 15 }],
 }));
 
 const options: ChartOptions<'pie'> = {
   responsive: true,
   maintainAspectRatio: false,
-  animation: {
-    animateRotate: true,
-    duration: 2000,
-  },
+  animation: { animateRotate: true, duration: 2000 },
   plugins: {
-    legend: {
-      position: 'right',
-      labels: {
-        color: '#a3a3a3',
-        usePointStyle: true,
-        padding: 20,
-      },
-    },
-    tooltip: {
-      backgroundColor: '#1a1a1a',
-      borderColor: '#2a2a2a',
-      borderWidth: 1,
-      titleColor: '#ffffff',
-      bodyColor: '#ffffff',
-    },
+    legend: { position: 'right', labels: { color: '#a3a3a3', usePointStyle: true, padding: 20 } },
+    tooltip: { backgroundColor: '#1a1a1a', borderColor: '#2a2a2a', borderWidth: 1, titleColor: '#ffffff', bodyColor: '#ffffff' },
   },
 };
 
