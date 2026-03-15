@@ -5,23 +5,13 @@
 import type { UserInterface } from '@interfaces/UserInterface';
 import type { CreateUserDTO } from '@dtos/user/CreateUserDTO';
 import type { EditUserDTO } from '@dtos/user/EditUserDTO';
+import { createUserSchema } from '@schemas/user/UserSchema';
 
 // -------------------------------
 // Third Party Imports
 // -------------------------------
-import { ref, watch } from 'vue';
-
-// -------------------------------
-// Reactive Variables
-// -------------------------------
-const formData = ref<CreateUserDTO>({
-  name: '',
-  username: '',
-  email: '',
-  password: '',
-  role: 'user',
-  computerIds: null,
-});
+import { computed } from 'vue';
+import { ErrorMessage, Field, Form } from 'vee-validate';
 
 // -------------------------------
 // Props
@@ -42,103 +32,127 @@ const emit = defineEmits<{
 }>();
 
 // -------------------------------
+// Computed Variables
+// -------------------------------
+const initialValues = computed(() => ({
+  name: props.user?.name ?? '',
+  username: props.user?.username ?? '',
+  email: props.user?.email ?? '',
+  password: props.user?.password ?? '',
+  role: props.user?.role ?? 'user',
+}));
+
+const validationSchema = computed(() => createUserSchema(props.user?.id));
+
+// -------------------------------
 // Functions
 // -------------------------------
-function resetFormState(): void {
-  formData.value = {
-    name: '',
-    username: '',
-    email: '',
-    password: '',
-    role: 'user',
-    computerIds: null,
+function handleSubmit(values: Record<string, unknown>): void {
+  const payload: CreateUserDTO = {
+    name: String(values.name ?? '').trim(),
+    username: String(values.username ?? '').trim(),
+    email: String(values.email ?? '').trim(),
+    password: String(values.password ?? ''),
+    role: (values.role === 'admin' ? 'admin' : 'user') as CreateUserDTO['role'],
+    computerIds: props.user?.computerIds ?? null,
   };
-}
 
-function handleSubmit(): void {
   if (props.user) {
-    emit('edit', { ...formData.value });
+    emit('edit', payload);
     return;
   }
-  emit('create', { ...formData.value });
+
+  emit('create', payload);
 }
-
-// -------------------------------
-// Watchers
-// -------------------------------
-watch(
-  () => props.user,
-  (user) => {
-    if (!user) {
-      resetFormState();
-      return;
-    }
-
-    formData.value = {
-      name: user.name,
-      username: user.username,
-      email: user.email,
-      password: user.password,
-      role: user.role,
-      computerIds: user.computerIds,
-    };
-  },
-  { immediate: true },
-);
 </script>
 
 <template>
-  <form class="space-y-4" @submit.prevent="handleSubmit">
+  <Form
+    :key="user ? `edit-${user.id}` : 'create-user'"
+    :initial-values="initialValues"
+    :validation-schema="validationSchema"
+    class="space-y-4"
+    @submit="handleSubmit"
+  >
     <div>
       <label class="block text-sm text-foreground mb-2">Full Name *</label>
-      <input
-        v-model="formData.name"
-        type="text"
-        class="w-full px-4 py-2 bg-input rounded-lg border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-        required
-      />
+      <Field v-slot="{ field, errorMessage }" name="name">
+        <input
+          v-bind="field"
+          type="text"
+          class="w-full px-4 py-2 bg-input rounded-lg border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+          :class="errorMessage ? 'border-destructive' : 'border-border'"
+          placeholder="Enter full name"
+        />
+      </Field>
+      <ErrorMessage name="name" v-slot="{ message }">
+        <p class="text-xs text-destructive mt-1">{{ message }}</p>
+      </ErrorMessage>
     </div>
 
     <div>
       <label class="block text-sm text-foreground mb-2">Username *</label>
-      <input
-        v-model="formData.username"
-        type="text"
-        class="w-full px-4 py-2 bg-input rounded-lg border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-        required
-      />
+      <Field v-slot="{ field, errorMessage }" name="username">
+        <input
+          v-bind="field"
+          type="text"
+          class="w-full px-4 py-2 bg-input rounded-lg border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+          :class="errorMessage ? 'border-destructive' : 'border-border'"
+          placeholder="Enter username"
+        />
+      </Field>
+      <ErrorMessage name="username" v-slot="{ message }">
+        <p class="text-xs text-destructive mt-1">{{ message }}</p>
+      </ErrorMessage>
     </div>
 
     <div>
       <label class="block text-sm text-foreground mb-2">Email *</label>
-      <input
-        v-model="formData.email"
-        type="email"
-        class="w-full px-4 py-2 bg-input rounded-lg border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-        required
-      />
+      <Field v-slot="{ field, errorMessage }" name="email">
+        <input
+          v-bind="field"
+          type="email"
+          class="w-full px-4 py-2 bg-input rounded-lg border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+          :class="errorMessage ? 'border-destructive' : 'border-border'"
+          placeholder="example@email.com"
+        />
+      </Field>
+      <ErrorMessage name="email" v-slot="{ message }">
+        <p class="text-xs text-destructive mt-1">{{ message }}</p>
+      </ErrorMessage>
     </div>
 
     <div>
       <label class="block text-sm text-foreground mb-2">Password *</label>
-      <input
-        v-model="formData.password"
-        type="password"
-        class="w-full px-4 py-2 bg-input rounded-lg border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-        required
-      />
+      <Field v-slot="{ field, errorMessage }" name="password">
+        <input
+          v-bind="field"
+          type="password"
+          class="w-full px-4 py-2 bg-input rounded-lg border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+          :class="errorMessage ? 'border-destructive' : 'border-border'"
+          placeholder="Minimum 8 characters"
+        />
+      </Field>
+      <ErrorMessage name="password" v-slot="{ message }">
+        <p class="text-xs text-destructive mt-1">{{ message }}</p>
+      </ErrorMessage>
     </div>
 
     <div>
       <label class="block text-sm text-foreground mb-2">Role *</label>
-      <select
-        v-model="formData.role"
-        class="w-full px-4 py-2 bg-input rounded-lg border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-        required
-      >
-        <option value="user">User</option>
-        <option value="admin">Administrator</option>
-      </select>
+      <Field v-slot="{ field, errorMessage }" name="role">
+        <select
+          v-bind="field"
+          class="w-full px-4 py-2 bg-input rounded-lg border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+          :class="errorMessage ? 'border-destructive' : 'border-border'"
+        >
+          <option value="user">User</option>
+          <option value="admin">Administrator</option>
+        </select>
+      </Field>
+      <ErrorMessage name="role" v-slot="{ message }">
+        <p class="text-xs text-destructive mt-1">{{ message }}</p>
+      </ErrorMessage>
     </div>
 
     <div class="flex gap-3 pt-4">
@@ -156,5 +170,5 @@ watch(
         Cancel
       </button>
     </div>
-  </form>
+  </Form>
 </template>

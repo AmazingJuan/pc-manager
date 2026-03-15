@@ -87,7 +87,7 @@ onMounted(loadData);
           <Shield class="w-8 h-8 text-primary" />
           User Management
         </h1>
-        <p class="text-muted-foreground">Manage system users (Admins only)</p>
+        <p class="text-muted-foreground">Manage system users</p>
       </div>
       <button
         class="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"

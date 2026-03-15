@@ -34,6 +34,31 @@ export class UserService {
     return this.usersStore.users.find((user) => user.id === id);
   }
 
+  isUniqueUsername(username: string, excludeUserId?: number): boolean {
+    const normalizedUsername = username.trim().toLowerCase();
+
+    if (!normalizedUsername) {
+      return true;
+    }
+
+    return !this.usersStore.users.some(
+      (user) =>
+        user.id !== excludeUserId && user.username.trim().toLowerCase() === normalizedUsername,
+    );
+  }
+
+  isUniqueEmail(email: string, excludeUserId?: number): boolean {
+    const normalizedEmail = email.trim().toLowerCase();
+
+    if (!normalizedEmail) {
+      return true;
+    }
+
+    return !this.usersStore.users.some(
+      (user) => user.id !== excludeUserId && user.email.trim().toLowerCase() === normalizedEmail,
+    );
+  }
+
   create(userData: CreateUserDTO): UserInterface {
     return this.usersStore.addUser(userData);
   }
