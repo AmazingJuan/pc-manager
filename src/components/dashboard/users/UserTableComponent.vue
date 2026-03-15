@@ -43,27 +43,16 @@ const emit = defineEmits<{
       </thead>
       <tbody>
         <tr v-if="!users.length">
-          <td colspan="6" class="px-6 py-8 text-center text-muted-foreground">
-            No users registered
-          </td>
+          <td colspan="6" class="px-6 py-8 text-center text-muted-foreground">No users registered</td>
         </tr>
-        <tr
-          v-for="user in users"
-          v-else
-          :key="user.id"
-          class="border-b border-border hover:bg-secondary/50 transition-colors"
-        >
+        <tr v-for="user in users" v-else :key="user.id" class="border-b border-border hover:bg-secondary/50 transition-colors">
           <td class="px-6 py-4 text-sm">{{ user.name }}</td>
           <td class="px-6 py-4 text-sm">{{ user.username }}</td>
           <td class="px-6 py-4 text-sm">{{ user.email }}</td>
           <td class="px-6 py-4 text-sm">
             <span
               class="px-2 py-1 rounded text-xs border flex items-center gap-1 w-fit"
-              :class="
-                user.role === 'admin'
-                  ? 'bg-primary/10 text-primary border-primary/20'
-                  : 'bg-secondary text-foreground border-border'
-              "
+              :class="user.role === 'admin' ? 'bg-primary/10 text-primary border-primary/20' : 'bg-secondary text-foreground border-border'"
             >
               <Shield v-if="user.role === 'admin'" class="w-3 h-3" />
               {{ user.role === 'admin' ? 'Administrator' : 'User' }}

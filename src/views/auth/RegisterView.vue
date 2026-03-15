@@ -169,22 +169,14 @@ function onSubmit(values: Record<string, unknown>): void {
   </Form>
 
   <!-- Error message card -->
-  <div
-    v-if="error"
-    role="alert"
-    aria-live="polite"
-    class="mt-4 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3"
-  >
+  <div v-if="error" role="alert" aria-live="polite" class="mt-4 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3">
     <p class="text-sm font-medium text-destructive-foreground">Registration error</p>
     <p class="mt-1 text-xs text-destructive-foreground/90">{{ error }}</p>
   </div>
 
   <!-- Back to login link -->
   <div class="mt-6 text-center">
-    <RouterLink
-      to="/login"
-      class="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors"
-    >
+    <RouterLink to="/login" class="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors">
       <ArrowLeft class="w-4 h-4" />
       Back to login
     </RouterLink>

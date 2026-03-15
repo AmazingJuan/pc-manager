@@ -45,46 +45,24 @@ const emit = defineEmits<{
       </thead>
       <tbody>
         <tr v-if="!computers.length">
-          <td colspan="6" class="px-6 py-8 text-center text-muted-foreground">
-            No computers registered
-          </td>
+          <td colspan="6" class="px-6 py-8 text-center text-muted-foreground">No computers registered</td>
         </tr>
-        <tr
-          v-for="computer in computers"
-          v-else
-          :key="computer.id"
-          class="border-b border-border hover:bg-secondary/50 transition-colors"
-        >
+        <tr v-for="computer in computers" v-else :key="computer.id" class="border-b border-border hover:bg-secondary/50 transition-colors">
           <td class="px-6 py-4 text-sm">{{ computer.name }}</td>
           <td class="px-6 py-4 text-sm">{{ computer.location || '-' }}</td>
           <td class="px-6 py-4 text-sm">
             <span class="text-muted-foreground">
-              {{
-                !computer.userId
-                  ? 'Unassigned'
-                  : (users.find((u) => u.id === computer.userId)?.username ?? 'User not found')
-              }}
+              {{ !computer.userId ? 'Unassigned' : (users.find((u) => u.id === computer.userId)?.username ?? 'User not found') }}
             </span>
           </td>
           <td class="px-6 py-4 text-sm">
-            <span
-              v-if="computer.status === 'active'"
-              class="px-2 py-1 rounded text-xs border bg-green-500/10 text-green-500 border-green-500/20"
-            >
+            <span v-if="computer.status === 'active'" class="px-2 py-1 rounded text-xs border bg-green-500/10 text-green-500 border-green-500/20">
               Active
             </span>
-            <span
-              v-else-if="computer.status === 'inactive'"
-              class="px-2 py-1 rounded text-xs border bg-gray-500/10 text-gray-500 border-gray-500/20"
-            >
+            <span v-else-if="computer.status === 'inactive'" class="px-2 py-1 rounded text-xs border bg-gray-500/10 text-gray-500 border-gray-500/20">
               Inactive
             </span>
-            <span
-              v-else
-              class="px-2 py-1 rounded text-xs border bg-yellow-500/10 text-yellow-500 border-yellow-500/20"
-            >
-              Maintenance
-            </span>
+            <span v-else class="px-2 py-1 rounded text-xs border bg-yellow-500/10 text-yellow-500 border-yellow-500/20"> Maintenance </span>
           </td>
           <td class="px-6 py-4 text-sm">
             <span class="text-primary">

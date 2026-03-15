@@ -32,10 +32,7 @@ export const useComponentsStore = defineStore('components', {
       return newComponent;
     },
 
-    updateComponentById(
-      id: number,
-      componentData: Partial<Omit<ComponentInterface, 'id'>>,
-    ): boolean {
+    updateComponentById(id: number, componentData: Partial<Omit<ComponentInterface, 'id'>>): boolean {
       const component = this.components.find((currentComponent) => currentComponent.id === id);
 
       if (!component) {

@@ -56,11 +56,7 @@ export const useComputersStore = defineStore('computers', {
   persist: {
     afterHydrate: (ctx) => {
       ctx.store.computers = ctx.store.computers.map(
-        (computer: {
-          purchaseDate: string | Date;
-          warrantyExpirationDate: string | Date;
-          createdAt: string | Date;
-        }) => ({
+        (computer: { purchaseDate: string | Date; warrantyExpirationDate: string | Date; createdAt: string | Date }) => ({
           ...computer,
           purchaseDate: new Date(computer.purchaseDate),
           warrantyExpirationDate: new Date(computer.warrantyExpirationDate),

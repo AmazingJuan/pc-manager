@@ -16,17 +16,21 @@ import UsersView from '@views/dashboard/UsersView.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
+  // Guest routes
   { path: '/', redirect: '/login' },
   { path: '/login', name: 'login', component: LoginView },
   { path: '/register', name: 'register', component: RegisterView },
 
+  // Routes that require login
   { path: '/dashboard', name: 'dashboard', component: IndexView },
   { path: '/dashboard/computers', name: 'computers', component: ComputersView },
   { path: '/dashboard/components', name: 'components', component: IndexView },
-  { path: '/dashboard/users', name: 'users', component: UsersView },
-  { path: '/dashboard/log', name: 'computers-status-log', component: IndexView },
   { path: '/dashboard/reports', name: 'reports', component: IndexView },
   { path: '/dashboard/inventory', name: 'inventory', component: IndexView },
+
+  // Admin only routes
+  { path: '/dashboard/users', name: 'users', component: UsersView },
+  { path: '/dashboard/log', name: 'computers-status-log', component: IndexView },
 ];
 
 const router = createRouter({

@@ -48,9 +48,7 @@ const initialValues = computed(() => ({
   status: (props.computer?.status ?? 'active') as ComputerStatus,
   componentIds: props.computer ? [...props.computer.componentIds] : [],
   purchaseDate: props.computer ? Formatter.dateToString(props.computer.purchaseDate) : '',
-  warrantyExpiration: props.computer
-    ? Formatter.dateToString(props.computer.warrantyExpirationDate)
-    : '',
+  warrantyExpiration: props.computer ? Formatter.dateToString(props.computer.warrantyExpirationDate) : '',
   notes: props.computer?.notes ?? '',
 }));
 
@@ -69,9 +67,7 @@ function handleSubmit(values: Record<string, unknown>): void {
     name: String(values.name ?? '').trim(),
     location: String(values.location ?? '').trim(),
     userId: Number.isFinite(parsedUserId) && parsedUserId > 0 ? parsedUserId : 0,
-    status: (status === 'inactive' || status === 'maintenance'
-      ? status
-      : 'active') as ComputerStatus,
+    status: (status === 'inactive' || status === 'maintenance' ? status : 'active') as ComputerStatus,
     componentIds: selectedComponentIds,
     purchaseDate: new Date(String(values.purchaseDate ?? '')),
     warrantyExpirationDate: new Date(String(values.warrantyExpiration ?? '')),
@@ -204,11 +200,7 @@ function handleSubmit(values: Record<string, unknown>): void {
       <label class="block text-sm text-foreground mb-2">Components</label>
       <div class="max-h-48 overflow-y-auto p-4 bg-secondary/30 rounded-lg border border-border">
         <div class="grid grid-cols-2 gap-2">
-          <label
-            v-for="component in components"
-            :key="component.id"
-            class="flex items-center gap-2 p-2 hover:bg-secondary/50 rounded cursor-pointer"
-          >
+          <label v-for="component in components" :key="component.id" class="flex items-center gap-2 p-2 hover:bg-secondary/50 rounded cursor-pointer">
             <Field
               name="componentIds"
               type="checkbox"
@@ -239,10 +231,7 @@ function handleSubmit(values: Record<string, unknown>): void {
 
     <!-- Form Actions -->
     <div class="flex gap-3 pt-4">
-      <button
-        type="submit"
-        class="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all"
-      >
+      <button type="submit" class="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all">
         {{ computer ? 'Update' : 'Create' }}
       </button>
       <button

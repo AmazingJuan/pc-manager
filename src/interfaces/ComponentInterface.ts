@@ -1,5 +1,3 @@
-
-
 export interface ComponentInterface {
   id: number;
   name: string;
