@@ -1,4 +1,4 @@
-// Author: Juan Pablo Avendaño y Andru Quiroz
+// Author: Juan Pablo Avendaño & Andru Quiroz
 // -------------------------------
 // Own Imports
 // -------------------------------
@@ -42,7 +42,11 @@ export class ComputerService {
     const computer = this.getById(id);
 
     if (computer && computerData.status && computer.status !== computerData.status) {
-      StatusChangeService.getInstance().record(id, computer.status, computerData.status);
+      StatusChangeService.getInstance().record({
+        computerId: id,
+        previousStatus: computer.status,
+        newStatus: computerData.status,
+      });
     }
 
     return this.computersStore.updateComputerById(id, computerData);

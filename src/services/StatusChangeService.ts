@@ -2,10 +2,9 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
+import type { RecordStatusChangeDTO } from '@dtos/statusChange/RecordStatusChangeDTO';
 import type { StatusChangeInterface } from '@interfaces/StatusChangeInterface';
 import { useStatusChangesStore } from '@stores/StatusChangeStore';
-import type { ComputerStatus } from '@/types/Computer';
-
 
 export class StatusChangeService {
   private statusChangesStore: ReturnType<typeof useStatusChangesStore>;
@@ -35,7 +34,7 @@ export class StatusChangeService {
     );
   }
 
-  record(computerId: number, previousStatus: ComputerStatus, newStatus: ComputerStatus): StatusChangeInterface {
-    return this.statusChangesStore.addStatusChange(computerId, previousStatus, newStatus);
+  record(dto: RecordStatusChangeDTO): void {
+    this.statusChangesStore.addStatusChange(dto.computerId, dto.previousStatus, dto.newStatus);
   }
 }
