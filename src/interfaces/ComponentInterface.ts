@@ -3,7 +3,7 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import type { ComponentType } from '@types/Components';
+import type { ComponentType } from '@/types/Components';
 
 export interface ComponentInterface {
   id: number;
