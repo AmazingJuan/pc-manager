@@ -2,8 +2,7 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import ComponentsStatusPieChart from '@components/dashboard/charts/ComponentsStatusPieChart.vue';
-import ComputersStatusBarChart from '@components/dashboard/charts/ComputersStatusBarChart.vue';
+import ChartsSectionComponent from '@components/dashboard/sections/ChartsSectionComponent.vue';
 import StatsSection from '@components/dashboard/sections/StatsSectionComponent.vue';
 import SummarySection from '@components/dashboard/sections/SummarySectionComponent.vue';
 import { ComponentService } from '@services/ComponentService';
@@ -63,10 +62,7 @@ onMounted(loadData);
     <StatsSection :stats="stats" />
 
     <!-- Charts -->
-    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <ComputersStatusBarChart :computers="computers" />
-      <ComponentsStatusPieChart :components="components" />
-    </section>
+    <ChartsSectionComponent :computers="computers" :components="components" />
 
     <!-- System summary section -->
     <SummarySection :stats="stats" />

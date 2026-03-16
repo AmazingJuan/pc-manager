@@ -5,9 +5,9 @@
 import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import { ComputerService } from '@services/ComputerService';
 import type { StatusChangeInterface } from '@interfaces/StatusChangeInterface';
-import StatusChangeStats from '@components/dashboard/statusChange/StatusChangeStatsComponent.vue';
-import StatusChangeFilters from '@components/dashboard/statusChange/StatusChangeFiltersComponent.vue';
-import StatusChangeTable from '@components/dashboard/statusChange/StatusChangeTableComponent.vue';
+import StatusChangeStats from '@components/statusChange/sections/StatusChangeStatsComponent.vue';
+import StatusChangeFilters from '@components/statusChange/sections/StatusChangeFiltersComponent.vue';
+import StatusChangeTable from '@components/statusChange/sections/StatusChangeTableComponent.vue';
 import { StatusChangeService } from '@services/StatusChangeService';
 
 // -------------------------------

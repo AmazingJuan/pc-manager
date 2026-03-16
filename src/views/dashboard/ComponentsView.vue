@@ -3,13 +3,13 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import ComponentForm from '@components/dashboard/components/ComponentFormComponent.vue';
+import ComponentForm from '@components/componentsInventory/forms/ComponentFormComponent.vue';
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
 import { ComponentService } from '@services/ComponentService';
-import ComponentTable from '@components/dashboard/components/ComponentTableComponent.vue';
+import ComponentTable from '@components/componentsInventory/tables/ComponentTableComponent.vue';
 import type { CreateComponentDTO } from '@dtos/components/CreateComponentDTO';
 import type { EditComponentDTO } from '@dtos/components/EditComponentDTO';
-import ModalComponent from '@components/dashboard/ModalComponent.vue';
+import ModalComponent from '@components/ui/ModalComponent.vue';
 
 // -------------------------------
 // Third Party Imports

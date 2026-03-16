@@ -2,7 +2,7 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import StatCard from '@components/dashboard/StatCardComponent.vue';
+import StatCard from '@components/ui/StatCardComponent.vue';
 
 // -------------------------------
 // Third Party Imports
