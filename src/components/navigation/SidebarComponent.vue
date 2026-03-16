@@ -8,17 +8,7 @@ import { useAuthStore } from '@stores/AuthStore';
 // -------------------------------
 // Third-Party Imports
 // -------------------------------
-import {
-  BarChart3,
-  Cpu,
-  Layers,
-  LayoutDashboard,
-  LogOut,
-  Monitor,
-  Package,
-  Shield,
-  Users,
-} from 'lucide-vue-next';
+import { BarChart3, Cpu, Layers, LayoutDashboard, LogOut, Monitor, Package, Shield, Users } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -58,8 +48,6 @@ function logout(): void {
   authService.logout();
   router.push({ name: 'login' });
 }
-
-
 </script>
 
 <template>

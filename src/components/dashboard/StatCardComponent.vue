@@ -24,16 +24,8 @@ const props = defineProps<Props>();
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-3">
         <component v-if="props.color === 'success'" :is="icon" class="w-6 h-6 text-emerald-400" />
-        <component
-          v-else-if="props.color === 'warning'"
-          :is="icon"
-          class="w-6 h-6 text-amber-400"
-        />
-        <component
-          v-else-if="props.color === 'destructive'"
-          :is="icon"
-          class="w-6 h-6 text-destructive"
-        />
+        <component v-else-if="props.color === 'warning'" :is="icon" class="w-6 h-6 text-amber-400" />
+        <component v-else-if="props.color === 'destructive'" :is="icon" class="w-6 h-6 text-destructive" />
         <component v-else :is="icon" class="w-6 h-6 text-primary" />
         <span class="text-sm font-medium text-muted-foreground">{{ title }}</span>
       </div>

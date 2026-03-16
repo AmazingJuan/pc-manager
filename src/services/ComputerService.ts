@@ -35,39 +35,14 @@ export class ComputerService {
   }
 
   create(computerData: CreateComputerDTO): ComputerInterface {
-    const newId = this.computersStore.lastId + 1;
-    this.computersStore.lastId = newId;
-
-    const newComputer: ComputerInterface = {
-      id: newId,
-      ...computerData,
-      createdAt: new Date(),
-    };
-
-    this.computersStore.computers.push(newComputer);
-    return newComputer;
+    return this.computersStore.addComputer(computerData);
   }
 
   update(id: number, computerData: EditComputerDTO): boolean {
-    const computer = this.computersStore.computers.find(
-      (currentComputer) => currentComputer.id === id,
-    );
-
-    if (!computer) {
-      return false;
-    }
-
-    Object.assign(computer, computerData);
-
-    return true;
+    return this.computersStore.updateComputerById(id, computerData);
   }
 
   delete(id: number): boolean {
-    const previousLength = this.computersStore.computers.length;
-    this.computersStore.computers = this.computersStore.computers.filter(
-      (computer) => computer.id !== id,
-    );
-
-    return this.computersStore.computers.length < previousLength;
+    return this.computersStore.deleteComputerById(id);
   }
 }

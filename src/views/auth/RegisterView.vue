@@ -1,5 +1,5 @@
 <!-- Author: Juan Pablo Avendaño -->
- 
+
 <script setup lang="ts">
 // -------------------------------
 // Own Imports
@@ -11,8 +11,8 @@ import { RegisterSchema } from '@schemas/user/RegisterSchema';
 // -------------------------------
 // Third Party Imports
 // -------------------------------
-import { ArrowLeft, Lock, Mail, User } from 'lucide-vue-next';
 import { ErrorMessage, Field, Form } from 'vee-validate';
+import { ArrowLeft, Lock, Mail, User } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 
@@ -55,7 +55,14 @@ function onSubmit(values: Record<string, unknown>): void {
     <!-- Name Field -->
     <div>
       <label class="block text-sm text-foreground mb-2">Full Name</label>
-      <Field v-slot="{ field, errorMessage }" name="name">
+      <Field
+        v-slot="{ field, errorMessage }"
+        name="name"
+        :validate-on-blur="false"
+        :validate-on-change="false"
+        :validate-on-input="false"
+        :validate-on-model-update="false"
+      >
         <div class="relative">
           <User class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <input
@@ -75,7 +82,14 @@ function onSubmit(values: Record<string, unknown>): void {
     <!-- Username Field -->
     <div>
       <label class="block text-sm text-foreground mb-2">Username</label>
-      <Field v-slot="{ field, errorMessage }" name="username">
+      <Field
+        v-slot="{ field, errorMessage }"
+        name="username"
+        :validate-on-blur="false"
+        :validate-on-change="false"
+        :validate-on-input="false"
+        :validate-on-model-update="false"
+      >
         <div class="relative">
           <User class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <input
@@ -95,7 +109,14 @@ function onSubmit(values: Record<string, unknown>): void {
     <!-- Email Field -->
     <div>
       <label class="block text-sm text-foreground mb-2">Email</label>
-      <Field v-slot="{ field, errorMessage }" name="email">
+      <Field
+        v-slot="{ field, errorMessage }"
+        name="email"
+        :validate-on-blur="false"
+        :validate-on-change="false"
+        :validate-on-input="false"
+        :validate-on-model-update="false"
+      >
         <div class="relative">
           <Mail class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <input
@@ -115,7 +136,14 @@ function onSubmit(values: Record<string, unknown>): void {
     <!-- Password Field -->
     <div>
       <label class="block text-sm text-foreground mb-2">Password</label>
-      <Field v-slot="{ field, errorMessage }" name="password">
+      <Field
+        v-slot="{ field, errorMessage }"
+        name="password"
+        :validate-on-blur="false"
+        :validate-on-change="false"
+        :validate-on-input="false"
+        :validate-on-model-update="false"
+      >
         <div class="relative">
           <Lock class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <input
@@ -141,22 +169,14 @@ function onSubmit(values: Record<string, unknown>): void {
   </Form>
 
   <!-- Error message card -->
-  <div
-    v-if="error"
-    role="alert"
-    aria-live="polite"
-    class="mt-4 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3"
-  >
+  <div v-if="error" role="alert" aria-live="polite" class="mt-4 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3">
     <p class="text-sm font-medium text-destructive-foreground">Registration error</p>
     <p class="mt-1 text-xs text-destructive-foreground/90">{{ error }}</p>
   </div>
 
   <!-- Back to login link -->
   <div class="mt-6 text-center">
-    <RouterLink
-      to="/login"
-      class="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors"
-    >
+    <RouterLink to="/login" class="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors">
       <ArrowLeft class="w-4 h-4" />
       Back to login
     </RouterLink>

@@ -2,7 +2,7 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import type { ComponentInterface } from '../../../interfaces/ComponentInterface';
+import type { ComponentInterface } from '@interfaces/ComponentInterface';
 
 // -------------------------------
 // Third Party Imports
