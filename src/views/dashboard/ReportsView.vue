@@ -3,7 +3,7 @@
 // Own Imports
 // -------------------------------
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
-import type { ComponentType } from '@/types/Components';
+import type { ComponentType } from '@app-types/Components';
 import { ComponentService } from '@services/ComponentService';
 
 // -------------------------------

@@ -3,7 +3,7 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import type { ComputerStatus } from '@/types/Computer';
+import type { ComputerStatus } from '@app-types/Computer';
 
 export interface ComputerInterface {
   id: number;
