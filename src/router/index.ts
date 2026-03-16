@@ -28,7 +28,6 @@ const routes = [
   { path: '/dashboard/components', name: 'components', component: ComponentsView },
   { path: '/dashboard/users', name: 'users', component: IndexView },
   { path: '/dashboard/log', name: 'computers-status-log', component: IndexView },
-  { path: '/dashboard/components', name: 'components', component: IndexView },
   { path: '/dashboard/reports', name: 'reports', component: IndexView },
   { path: '/dashboard/inventory', name: 'inventory', component: IndexView },
 
