@@ -1,5 +1,4 @@
-// Author: Juan Pablo Avendaño
-
+// Author: Juan Pablo Avendaño y Andru Quiroz
 // -------------------------------
 // Own Imports
 // -------------------------------
@@ -7,6 +6,7 @@ import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import type { CreateComputerDTO } from '@dtos/computer/CreateComputerDTO';
 import type { EditComputerDTO } from '@dtos/computer/EditComputerDTO';
 import { useComputersStore } from '@stores/ComputerStore';
+import { StatusChangeService } from '@services/StatusChangeService';
 
 export class ComputerService {
   private computersStore: ReturnType<typeof useComputersStore>;
@@ -39,6 +39,12 @@ export class ComputerService {
   }
 
   update(id: number, computerData: EditComputerDTO): boolean {
+    const computer = this.getById(id);
+
+    if (computer && computerData.status && computer.status !== computerData.status) {
+      StatusChangeService.getInstance().record(id, computer.status, computerData.status);
+    }
+
     return this.computersStore.updateComputerById(id, computerData);
   }
 
