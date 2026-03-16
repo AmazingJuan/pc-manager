@@ -14,10 +14,7 @@ import type { EditComponentDTO } from '@dtos/components/EditComponentDTO';
 import { defineStore } from 'pinia';
 
 export const useComponentsStore = defineStore('components', {
-  state: () => ({
-    components: components,
-    lastId: components.reduce((maxId, component) => Math.max(maxId, component.id), 0),
-  }),
+  state: () => ({ components: components, lastId: components.reduce((maxId, component) => Math.max(maxId, component.id), 0) }),
   actions: {
     getNextComponentId(): number {
       this.lastId += 1;
@@ -25,11 +22,7 @@ export const useComponentsStore = defineStore('components', {
     },
 
     addComponent(componentData: CreateComponentDTO): ComponentInterface {
-      const newComponent: ComponentInterface = {
-        id: this.getNextComponentId(),
-        ...componentData,
-        createdAt: new Date(),
-      };
+      const newComponent: ComponentInterface = { id: this.getNextComponentId(), ...componentData, createdAt: new Date() };
 
       this.components.push(newComponent);
       return newComponent;
@@ -56,10 +49,7 @@ export const useComponentsStore = defineStore('components', {
   persist: {
     afterHydrate: (ctx) => {
       ctx.store.components = ctx.store.components.map(
-        (component: ComponentInterface): ComponentInterface => ({
-          ...component,
-          createdAt: new Date(component.createdAt),
-        }),
+        (component: ComponentInterface): ComponentInterface => ({ ...component, createdAt: new Date(component.createdAt) }),
       );
     },
   },
