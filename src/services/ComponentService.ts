@@ -4,6 +4,8 @@
 // Own Imports
 // -------------------------------
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
+import type { CreateComponentDTO } from '@dtos/components/CreateComponentDTO';
+import type { EditComponentDTO } from '@dtos/components/EditComponentDTO';
 import { useComponentsStore } from '@stores/ComponentStore';
 
 export class ComponentService {
@@ -32,11 +34,11 @@ export class ComponentService {
     return this.componentsStore.components.find((component) => component.id === id);
   }
 
-  create(componentData: Omit<ComponentInterface, 'id'>): ComponentInterface {
+  create(componentData: CreateComponentDTO): ComponentInterface {
     return this.componentsStore.addComponent(componentData);
   }
 
-  update(id: number, componentData: Partial<Omit<ComponentInterface, 'id'>>): boolean {
+  update(id: number, componentData: EditComponentDTO): boolean {
     return this.componentsStore.updateComponentById(id, componentData);
   }
 

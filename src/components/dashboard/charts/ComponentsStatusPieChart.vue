@@ -32,16 +32,27 @@ const COLORS = ['#dc2626', '#ef4444', '#f87171', '#fca5a5'];
 // -------------------------------
 const isChartReady = ref(false);
 
-const chartValues = computed(() => [
-  props.components.filter((component) => component.status === 'available').length,
-  props.components.filter((component) => component.status === 'in-use').length,
-  props.components.filter((component) => component.status === 'maintenance').length,
-  props.components.filter((component) => component.status === 'damaged').length,
-]);
+const groupedByType = computed<Record<string, number>>(() => {
+  return props.components.reduce<Record<string, number>>((accumulator, component) => {
+    const key = component.type || 'Unknown';
+    accumulator[key] = (accumulator[key] ?? 0) + 1;
+    return accumulator;
+  }, {});
+});
+
+const chartLabels = computed(() => Object.keys(groupedByType.value));
+const chartValues = computed(() => Object.values(groupedByType.value));
 
 const chartData = computed(() => ({
-  labels: ['Available', 'In Use', 'Maintenance', 'Damaged'],
-  datasets: [{ data: isChartReady.value ? chartValues.value : [0, 0, 0, 0], backgroundColor: COLORS, borderWidth: 0, hoverOffset: 15 }],
+  labels: chartLabels.value,
+  datasets: [
+    {
+      data: isChartReady.value ? chartValues.value : chartLabels.value.map(() => 0),
+      backgroundColor: COLORS,
+      borderWidth: 0,
+      hoverOffset: 15,
+    },
+  ],
 }));
 
 const options: ChartOptions<'pie'> = {
@@ -50,7 +61,13 @@ const options: ChartOptions<'pie'> = {
   animation: { animateRotate: true, duration: 2000 },
   plugins: {
     legend: { position: 'right', labels: { color: '#a3a3a3', usePointStyle: true, padding: 20 } },
-    tooltip: { backgroundColor: '#1a1a1a', borderColor: '#2a2a2a', borderWidth: 1, titleColor: '#ffffff', bodyColor: '#ffffff' },
+    tooltip: {
+      backgroundColor: '#1a1a1a',
+      borderColor: '#2a2a2a',
+      borderWidth: 1,
+      titleColor: '#ffffff',
+      bodyColor: '#ffffff',
+    },
   },
 };
 
@@ -66,7 +83,7 @@ onMounted(() => {
 
 <template>
   <div class="bg-card border border-border rounded-xl p-6 shadow-sm">
-    <h2 class="text-xl font-semibold mb-6">Components by Status</h2>
+    <h2 class="text-xl font-semibold mb-6">Components by Type</h2>
     <div class="h-75">
       <Pie :data="chartData" :options="options" />
     </div>

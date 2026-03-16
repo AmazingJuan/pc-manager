@@ -5,6 +5,8 @@
 // -------------------------------
 import { components } from '@seeders/ComponentSeeder';
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
+import type { CreateComponentDTO } from '@dtos/components/CreateComponentDTO';
+import type { EditComponentDTO } from '@dtos/components/EditComponentDTO';
 
 // -------------------------------
 // Third-Party Imports
@@ -12,21 +14,28 @@ import type { ComponentInterface } from '@interfaces/ComponentInterface';
 import { defineStore } from 'pinia';
 
 export const useComponentsStore = defineStore('components', {
-  state: () => ({ components: components, lastId: components.length }),
+  state: () => ({
+    components: components,
+    lastId: components.reduce((maxId, component) => Math.max(maxId, component.id), 0),
+  }),
   actions: {
     getNextComponentId(): number {
       this.lastId += 1;
       return this.lastId;
     },
 
-    addComponent(componentData: Omit<ComponentInterface, 'id'>): ComponentInterface {
-      const newComponent: ComponentInterface = { id: this.getNextComponentId(), ...componentData };
+    addComponent(componentData: CreateComponentDTO): ComponentInterface {
+      const newComponent: ComponentInterface = {
+        id: this.getNextComponentId(),
+        ...componentData,
+        createdAt: new Date(),
+      };
 
       this.components.push(newComponent);
       return newComponent;
     },
 
-    updateComponentById(id: number, componentData: Partial<Omit<ComponentInterface, 'id'>>): boolean {
+    updateComponentById(id: number, componentData: EditComponentDTO): boolean {
       const component = this.components.find((currentComponent) => currentComponent.id === id);
 
       if (!component) {
@@ -44,5 +53,14 @@ export const useComponentsStore = defineStore('components', {
       return this.components.length < previousLength;
     },
   },
-  persist: true,
+  persist: {
+    afterHydrate: (ctx) => {
+      ctx.store.components = ctx.store.components.map(
+        (component: ComponentInterface): ComponentInterface => ({
+          ...component,
+          createdAt: new Date(component.createdAt),
+        }),
+      );
+    },
+  },
 });
