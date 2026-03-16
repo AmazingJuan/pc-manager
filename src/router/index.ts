@@ -30,7 +30,7 @@ const routes = [
 
   // Admin only routes
   { path: '/dashboard/users', name: 'users', component: UsersView },
-  { path: '/dashboard/log', name: 'status-history', component: StatusHistoryView },
+  { path: '/dashboard/status-history', name: 'status-history', component: StatusHistoryView },
 ];
 
 const router = createRouter({ history: createWebHistory(import.meta.env.BASE_URL), routes });

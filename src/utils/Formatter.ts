@@ -6,12 +6,6 @@ export class Formatter {
   }
 
   static formatDate(value: Date): string {
-    return new Intl.DateTimeFormat('es-CO', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    }).format(value);
+    return new Intl.DateTimeFormat('es-CO', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }).format(value);
   }
 }

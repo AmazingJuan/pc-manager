@@ -2,10 +2,6 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import type { ComputerStatus } from '@/types/Computer';
+import type { StatusChangeInterface } from '@interfaces/StatusChangeInterface';
 
-export interface RecordStatusChangeDTO {
-  computerId: number;
-  previousStatus: ComputerStatus;
-  newStatus: ComputerStatus;
-}
+export type RecordStatusChangeDTO = Omit<StatusChangeInterface, 'id' | 'changedAt'>;

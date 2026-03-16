@@ -29,12 +29,10 @@ export class StatusChangeService {
   }
 
   getByComputerId(computerId: number): StatusChangeInterface[] {
-    return this.statusChangesStore.statusChanges.filter(
-      (statusChange) => statusChange.computerId === computerId,
-    );
+    return this.statusChangesStore.statusChanges.filter((statusChange) => statusChange.computerId === computerId);
   }
 
   record(dto: RecordStatusChangeDTO): void {
-    this.statusChangesStore.addStatusChange(dto.computerId, dto.previousStatus, dto.newStatus);
+    this.statusChangesStore.addStatusChange(dto);
   }
 }

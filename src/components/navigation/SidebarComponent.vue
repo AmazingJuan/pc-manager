@@ -8,7 +8,7 @@ import { useAuthStore } from '@stores/AuthStore';
 // -------------------------------
 // Third-Party Imports
 // -------------------------------
-import { BarChart3, Cpu, Layers, LayoutDashboard, LogOut, Monitor, Package, Shield, Users } from 'lucide-vue-next';
+import { BarChart3, Cpu, History, LayoutDashboard, LogOut, Monitor, Package, Shield, Users } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -26,7 +26,7 @@ const menuItems = [
   { path: '/dashboard/computers', icon: Monitor, label: 'Computer Management', admin: false },
   { path: '/dashboard/components', icon: Cpu, label: 'Components', admin: false },
   { path: '/dashboard/users', icon: Users, label: 'Users', admin: true },
-  { path: '/dashboard/component-types', icon: Layers, label: 'Component Types', admin: true },
+  { path: '/dashboard/status-history', icon: History, label: 'Computer status history', admin: true },
   { path: '/dashboard/reports', icon: BarChart3, label: 'Reports', admin: false },
   { path: '/dashboard/inventory', icon: Package, label: 'Inventory', admin: false },
 ];

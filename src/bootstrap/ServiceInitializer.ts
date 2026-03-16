@@ -21,11 +21,12 @@ export class ServiceInitializer {
     const computersStore = useComputersStore();
     const statusChangesStore = useStatusChangesStore();
     const usersStore = useUsersStore();
+
     // services
+    const statusChangeService = StatusChangeService.getInstance(statusChangesStore);
     AuthService.getInstance(authStore, usersStore);
     ComponentService.getInstance(componentsStore);
-    ComputerService.getInstance(computersStore);
-    StatusChangeService.getInstance(statusChangesStore);
+    ComputerService.getInstance(computersStore, statusChangeService);
     UserService.getInstance(usersStore);
   }
 }
