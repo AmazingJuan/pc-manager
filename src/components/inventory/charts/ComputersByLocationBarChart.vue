@@ -80,7 +80,7 @@ onMounted(() => {
 
 <template>
   <div class="bg-card border border-border rounded-xl p-6 shadow-sm">
-    <h2 class="text-xl font-semibold mb-6">PCs por Ubicación</h2>
+    <h2 class="text-xl font-semibold mb-6">Computers by Location</h2>
     <div class="h-75">
       <Bar :data="chartData" :options="options" />
     </div>
