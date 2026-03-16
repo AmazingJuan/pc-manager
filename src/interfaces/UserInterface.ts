@@ -1,6 +1,6 @@
 // Author: Juan Pablo Avendaño
 
-import type { UserRole } from '@/types/User';
+import type { UserRole } from '@app-types/User';
 
 export interface UserInterface {
   id: number;
