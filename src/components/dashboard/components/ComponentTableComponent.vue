@@ -23,10 +23,7 @@ defineProps<Props>();
 // -------------------------------
 // Emitters
 // -------------------------------
-const emit = defineEmits<{
-  edit: [component: ComponentInterface];
-  delete: [component: ComponentInterface];
-}>();
+const emit = defineEmits<{ edit: [component: ComponentInterface]; delete: [component: ComponentInterface] }>();
 
 // -------------------------------
 // Functions
@@ -43,12 +40,7 @@ function getStatusClasses(status: ComponentType): string {
 }
 
 function getStatusLabel(status: ComponentType): string {
-  const labels: Record<ComponentType, string> = {
-    available: 'Available',
-    'in-use': 'In Use',
-    maintenance: 'Maintenance',
-    damaged: 'Damaged',
-  };
+  const labels: Record<ComponentType, string> = { available: 'Available', 'in-use': 'In Use', maintenance: 'Maintenance', damaged: 'Damaged' };
 
   return labels[status];
 }
@@ -71,34 +63,20 @@ function getStatusLabel(status: ComponentType): string {
       </thead>
       <tbody>
         <tr v-if="!components.length">
-          <td colspan="8" class="px-6 py-8 text-center text-muted-foreground">
-            No components registered
-          </td>
+          <td colspan="8" class="px-6 py-8 text-center text-muted-foreground">No components registered</td>
         </tr>
-        <tr
-          v-for="component in components"
-          v-else
-          :key="component.id"
-          class="border-b border-border hover:bg-secondary/50 transition-colors"
-        >
+        <tr v-for="component in components" v-else :key="component.id" class="border-b border-border hover:bg-secondary/50 transition-colors">
           <td class="px-6 py-4 text-sm">{{ component.name }}</td>
           <td class="px-6 py-4 text-sm">{{ component.type || '-' }}</td>
           <td class="px-6 py-4 text-sm">{{ component.manufacturer || '-' }}</td>
           <td class="px-6 py-4 text-sm">{{ component.model || '-' }}</td>
           <td class="px-6 py-4 text-sm">
-            <span
-              class="px-2 py-1 rounded text-xs border"
-              :class="getStatusClasses(component.status)"
-            >
+            <span class="px-2 py-1 rounded text-xs border" :class="getStatusClasses(component.status)">
               {{ getStatusLabel(component.status) }}
             </span>
           </td>
           <td class="px-6 py-4 text-sm">
-            {{
-              component.purchaseDate
-                ? Formatter.dateToString(new Date(component.purchaseDate))
-                : '-'
-            }}
+            {{ component.purchaseDate ? Formatter.dateToString(new Date(component.purchaseDate)) : '-' }}
           </td>
           <td class="px-6 py-4 text-sm">${{ component.price.toFixed(2) }}</td>
           <td class="px-6 py-4">

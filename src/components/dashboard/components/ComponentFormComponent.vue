@@ -26,11 +26,7 @@ const props = defineProps<Props>();
 // -------------------------------
 // Emitters
 // -------------------------------
-const emit = defineEmits<{
-  create: [payload: CreateComponentDTO];
-  edit: [payload: EditComponentDTO];
-  cancel: [];
-}>();
+const emit = defineEmits<{ create: [payload: CreateComponentDTO]; edit: [payload: EditComponentDTO]; cancel: [] }>();
 
 // -------------------------------
 // Non-Reactive Variables
@@ -56,9 +52,7 @@ const initialValues = computed(() => ({
 // -------------------------------
 function handleSubmit(values: Record<string, unknown>): void {
   const parsedStatus = String(values.status ?? 'available');
-  const normalizedStatus = availableStatuses.includes(parsedStatus as ComponentType)
-    ? (parsedStatus as ComponentType)
-    : 'available';
+  const normalizedStatus = availableStatuses.includes(parsedStatus as ComponentType) ? (parsedStatus as ComponentType) : 'available';
   const parsedPrice = Number(values.price ?? 0);
 
   const componentData: CreateComponentDTO = {
@@ -73,9 +67,7 @@ function handleSubmit(values: Record<string, unknown>): void {
   };
 
   if (props.component) {
-    const editPayload: EditComponentDTO = {
-      ...componentData,
-    };
+    const editPayload: EditComponentDTO = { ...componentData };
 
     emit('edit', editPayload);
     return;
@@ -131,9 +123,7 @@ function handleSubmit(values: Record<string, unknown>): void {
 
     <div class="grid grid-cols-2 gap-4">
       <div>
-        <label class="block text-sm text-foreground mb-2" for="component-manufacturer"
-          >Manufacturer *</label
-        >
+        <label class="block text-sm text-foreground mb-2" for="component-manufacturer">Manufacturer *</label>
         <Field v-slot="{ field, errorMessage }" name="manufacturer">
           <input
             id="component-manufacturer"
@@ -167,9 +157,7 @@ function handleSubmit(values: Record<string, unknown>): void {
 
     <div class="grid grid-cols-2 gap-4">
       <div>
-        <label class="block text-sm text-foreground mb-2" for="component-serial-number"
-          >Serial Number *</label
-        >
+        <label class="block text-sm text-foreground mb-2" for="component-serial-number">Serial Number *</label>
         <Field v-slot="{ field, errorMessage }" name="serialNumber">
           <input
             id="component-serial-number"
@@ -205,9 +193,7 @@ function handleSubmit(values: Record<string, unknown>): void {
       </div>
 
       <div>
-        <label class="block text-sm text-foreground mb-2" for="component-purchase-date"
-          >Purchase Date *</label
-        >
+        <label class="block text-sm text-foreground mb-2" for="component-purchase-date">Purchase Date *</label>
         <Field v-slot="{ field, errorMessage }" name="purchaseDate">
           <input
             id="component-purchase-date"
@@ -242,10 +228,7 @@ function handleSubmit(values: Record<string, unknown>): void {
     </div>
 
     <div class="flex gap-3 pt-4">
-      <button
-        type="submit"
-        class="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all"
-      >
+      <button type="submit" class="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all">
         {{ component ? 'Update' : 'Create' }}
       </button>
       <button

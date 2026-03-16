@@ -46,12 +46,7 @@ const chartValues = computed(() => Object.values(groupedByType.value));
 const chartData = computed(() => ({
   labels: chartLabels.value,
   datasets: [
-    {
-      data: isChartReady.value ? chartValues.value : chartLabels.value.map(() => 0),
-      backgroundColor: COLORS,
-      borderWidth: 0,
-      hoverOffset: 15,
-    },
+    { data: isChartReady.value ? chartValues.value : chartLabels.value.map(() => 0), backgroundColor: COLORS, borderWidth: 0, hoverOffset: 15 },
   ],
 }));
 
@@ -61,13 +56,7 @@ const options: ChartOptions<'pie'> = {
   animation: { animateRotate: true, duration: 2000 },
   plugins: {
     legend: { position: 'right', labels: { color: '#a3a3a3', usePointStyle: true, padding: 20 } },
-    tooltip: {
-      backgroundColor: '#1a1a1a',
-      borderColor: '#2a2a2a',
-      borderWidth: 1,
-      titleColor: '#ffffff',
-      bodyColor: '#ffffff',
-    },
+    tooltip: { backgroundColor: '#1a1a1a', borderColor: '#2a2a2a', borderWidth: 1, titleColor: '#ffffff', bodyColor: '#ffffff' },
   },
 };
 
