@@ -3,8 +3,9 @@
 // Own Imports
 // -------------------------------
 import type { StatusChangeInterface } from '@interfaces/StatusChangeInterface';
-import type { ComputerStatus } from '@/types/Computer';
 import { useStatusChangesStore } from '@stores/StatusChangeStore';
+import type { ComputerStatus } from '@/types/Computer';
+
 
 export class StatusChangeService {
   private statusChangesStore: ReturnType<typeof useStatusChangesStore>;

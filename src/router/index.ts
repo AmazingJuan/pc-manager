@@ -1,4 +1,4 @@
-// Author: Juan Manuel Zapata & Juan Pablo Avendaño
+// Author: Juan Manuel Zapata, Juan Pablo Avendaño & Andru Quiroz
 
 // -------------------------------
 // Own Imports
@@ -30,7 +30,7 @@ const routes = [
 
   // Admin only routes
   { path: '/dashboard/users', name: 'users', component: UsersView },
-  { path: '/dashboard/log', name: 'computers-status-log', component: StatusHistoryView },
+  { path: '/dashboard/log', name: 'status-history', component: StatusHistoryView },
 ];
 
 const router = createRouter({ history: createWebHistory(import.meta.env.BASE_URL), routes });

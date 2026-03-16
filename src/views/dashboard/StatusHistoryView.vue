@@ -6,6 +6,7 @@ import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import type { StatusChangeInterface } from '@interfaces/StatusChangeInterface';
 import { ComputerService } from '@services/ComputerService';
 import { StatusChangeService } from '@services/StatusChangeService';
+import { Formatter } from '@utils/Formatter';
 
 // -------------------------------
 // Third-Party Imports
@@ -63,15 +64,6 @@ function formatStatus(status: string): string {
   return statusLabels[status] ?? status;
 }
 
-function formatDate(date: Date): string {
-  return new Intl.DateTimeFormat('es-CO', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(date);
-}
 
 function loadData(): void {
   computers.value = computerService.getAll();
@@ -191,7 +183,7 @@ onMounted(loadData);
                 {{ formatStatus(statusChange.newStatus) }}
               </span>
             </td>
-            <td class="px-4 py-3 text-muted-foreground">{{ formatDate(statusChange.changedAt) }}</td>
+            <td class="px-4 py-3 text-muted-foreground">{{ Formatter.formatDate(statusChange.changedAt) }}</td>
           </tr>
         </tbody>
       </table>

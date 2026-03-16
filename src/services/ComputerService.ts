@@ -2,11 +2,11 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import type { CreateComputerDTO } from '@dtos/computer/CreateComputerDTO';
 import type { EditComputerDTO } from '@dtos/computer/EditComputerDTO';
-import { useComputersStore } from '@stores/ComputerStore';
+import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import { StatusChangeService } from '@services/StatusChangeService';
+import { useComputersStore } from '@stores/ComputerStore';
 
 export class ComputerService {
   private computersStore: ReturnType<typeof useComputersStore>;
