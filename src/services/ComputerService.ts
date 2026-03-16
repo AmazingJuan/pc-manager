@@ -1,27 +1,29 @@
-// Author: Juan Pablo Avendaño
-
+// Author: Juan Pablo Avendaño & Andru Quiroz
 // -------------------------------
 // Own Imports
 // -------------------------------
-import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import type { CreateComputerDTO } from '@dtos/computer/CreateComputerDTO';
 import type { EditComputerDTO } from '@dtos/computer/EditComputerDTO';
+import type { ComputerInterface } from '@interfaces/ComputerInterface';
+import { StatusChangeService } from '@services/StatusChangeService';
 import { useComputersStore } from '@stores/ComputerStore';
 
 export class ComputerService {
   private computersStore: ReturnType<typeof useComputersStore>;
+  private statusChangeService: StatusChangeService;
   private static instance: ComputerService;
 
-  private constructor(computersStore: ReturnType<typeof useComputersStore>) {
+  private constructor(computersStore: ReturnType<typeof useComputersStore>, statusChangeService: StatusChangeService) {
     this.computersStore = computersStore;
+    this.statusChangeService = statusChangeService;
   }
 
-  static getInstance(computersStore?: ReturnType<typeof useComputersStore>): ComputerService {
+  static getInstance(computersStore?: ReturnType<typeof useComputersStore>, statusChangeService?: StatusChangeService): ComputerService {
     if (!this.instance) {
-      if (!computersStore) {
+      if (!computersStore || !statusChangeService) {
         throw new Error('You should put a store here');
       }
-      this.instance = new ComputerService(computersStore);
+      this.instance = new ComputerService(computersStore, statusChangeService);
     }
     return this.instance;
   }
@@ -39,6 +41,12 @@ export class ComputerService {
   }
 
   update(id: number, computerData: EditComputerDTO): boolean {
+    const computer = this.getById(id);
+
+    if (computer && computerData.status && computer.status !== computerData.status) {
+      this.statusChangeService.record({ computerId: id, previousStatus: computer.status, newStatus: computerData.status });
+    }
+
     return this.computersStore.updateComputerById(id, computerData);
   }
 

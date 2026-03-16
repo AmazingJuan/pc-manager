@@ -1,4 +1,4 @@
-// Author: Juan Manuel Zapata & Juan Pablo Avendaño
+// Author: Juan Manuel Zapata, Juan Pablo Avendaño & Andru Quiroz
 
 // -------------------------------
 // Own Imports
@@ -10,7 +10,7 @@ import IndexView from '@/views/dashboard/IndexView.vue';
 import LoginView from '@views/auth/LoginView.vue';
 import RegisterView from '@views/auth/RegisterView.vue';
 import UsersView from '@views/dashboard/UsersView.vue';
-
+import StatusHistoryView from '@views/dashboard/StatusHistoryView.vue';
 // -------------------------------
 // Third-Party Imports
 // -------------------------------
@@ -33,7 +33,7 @@ const routes = [
 
   // Admin only routes
   { path: '/dashboard/users', name: 'users', component: UsersView },
-  { path: '/dashboard/log', name: 'computers-status-log', component: IndexView },
+  { path: '/dashboard/status-history', name: 'status-history', component: StatusHistoryView },
 ];
 
 const router = createRouter({ history: createWebHistory(import.meta.env.BASE_URL), routes });
