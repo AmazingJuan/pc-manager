@@ -7,6 +7,7 @@ import { AuthService } from '@services/AuthService';
 import ComponentsView from '@views/dashboard/ComponentsView.vue';
 import ComputersView from '@views/dashboard/ComputersView.vue';
 import IndexView from '@/views/dashboard/IndexView.vue';
+import InventoryView from '@views/dashboard/InventoryView.vue';
 import LoginView from '@views/auth/LoginView.vue';
 import RegisterView from '@views/auth/RegisterView.vue';
 import ReportsView from '@views/dashboard/ReportsView.vue';
@@ -30,7 +31,7 @@ const routes = [
   { path: '/dashboard/users', name: 'users', component: IndexView },
   { path: '/dashboard/log', name: 'computers-status-log', component: IndexView },
   { path: '/dashboard/reports', name: 'reports', component: ReportsView },
-  { path: '/dashboard/inventory', name: 'inventory', component: IndexView },
+  { path: '/dashboard/inventory', name: 'inventory', component: InventoryView },
 
   // Admin only routes
   { path: '/dashboard/users', name: 'users', component: UsersView },
