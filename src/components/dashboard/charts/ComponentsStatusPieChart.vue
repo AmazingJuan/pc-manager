@@ -26,22 +26,21 @@ const props = defineProps<Props>();
 // Non Reactive Variables
 // -------------------------------
 const COLORS = ['#dc2626', '#ef4444', '#f87171', '#fca5a5'];
+const STATUS_LABELS = ['Available', 'In Use', 'Maintenance', 'Damaged'];
 
 // -------------------------------
 // Reactive Variables
 // -------------------------------
 const isChartReady = ref(false);
 
-const groupedByType = computed<Record<string, number>>(() => {
-  return props.components.reduce<Record<string, number>>((accumulator, component) => {
-    const key = component.type || 'Unknown';
-    accumulator[key] = (accumulator[key] ?? 0) + 1;
-    return accumulator;
-  }, {});
-});
+const chartLabels = computed(() => STATUS_LABELS);
 
-const chartLabels = computed(() => Object.keys(groupedByType.value));
-const chartValues = computed(() => Object.values(groupedByType.value));
+const chartValues = computed(() => [
+  props.components.filter((component) => component.status === 'available').length,
+  props.components.filter((component) => component.status === 'in-use').length,
+  props.components.filter((component) => component.status === 'maintenance').length,
+  props.components.filter((component) => component.status === 'damaged').length,
+]);
 
 const chartData = computed(() => ({
   labels: chartLabels.value,
@@ -72,7 +71,7 @@ onMounted(() => {
 
 <template>
   <div class="bg-card border border-border rounded-xl p-6 shadow-sm">
-    <h2 class="text-xl font-semibold mb-6">Components by Type</h2>
+    <h2 class="text-xl font-semibold mb-6">Components by Status</h2>
     <div class="h-75">
       <Pie :data="chartData" :options="options" />
     </div>

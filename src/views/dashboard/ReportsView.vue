@@ -5,9 +5,9 @@
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
 import type { ComponentType } from '@app-types/Components';
 import { ComponentService } from '@services/ComponentService';
-import ReportsChartsComponent from '@components/dashboard/reports/ReportsChartsComponent.vue';
-import ReportsFiltersComponent from '@components/dashboard/reports/ReportsFiltersComponent.vue';
-import ReportsTableComponent from '@components/dashboard/reports/ReportsTableComponent.vue';
+import ReportsChartsComponent from '@components/reports/sections/ReportsChartsComponent.vue';
+import ReportsFiltersComponent from '@components/reports/sections/ReportsFiltersComponent.vue';
+import ReportsTableComponent from '@components/reports/sections/ReportsTableComponent.vue';
 
 // -------------------------------
 // Third-Party Imports
