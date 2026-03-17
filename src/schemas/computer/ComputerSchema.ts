@@ -27,6 +27,6 @@ export const ComputerSchema = yup.object({
 
       return new Date(value) >= new Date(purchaseDate);
     }),
-  componentIds: yup.array(yup.number()).default([]),
+  componentIds: yup.array(yup.number()).min(1, 'Computer must have at least one component').required().default([]),
   notes: yup.string().max(500, 'Notes must be at most 500 characters'),
 });

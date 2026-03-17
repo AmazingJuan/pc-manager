@@ -5,11 +5,11 @@
 import { AuthService } from '@services/AuthService';
 import { ComponentService } from '@services/ComponentService';
 import { ComputerService } from '@services/ComputerService';
-import { StatusChangeService } from '@services/StatusChangeService';
+import { ComputerStatusHistoryService } from '@services/ComputerStatusHistoryService';
 import { useAuthStore } from '@stores/AuthStore';
 import { useComponentsStore } from '@stores/ComponentStore';
+import { useComputerStatusHistoryStore } from '@stores/ComputerStatusHistoryStore';
 import { useComputersStore } from '@stores/ComputerStore';
-import { useStatusChangesStore } from '@stores/StatusChangeStore';
 import { UserService } from '@services/UserService';
 import { useUsersStore } from '@stores/UsersStore';
 
@@ -19,14 +19,14 @@ export class ServiceInitializer {
     const authStore = useAuthStore();
     const componentsStore = useComponentsStore();
     const computersStore = useComputersStore();
-    const statusChangesStore = useStatusChangesStore();
+    const computerStatusHistoryStore = useComputerStatusHistoryStore();
     const usersStore = useUsersStore();
 
     // services
-    const statusChangeService = StatusChangeService.getInstance(statusChangesStore);
+    const computerStatusHistoryService = ComputerStatusHistoryService.getInstance(computerStatusHistoryStore);
     AuthService.getInstance(authStore, usersStore);
     ComponentService.getInstance(componentsStore);
-    ComputerService.getInstance(computersStore, statusChangeService);
+    ComputerService.getInstance(computersStore, computerStatusHistoryService);
     UserService.getInstance(usersStore);
   }
 }
