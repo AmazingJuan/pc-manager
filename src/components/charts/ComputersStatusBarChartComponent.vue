@@ -2,17 +2,20 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
+import { ChartUtils } from '@utils/ChartUtils';
 import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import { ComputerService } from '@services/ComputerService';
-import { ChartUtils } from '@utils/ChartUtils';
 
 // -------------------------------
-// Third Party Imports
+// Third-Party Imports
 // -------------------------------
-import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Tooltip } from 'chart.js';
 import { Bar } from 'vue-chartjs';
+import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Tooltip } from 'chart.js';
 import { computed } from 'vue';
 
+// -------------------------------
+// Setup / Library Configuration
+// -------------------------------
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 // -------------------------------
@@ -23,18 +26,15 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+
+// -------------------------------
+// Services
+// -------------------------------
 const computerService = ComputerService.getInstance();
 
-const chartValues = computed(() => computerService.getCountByStatus(props.computers).map((entry) => entry.count));
-
 // -------------------------------
-// Computed Variables
+// Reactive Variables / Computed
 // -------------------------------
-const chartData = computed(() => ({
-  labels: ['Active', 'Inactive', 'Maintenance'],
-  datasets: [ChartUtils.buildBarDataset('Count', chartValues.value, { barThickness: 45 })],
-}));
-
 const options = ChartUtils.getBarChartOptions({
   animation: { duration: 1500, easing: 'easeOutQuart' },
   plugins: { legend: { display: false }, tooltip: { padding: 12 } },
@@ -43,6 +43,11 @@ const options = ChartUtils.getBarChartOptions({
     y: ChartUtils.getBaseAxisOptions({ beginAtZero: true, ticks: { stepSize: 1 } }),
   },
 });
+const chartValues = computed(() => computerService.getCountByStatus(props.computers).map((entry) => entry.count));
+const chartData = computed(() => ({
+  labels: ['Active', 'Inactive', 'Maintenance'],
+  datasets: [ChartUtils.buildBarDataset('Count', chartValues.value, { barThickness: 45 })],
+}));
 </script>
 
 <template>

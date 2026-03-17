@@ -8,19 +8,18 @@ import { computed } from 'vue';
 import { Monitor } from 'lucide-vue-next';
 import { useRoute } from 'vue-router';
 
-// Gather title and subtitle
+// -------------------------------
+// Reactive Variables / Computed
+// -------------------------------
 const route = useRoute();
-const title = computed(() => route.meta.title);
 const subtitle = computed(() => route.meta.subtitle);
+const title = computed(() => route.meta.title);
 </script>
 
 <template>
-  <!-- Auth Screen Container -->
   <div class="min-h-screen bg-background flex items-center justify-center p-4">
     <div class="w-full max-w-md">
-      <!-- Auth Card -->
       <div class="bg-card rounded-2xl shadow-2xl border border-border p-8">
-        <!-- Brand and Route Metadata -->
         <div class="text-center mb-8">
           <div class="inline-flex items-center justify-center w-20 h-20 bg-primary/10 rounded-2xl mb-4">
             <Monitor class="w-10 h-10 text-primary" />
@@ -30,7 +29,6 @@ const subtitle = computed(() => route.meta.subtitle);
           <p class="text-sm text-muted-foreground">{{ subtitle }}</p>
         </div>
 
-        <!-- Auth View Content -->
         <RouterView />
       </div>
     </div>

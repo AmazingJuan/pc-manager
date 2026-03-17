@@ -5,24 +5,24 @@
 import type { CreateUserDTO } from '@dtos/user/CreateUserDTO';
 import type { EditUserDTO } from '@dtos/user/EditUserDTO';
 import UiModalComponent from '@components/ui/UiModalComponent.vue';
-import UsersManagementFormSection from '@components/usersManagement/UsersManagementFormSectionComponent.vue';
 import type { UserInterface } from '@interfaces/UserInterface';
 import { UserService } from '@services/UserService';
+import UsersManagementFormSection from '@components/usersManagement/UsersManagementFormSectionComponent.vue';
 import UsersManagementTableSection from '@components/usersManagement/UsersManagementTableSectionComponent.vue';
 
 // -------------------------------
-// Third Party Imports
+// Third-Party Imports
 // -------------------------------
-import { onMounted, ref } from 'vue';
 import { Plus, Shield } from 'lucide-vue-next';
+import { onMounted, ref } from 'vue';
 
 // -------------------------------
-// Non Reactive Variables
+// Services
 // -------------------------------
 const userService = UserService.getInstance();
 
 // -------------------------------
-// Reactive Variables
+// Reactive Variables / Computed
 // -------------------------------
 const users = ref<UserInterface[]>([]);
 const isModalOpen = ref(false);
@@ -74,6 +74,8 @@ function handleDelete(user: UserInterface): void {
   }
 }
 
+// -------------------------------
+// Watchers / Lifecycle
 // -------------------------------
 onMounted(loadData);
 </script>

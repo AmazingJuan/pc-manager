@@ -6,14 +6,14 @@
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
 import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import { ComputerSchema } from '@schemas/computer/ComputerSchema';
-import type { ComputerStatus } from '@/types/Computer';
+import type { ComputerStatus } from '@app-types/Computer';
 import type { CreateComputerDTO } from '@dtos/computer/CreateComputerDTO';
 import type { EditComputerDTO } from '@dtos/computer/EditComputerDTO';
+import { FormatUtils } from '@utils/FormatUtils';
 import type { UserInterface } from '@interfaces/UserInterface';
-import { FormatUtils } from '@/utils/FormatUtils';
 
 // -------------------------------
-// Third Party Imports
+// Third-Party Imports
 // -------------------------------
 import { computed } from 'vue';
 import { ErrorMessage, Field, Form } from 'vee-validate';
@@ -35,7 +35,7 @@ const props = defineProps<Props>();
 const emit = defineEmits<{ create: [payload: CreateComputerDTO]; edit: [payload: EditComputerDTO]; cancel: [] }>();
 
 // -------------------------------
-// Computed Variables
+// Reactive Variables / Computed
 // -------------------------------
 const initialValues = computed(() => ({
   name: props.computer?.name ?? '',

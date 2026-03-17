@@ -1,3 +1,8 @@
+// Author: Juan Pablo Avendaño
+
+// -------------------------------
+// Third-Party Imports
+// -------------------------------
 import type { ChartOptions } from 'chart.js';
 
 type ChartExtra = Record<string, unknown>;

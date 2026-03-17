@@ -4,51 +4,41 @@
 // -------------------------------
 import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import { ComputerService } from '@services/ComputerService';
+import type { ComputerStatus } from '@app-types/Computer';
 import type { ComputerStatusHistoryInterface } from '@interfaces/ComputerStatusHistoryInterface';
-import ComputerStatusHistoryStatsSection from '@components/computerStatusHistory/ComputerStatusHistoryStatsSectionComponent.vue';
-import ComputerStatusHistoryFiltersSection from '@components/computerStatusHistory/ComputerStatusHistoryFiltersSectionComponent.vue';
-import ComputerStatusHistoryTableSection from '@components/computerStatusHistory/ComputerStatusHistoryTableSectionComponent.vue';
 import { ComputerStatusHistoryService } from '@services/ComputerStatusHistoryService';
+import ComputerStatusHistoryFiltersSection from '@components/computerStatusHistory/ComputerStatusHistoryFiltersSectionComponent.vue';
+import ComputerStatusHistoryStatsSection from '@components/computerStatusHistory/ComputerStatusHistoryStatsSectionComponent.vue';
+import ComputerStatusHistoryTableSection from '@components/computerStatusHistory/ComputerStatusHistoryTableSectionComponent.vue';
 
 // -------------------------------
 // Third-Party Imports
 // -------------------------------
-import { computed, onMounted, ref } from 'vue';
 import { History } from 'lucide-vue-next';
+import { computed, onMounted, ref } from 'vue';
 
 // -------------------------------
-// Non Reactive Variables
+// Services
 // -------------------------------
 const computerService = ComputerService.getInstance();
 const computerStatusHistoryService = ComputerStatusHistoryService.getInstance();
 
 // -------------------------------
-// Reactive Variables
+// Reactive Variables / Computed
 // -------------------------------
 const computers = ref<ComputerInterface[]>([]);
 const computerStatusHistoryEntries = ref<ComputerStatusHistoryInterface[]>([]);
 const selectedComputerId = ref<number | 'all'>('all');
-const selectedOldStatus = ref<string>('all');
-const selectedStatus = ref<string>('all');
-
-// -------------------------------
-// Computed
-// -------------------------------
+const selectedOldStatus = ref<ComputerStatus | 'all'>('all');
+const selectedStatus = ref<ComputerStatus | 'all'>('all');
 const filteredComputerStatusHistoryEntries = computed(() => {
-  return computerStatusHistoryEntries.value.filter((historyEntry) => {
-    const matchesComputer = selectedComputerId.value === 'all' || historyEntry.computerId === selectedComputerId.value;
-    const matchesOldStatus = selectedOldStatus.value === 'all' || historyEntry.previousStatus === selectedOldStatus.value;
-    const matchesStatus = selectedStatus.value === 'all' || historyEntry.newStatus === selectedStatus.value;
-    return matchesComputer && matchesOldStatus && matchesStatus;
+  return computerStatusHistoryService.filterHistoryEntries(computerStatusHistoryEntries.value, {
+    computerId: selectedComputerId.value,
+    previousStatus: selectedOldStatus.value,
+    newStatus: selectedStatus.value,
   });
 });
-
-const computerStatusHistoryStats = computed(() => ({
-  total: filteredComputerStatusHistoryEntries.value.length,
-  toActive: filteredComputerStatusHistoryEntries.value.filter((entry) => entry.newStatus === 'active').length,
-  toMaintenance: filteredComputerStatusHistoryEntries.value.filter((entry) => entry.newStatus === 'maintenance').length,
-  toInactive: filteredComputerStatusHistoryEntries.value.filter((entry) => entry.newStatus === 'inactive').length,
-}));
+const computerStatusHistoryStats = computed(() => computerStatusHistoryService.getStatusChangeStats(filteredComputerStatusHistoryEntries.value));
 
 // -------------------------------
 // Functions
@@ -59,7 +49,8 @@ function loadData(): void {
 }
 
 // -------------------------------
-
+// Watchers / Lifecycle
+// -------------------------------
 onMounted(loadData);
 </script>
 
@@ -80,8 +71,8 @@ onMounted(loadData);
       :selected-old-status="selectedOldStatus"
       :selected-status="selectedStatus"
       @update:selected-computer-id="selectedComputerId = $event"
-      @update:selected-old-status="selectedOldStatus = $event"
-      @update:selected-status="selectedStatus = $event"
+      @update:selected-old-status="selectedOldStatus = $event as ComputerStatus | 'all'"
+      @update:selected-status="selectedStatus = $event as ComputerStatus | 'all'"
     />
 
     <ComputerStatusHistoryStatsSection :stats="computerStatusHistoryStats" />

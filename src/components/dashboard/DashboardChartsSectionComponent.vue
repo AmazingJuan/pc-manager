@@ -2,10 +2,10 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import ComponentsStatusPieChartComponent from '@components/charts/ComponentsStatusPieChartComponent.vue';
-import ComputersStatusBarChartComponent from '@components/charts/ComputersStatusBarChartComponent.vue';
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
+import ComponentsStatusPieChartComponent from '@components/charts/ComponentsStatusPieChartComponent.vue';
 import type { ComputerInterface } from '@interfaces/ComputerInterface';
+import ComputersStatusBarChartComponent from '@components/charts/ComputersStatusBarChartComponent.vue';
 
 // -------------------------------
 // Props

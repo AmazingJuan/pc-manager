@@ -3,9 +3,9 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import { components } from '@seeders/ComponentSeeder';
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
 import type { CreateComponentDTO } from '@dtos/components/CreateComponentDTO';
+import { components } from '@seeders/ComponentSeeder';
 import type { EditComponentDTO } from '@dtos/components/EditComponentDTO';
 
 // -------------------------------

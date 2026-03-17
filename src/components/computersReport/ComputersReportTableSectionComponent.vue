@@ -2,9 +2,9 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import type { ComputerInterface } from '@interfaces/ComputerInterface';
-import { FormatUtils } from '@/utils/FormatUtils';
 import { BadgeUtils } from '@utils/BadgeUtils';
+import type { ComputerInterface } from '@interfaces/ComputerInterface';
+import { FormatUtils } from '@utils/FormatUtils';
 
 // -------------------------------
 // Props

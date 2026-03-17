@@ -2,17 +2,20 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
+import { ChartUtils } from '@utils/ChartUtils';
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
 import { ComponentService } from '@services/ComponentService';
-import { ChartUtils } from '@utils/ChartUtils';
 
 // -------------------------------
 // Third-Party Imports
 // -------------------------------
 import { Bar } from 'vue-chartjs';
-import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Tooltip, type ChartData } from 'chart.js';
+import { BarElement, CategoryScale, Chart as ChartJS, type ChartData, Legend, LinearScale, Tooltip } from 'chart.js';
 import { computed } from 'vue';
 
+// -------------------------------
+// Setup / Library Configuration
+// -------------------------------
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 // -------------------------------
@@ -23,10 +26,18 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+
+// -------------------------------
+// Emitters
+// -------------------------------
+
+// -------------------------------
+// Services
+// -------------------------------
 const componentService = ComponentService.getInstance();
 
 // -------------------------------
-// Reactive variables
+// Reactive Variables / Computed
 // -------------------------------
 const chartData = computed<ChartData<'bar'>>(() => {
   const typeCounts = componentService.getCountByType(props.components);
@@ -35,7 +46,6 @@ const chartData = computed<ChartData<'bar'>>(() => {
 
   return { labels, datasets: [ChartUtils.buildBarDataset('Count', values)] };
 });
-
 const chartOptions = ChartUtils.getBarChartOptions({
   animation: { duration: 1500, easing: 'easeOutQuart' },
   plugins: { legend: { display: false }, tooltip: { padding: 12 } },
@@ -44,6 +54,14 @@ const chartOptions = ChartUtils.getBarChartOptions({
     y: ChartUtils.getBaseAxisOptions({ beginAtZero: true, ticks: { stepSize: 1 } }),
   },
 });
+
+// -------------------------------
+// Functions
+// -------------------------------
+
+// -------------------------------
+// Watchers / Lifecycle
+// -------------------------------
 </script>
 
 <template>

@@ -2,8 +2,9 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import type { RecordComputerStatusChange } from '@/dtos/computerStatusHistory/RecordComputerStatusChangeDTO';
 import type { ComputerStatusHistoryInterface } from '@interfaces/ComputerStatusHistoryInterface';
+import type { RecordComputerStatusChange } from '@dtos/computerStatusHistory/RecordComputerStatusChangeDTO';
+
 // -------------------------------
 // Third-Party Imports
 // -------------------------------

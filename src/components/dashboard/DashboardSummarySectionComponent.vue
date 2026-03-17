@@ -2,10 +2,10 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import { FormatUtils } from '@/utils/FormatUtils';
+import { FormatUtils } from '@utils/FormatUtils';
 
 // -------------------------------
-// Third Party Imports
+// Third-Party Imports
 // -------------------------------
 import { computed } from 'vue';
 
@@ -19,10 +19,9 @@ interface Props {
 const props = defineProps<Props>();
 
 // -------------------------------
-// Reactive Variables
+// Reactive Variables / Computed
 // -------------------------------
 const inUseComponents = computed(() => props.stats.totalComponents - props.stats.availableComponents);
-
 const availabilityRate = computed(() => {
   if (!props.stats.totalComputers) {
     return 0;

@@ -13,29 +13,31 @@ import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 // -------------------------------
-// Non Reactive Variables
+// Services
 // -------------------------------
-
-const authStore = useAuthStore();
 const authService = AuthService.getInstance();
+
+// -------------------------------
+// Non-Reactive Variables
+// -------------------------------
+const authStore = useAuthStore();
 const route = useRoute();
 const router = useRouter();
-
 const menuItems = [
-  { name: 'dashboard', icon: LayoutDashboard, label: 'Dashboard', admin: false },
-  { name: 'computers', icon: Monitor, label: 'Computers Management', admin: true },
-  { name: 'components', icon: Cpu, label: 'Components Management', admin: true },
-  { name: 'users', icon: Users, label: 'Users Management', admin: true },
-  { name: 'computers-status-history', icon: History, label: 'Computers Status History', admin: false },
   { name: 'components-report', icon: BarChart3, label: 'Components Report', admin: false },
+  { name: 'components', icon: Cpu, label: 'Components Management', admin: true },
   { name: 'computers-report', icon: Package, label: 'Computers Report', admin: false },
+  { name: 'computers-status-history', icon: History, label: 'Computers Status History', admin: false },
+  { name: 'computers', icon: Monitor, label: 'Computers Management', admin: true },
+  { name: 'dashboard', icon: LayoutDashboard, label: 'Dashboard', admin: false },
+  { name: 'users', icon: Users, label: 'Users Management', admin: true },
 ];
 
 // -------------------------------
-// Reactive Variables
+// Reactive Variables / Computed
 // -------------------------------
-const user = computed(() => authStore.loggedInUser);
 const isAdmin = computed(() => user.value?.role === 'admin');
+const user = computed(() => authStore.loggedInUser);
 
 // -------------------------------
 // Functions
@@ -48,20 +50,22 @@ function logout(): void {
   authService.logout();
   router.push({ name: 'login' });
 }
+
+// -------------------------------
+// Watchers / Lifecycle
+// -------------------------------
 </script>
 
 <template>
   <aside class="w-64 bg-sidebar border-r border-sidebar-border flex flex-col h-screen sticky top-0">
-    <!-- Brand Header -->
     <div class="p-6 border-b border-sidebar-border">
       <h1 class="text-2xl text-primary flex items-center gap-2">
         <Monitor class="w-8 h-8" />
-        PC Manager
+        Computer Manager
       </h1>
       <p class="text-xs text-muted-foreground mt-1">IT equipment management</p>
     </div>
 
-    <!-- Navigation Links -->
     <nav class="flex-1 p-4 overflow-y-auto">
       <ul class="space-y-1">
         <li v-for="item in menuItems" :key="item.name" v-show="!item.admin || isAdmin">
@@ -82,7 +86,6 @@ function logout(): void {
       </ul>
     </nav>
 
-    <!-- User Panel and Sign Out -->
     <div class="p-4 border-t border-sidebar-border">
       <div class="mb-3 px-4 py-3 bg-secondary rounded-lg">
         <p class="text-xs text-muted-foreground">User</p>

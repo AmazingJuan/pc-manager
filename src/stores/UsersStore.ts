@@ -3,10 +3,10 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import { users } from '@seeders/UserSeeder';
-import type { UserInterface } from '@interfaces/UserInterface';
 import type { CreateUserDTO } from '@dtos/user/CreateUserDTO';
 import type { EditUserDTO } from '@dtos/user/EditUserDTO';
+import type { UserInterface } from '@interfaces/UserInterface';
+import { users } from '@seeders/UserSeeder';
 
 // -------------------------------
 // Third-Party Imports

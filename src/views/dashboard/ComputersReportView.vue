@@ -3,37 +3,33 @@
 // Own Imports
 // -------------------------------
 import type { ComputerInterface } from '@interfaces/ComputerInterface';
-import type { UserInterface } from '@interfaces/UserInterface';
-import type { ComputerStatus } from '@/types/Computer';
+import { ComputerService } from '@services/ComputerService';
+import type { ComputerStatus } from '@app-types/Computer';
 import ComputersReportChartsSection from '@components/computersReport/ComputersReportChartsSectionComponent.vue';
 import ComputersReportFiltersSection from '@components/computersReport/ComputersReportFiltersSectionComponent.vue';
 import ComputersReportTableSection from '@components/computersReport/ComputersReportTableSectionComponent.vue';
-import { ComputerService } from '@services/ComputerService';
+import type { UserInterface } from '@interfaces/UserInterface';
 import { UserService } from '@services/UserService';
 
 // -------------------------------
-// Third Party Imports
+// Third-Party Imports
 // -------------------------------
 import { computed, onMounted, ref } from 'vue';
 
 // -------------------------------
-// Non Reactive Variables
+// Services
 // -------------------------------
 const computerService = ComputerService.getInstance();
 const userService = UserService.getInstance();
 
 // -------------------------------
-// Reactive Variables
+// Reactive Variables / Computed
 // -------------------------------
 const computers = ref<ComputerInterface[]>([]);
 const users = ref<UserInterface[]>([]);
 const searchQuery = ref<string>('');
 const selectedStatus = ref<ComputerStatus | 'all'>('all');
 const selectedUserId = ref<number | 'all'>('all');
-
-// -------------------------------
-// Computed
-// -------------------------------
 const filteredComputers = computed(() =>
   computerService.filterComputers(computers.value, { searchQuery: searchQuery.value, status: selectedStatus.value, userId: selectedUserId.value }),
 );
@@ -57,7 +53,8 @@ function loadData(): void {
 }
 
 // -------------------------------
-
+// Watchers / Lifecycle
+// -------------------------------
 onMounted(loadData);
 </script>
 

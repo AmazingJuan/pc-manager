@@ -2,16 +2,19 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import { ChartUtils } from '@utils/ChartUtils';
+import type { ComputerInterface } from '@interfaces/ComputerInterface';
 
 // -------------------------------
-// Third Party Imports
+// Third-Party Imports
 // -------------------------------
+import { Bar } from 'vue-chartjs';
 import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Tooltip } from 'chart.js';
 import { computed } from 'vue';
-import { Bar } from 'vue-chartjs';
 
+// -------------------------------
+// Setup / Library Configuration
+// -------------------------------
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 // -------------------------------
@@ -24,7 +27,7 @@ interface Props {
 const props = defineProps<Props>();
 
 // -------------------------------
-// Computed Variables
+// Reactive Variables / Computed
 // -------------------------------
 const groupedByLocation = computed<Record<string, number>>(() => {
   return props.computers.reduce<Record<string, number>>((accumulator, computer) => {
@@ -33,15 +36,12 @@ const groupedByLocation = computed<Record<string, number>>(() => {
     return accumulator;
   }, {});
 });
-
 const chartLabels = computed(() => Object.keys(groupedByLocation.value));
 const chartValues = computed(() => Object.values(groupedByLocation.value));
-
 const chartData = computed(() => ({
   labels: chartLabels.value,
   datasets: [ChartUtils.buildBarDataset('Cantidad', chartValues.value, { barThickness: 45 })],
 }));
-
 const options = ChartUtils.getBarChartOptions({
   animation: { duration: 1500, easing: 'easeOutQuart' },
   plugins: { legend: { display: false }, tooltip: { padding: 12 } },

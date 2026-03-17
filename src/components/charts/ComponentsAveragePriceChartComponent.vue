@@ -2,17 +2,20 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
+import { ChartUtils } from '@utils/ChartUtils';
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
 import { ComponentService } from '@services/ComponentService';
-import { ChartUtils } from '@utils/ChartUtils';
 
 // -------------------------------
 // Third-Party Imports
 // -------------------------------
-import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Tooltip, type ChartData, type TooltipItem } from 'chart.js';
+import { CategoryScale, Chart as ChartJS, type ChartData, Legend, LinearScale, LineElement, PointElement, Tooltip, type TooltipItem } from 'chart.js';
 import { computed } from 'vue';
 import { Line } from 'vue-chartjs';
 
+// -------------------------------
+// Setup / Library Configuration
+// -------------------------------
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
 
 // -------------------------------
@@ -23,10 +26,14 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+
+// -------------------------------
+// Services
+// -------------------------------
 const componentService = ComponentService.getInstance();
 
 // -------------------------------
-// Reactive variables
+// Reactive Variables / Computed
 // -------------------------------
 const chartData = computed<ChartData<'line'>>(() => {
   const averages = componentService.getAveragePriceByType(props.components);
@@ -52,6 +59,14 @@ const chartOptions = ChartUtils.getLineChartOptions({
   },
   scales: { x: ChartUtils.getBaseAxisOptions({ grid: { display: false } }), y: ChartUtils.getBaseAxisOptions({ beginAtZero: true }) },
 });
+
+// -------------------------------
+// Functions
+// -------------------------------
+
+// -------------------------------
+// Watchers / Lifecycle
+// -------------------------------
 </script>
 
 <template>

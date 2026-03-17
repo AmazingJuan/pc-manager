@@ -1,30 +1,35 @@
 <script setup lang="ts">
 // Author: Juan Manuel Zapata
+
 // -------------------------------
 // Own Imports
 // -------------------------------
-import ComponentsManagementFormSection from '@components/componentsManagement/ComponentsManagementFormSectionComponent.vue';
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
 import { ComponentService } from '@services/ComponentService';
+import ComponentsManagementFormSection from '@components/componentsManagement/ComponentsManagementFormSectionComponent.vue';
 import ComponentsManagementTableSection from '@components/componentsManagement/ComponentsManagementTableSectionComponent.vue';
 import type { CreateComponentDTO } from '@dtos/components/CreateComponentDTO';
 import type { EditComponentDTO } from '@dtos/components/EditComponentDTO';
 import UiModalComponent from '@components/ui/UiModalComponent.vue';
 
 // -------------------------------
-// Third Party Imports
+// Third-Party Imports
 // -------------------------------
-import { onMounted, onUnmounted, ref } from 'vue';
 import { Plus } from 'lucide-vue-next';
+import { onMounted, onUnmounted, ref } from 'vue';
+
+// -------------------------------
+// Services
+// -------------------------------
+const componentService = ComponentService.getInstance();
 
 // -------------------------------
 // Non Reactive Variables
 // -------------------------------
-const componentService = ComponentService.getInstance();
 let successTimeout: ReturnType<typeof setTimeout> | null = null;
 
 // -------------------------------
-// Reactive Variables
+// Reactive Variables / Computed
 // -------------------------------
 const components = ref<ComponentInterface[]>([]);
 const editingComponent = ref<ComponentInterface | null>(null);
@@ -90,7 +95,7 @@ function closeModal(): void {
 }
 
 // -------------------------------
-// Lifecycle Hooks
+// Watchers / Lifecycle
 // -------------------------------
 onUnmounted(() => {
   if (successTimeout) {
