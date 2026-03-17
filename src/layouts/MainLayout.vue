@@ -4,13 +4,13 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import Sidebar from '@components/navigation/SidebarComponent.vue';
+import NavigationSidebarComponent from '@components/navigation/NavigationSidebarComponent.vue';
 </script>
 
 <template>
   <div class="min-h-screen bg-background flex">
     <!-- Sidebar Navigation -->
-    <Sidebar />
+    <NavigationSidebarComponent />
 
     <!-- Main Route Content -->
     <main class="flex-1 p-6 lg:p-8 overflow-auto">

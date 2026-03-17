@@ -4,14 +4,14 @@
 // Own Imports
 // -------------------------------
 import { AuthService } from '@services/AuthService';
-import ComponentsView from '@views/dashboard/ComponentsView.vue';
-import ComputersView from '@views/dashboard/ComputersView.vue';
+import ComponentsManagementView from '@views/dashboard/ComponentsManagementView.vue';
+import ComputersManagementView from '@views/dashboard/ComputersManagementView.vue';
+import ComputerReportView from '@views/dashboard/ComputersReportView.vue';
+import ComponentReportView from '@views/dashboard/ComponentsReportView.vue';
 import IndexView from '@/views/dashboard/IndexView.vue';
-import InventoryView from '@views/dashboard/InventoryView.vue';
 import LoginView from '@views/auth/LoginView.vue';
 import RegisterView from '@views/auth/RegisterView.vue';
-import ReportsView from '@views/dashboard/ReportsView.vue';
-import UsersView from '@views/dashboard/UsersView.vue';
+import UsersManagementView from '@views/dashboard/UsersManagementView.vue';
 import StatusHistoryView from '@views/dashboard/StatusHistoryView.vue';
 // -------------------------------
 // Third-Party Imports
@@ -26,16 +26,14 @@ const routes = [
 
   // Routes that require login
   { path: '/dashboard', name: 'dashboard', component: IndexView },
-  { path: '/dashboard/computers', name: 'computers', component: ComputersView },
-  { path: '/dashboard/components', name: 'components', component: ComponentsView },
-  { path: '/dashboard/users', name: 'users', component: IndexView },
-  { path: '/dashboard/log', name: 'computers-status-log', component: IndexView },
-  { path: '/dashboard/reports', name: 'reports', component: ReportsView },
-  { path: '/dashboard/inventory', name: 'inventory', component: InventoryView },
+  { path: '/dashboard/components/report', name: 'components-report', component: ComponentReportView },
+  { path: '/dashboard/computers/report', name: 'computers-report', component: ComputerReportView },
+  { path: '/dashboard/computers/status-history', name: 'computers-status-history', component: StatusHistoryView },
 
   // Admin only routes
-  { path: '/dashboard/users', name: 'users', component: UsersView },
-  { path: '/dashboard/status-history', name: 'status-history', component: StatusHistoryView },
+  { path: '/dashboard/users', name: 'users', component: UsersManagementView },
+  { path: '/dashboard/computers', name: 'computers', component: ComputersManagementView },
+  { path: '/dashboard/components', name: 'components', component: ComponentsManagementView },
 ];
 
 const router = createRouter({ history: createWebHistory(import.meta.env.BASE_URL), routes });
@@ -48,7 +46,7 @@ router.beforeEach((to) => {
   const isAdmin = loggedInUser?.role === 'admin';
 
   const guestOnlyRouteNames = new Set(['login', 'register']);
-  const adminOnlyRouteNames = new Set(['users', 'computers-status-log']);
+  const adminOnlyRouteNames = new Set(['users', 'computers', 'components']);
 
   const isDashboardRoute = to.path.startsWith('/dashboard');
   const isGuestOnlyRoute = guestOnlyRouteNames.has(String(to.name ?? ''));

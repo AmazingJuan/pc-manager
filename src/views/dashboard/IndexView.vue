@@ -2,9 +2,12 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import ChartsSectionComponent from '@components/dashboard/sections/ChartsSectionComponent.vue';
-import StatsSection from '@components/dashboard/sections/StatsSectionComponent.vue';
-import SummarySection from '@components/dashboard/sections/SummarySectionComponent.vue';
+import DashboardChartsSectionComponent from '@components/dashboard/DashboardChartsSectionComponent.vue';
+import DashboardStatsSectionComponent from '@components/dashboard/DashboardStatsSectionComponent.vue';
+import DashboardSummarySectionComponent from '@components/dashboard/DashboardSummarySectionComponent.vue';
+import type { ComponentInterface } from '@interfaces/ComponentInterface';
+import type { ComputerInterface } from '@interfaces/ComputerInterface';
+import type { UserInterface } from '@interfaces/UserInterface';
 import { ComponentService } from '@services/ComponentService';
 import { ComputerService } from '@services/ComputerService';
 import { UserService } from '@services/UserService';
@@ -24,14 +27,14 @@ const userService = UserService.getInstance();
 // -------------------------------
 // Reactive Variables
 // -------------------------------
-const computers = ref(computerService.getAll());
-const components = ref(componentService.getAll());
-const users = ref(userService.getAll());
+const computers = ref<ComputerInterface[]>([]);
+const components = ref<ComponentInterface[]>([]);
+const users = ref<UserInterface[]>([]);
 
 const stats = computed(() => ({
   totalComputers: computers.value.length,
-  activeComputers: computers.value.filter((computer) => computer.status === 'active').length,
-  maintenanceComputers: computers.value.filter((computer) => computer.status === 'maintenance').length,
+  activeComputers: computerService.getStatusCount('active', computers.value),
+  maintenanceComputers: computerService.getStatusCount('maintenance', computers.value),
   totalComponents: components.value.length,
   availableComponents: components.value.filter((component) => component.status === 'available').length,
   totalUsers: users.value.length,
@@ -59,12 +62,12 @@ onMounted(loadData);
     </div>
 
     <!-- Stats -->
-    <StatsSection :stats="stats" />
+    <DashboardStatsSectionComponent :stats="stats" />
 
     <!-- Charts -->
-    <ChartsSectionComponent :computers="computers" :components="components" />
+    <DashboardChartsSectionComponent :computers="computers" :components="components" />
 
     <!-- System summary section -->
-    <SummarySection :stats="stats" />
+    <DashboardSummarySectionComponent :stats="stats" />
   </div>
 </template>

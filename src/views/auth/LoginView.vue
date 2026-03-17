@@ -51,14 +51,7 @@ function handleSubmit(values: Record<string, unknown>): void {
     <!-- Username field -->
     <div>
       <label class="block text-sm text-foreground mb-2"> Username </label>
-      <Field
-        v-slot="{ field, errorMessage }"
-        name="username"
-        :validate-on-blur="false"
-        :validate-on-change="false"
-        :validate-on-input="false"
-        :validate-on-model-update="false"
-      >
+      <Field v-slot="{ field, errorMessage }" name="username">
         <div class="relative">
           <User class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <input
@@ -78,14 +71,7 @@ function handleSubmit(values: Record<string, unknown>): void {
     <!-- Password field -->
     <div>
       <label class="block text-sm text-foreground mb-2"> Password </label>
-      <Field
-        v-slot="{ field, errorMessage }"
-        name="password"
-        :validate-on-blur="false"
-        :validate-on-change="false"
-        :validate-on-input="false"
-        :validate-on-model-update="false"
-      >
+      <Field v-slot="{ field, errorMessage }" name="password">
         <div class="relative">
           <Lock class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <input
