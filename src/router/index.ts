@@ -21,8 +21,9 @@ import { createRouter, createWebHistory } from 'vue-router';
 const routes = [
   // Guest routes
   { path: '/', redirect: '/login' },
-  { path: '/login', name: 'login', component: LoginView },
-  { path: '/register', name: 'register', component: RegisterView },
+  { path: '/login', name: 'login', component: LoginView, meta: { title: 'Computer Manager', subtitle: 'TI Devices Management' } },
+
+  { path: '/register', name: 'register', component: RegisterView, meta: { title: 'Create an account', subtitle: 'Complete this form to register' } },
 
   // Routes that require login
   { path: '/dashboard', name: 'dashboard', component: IndexView },
