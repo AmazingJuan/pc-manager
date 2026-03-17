@@ -3,8 +3,8 @@
 // Own Imports
 // -------------------------------
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
-import type { ComponentType } from '@app-types/Components';
 import { ComponentService } from '@services/ComponentService';
+import type { ComponentType } from '@app-types/Components';
 import ComponentsReportChartsSection from '@components/componentsReport/ComponentsReportChartsSectionComponent.vue';
 import ComponentsReportFiltersSection from '@components/componentsReport/ComponentsReportFiltersSectionComponent.vue';
 import ComponentsReportTableSection from '@components/componentsReport/ComponentsReportTableSectionComponent.vue';
@@ -15,22 +15,18 @@ import ComponentsReportTableSection from '@components/componentsReport/Component
 import { computed, onMounted, ref } from 'vue';
 
 // -------------------------------
-// Non Reactive Variables
+// Services
 // -------------------------------
 const componentService = ComponentService.getInstance();
 
 // -------------------------------
-// Reactive Variables
+// Reactive Variables / Computed
 // -------------------------------
 const components = ref<ComponentInterface[]>([]);
 const selectedType = ref<string>('all');
 const selectedStatus = ref<ComponentType | 'all'>('all');
 const fromDate = ref<string>('');
 const toDate = ref<string>('');
-
-// -------------------------------
-// Computed
-// -------------------------------
 const filteredComponents = computed(() =>
   componentService.filterComponents(components.value, {
     type: selectedType.value,
@@ -39,7 +35,6 @@ const filteredComponents = computed(() =>
     toDate: toDate.value,
   }),
 );
-
 const availableTypes = computed(() => {
   return [...new Set(components.value.map((component) => component.type))];
 });

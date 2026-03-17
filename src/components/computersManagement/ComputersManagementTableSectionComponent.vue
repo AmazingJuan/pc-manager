@@ -7,7 +7,7 @@ import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import type { UserInterface } from '@interfaces/UserInterface';
 
 // -------------------------------
-// Third Party Imports
+// Third-Party Imports
 // -------------------------------
 import { Pencil, Trash2 } from 'lucide-vue-next';
 

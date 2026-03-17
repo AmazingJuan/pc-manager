@@ -5,7 +5,7 @@
 import UiStatCardComponent from '@components/ui/UiStatCardComponent.vue';
 
 // -------------------------------
-// Third Party Imports
+// Third-Party Imports
 // -------------------------------
 import { Activity, CheckCircle2, PauseCircle, Wrench } from 'lucide-vue-next';
 

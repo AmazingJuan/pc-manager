@@ -4,33 +4,36 @@
 // -------------------------------
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
 import { ComponentService } from '@services/ComponentService';
-import ComputersManagementFormSection from '@components/computersManagement/ComputersManagementFormSectionComponent.vue';
-import type { CreateComputerDTO } from '@dtos/computer/CreateComputerDTO';
 import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import { ComputerService } from '@services/ComputerService';
+import ComputersManagementFormSection from '@components/computersManagement/ComputersManagementFormSectionComponent.vue';
 import ComputersManagementTableSection from '@components/computersManagement/ComputersManagementTableSectionComponent.vue';
+import type { CreateComputerDTO } from '@dtos/computer/CreateComputerDTO';
 import type { EditComputerDTO } from '@dtos/computer/EditComputerDTO';
 import UiModalComponent from '@components/ui/UiModalComponent.vue';
 import type { UserInterface } from '@interfaces/UserInterface';
 import { UserService } from '@services/UserService';
 
 // -------------------------------
-// Third Party Imports
+// Third-Party Imports
 // -------------------------------
-import { onMounted, onUnmounted, ref } from 'vue';
 import { Plus } from 'lucide-vue-next';
+import { onMounted, onUnmounted, ref } from 'vue';
 
 // -------------------------------
-// Non Reactive Variables
+// Services
 // -------------------------------
 const computerService = ComputerService.getInstance();
 const componentService = ComponentService.getInstance();
 const userService = UserService.getInstance();
 
+// -------------------------------
+// Non Reactive Variables
+// -------------------------------
 let successTimeout: ReturnType<typeof setTimeout> | null = null;
 
 // -------------------------------
-// Reactive Variables
+// Reactive Variables / Computed
 // -------------------------------
 const computers = ref<ComputerInterface[]>([]);
 const users = ref<UserInterface[]>([]);
@@ -103,7 +106,7 @@ function closeModal(): void {
 }
 
 // -------------------------------
-// Watchers
+// Watchers / Lifecycle
 // -------------------------------
 
 onUnmounted(() => {

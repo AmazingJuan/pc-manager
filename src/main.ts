@@ -1,18 +1,18 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import '@assets/main.css';
 import App from '@/App.vue';
-import router from '@/router';
 import { ServiceInitializer } from '@bootstrap/ServiceInitializer';
+import router from '@/router';
+import '@assets/main.css';
 
 // -------------------------------
 // Third-Party Imports
 // -------------------------------
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
+import { configure } from 'vee-validate';
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
-import { configure } from 'vee-validate';
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 
 const app = createApp(App);
 

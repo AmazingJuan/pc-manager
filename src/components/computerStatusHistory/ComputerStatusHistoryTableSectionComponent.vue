@@ -2,10 +2,10 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
+import { BadgeUtils } from '@utils/BadgeUtils';
 import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import type { ComputerStatusHistoryInterface } from '@interfaces/ComputerStatusHistoryInterface';
-import { FormatUtils } from '@/utils/FormatUtils';
-import { BadgeUtils } from '@utils/BadgeUtils';
+import { FormatUtils } from '@utils/FormatUtils';
 
 // -------------------------------
 // Third-Party Imports

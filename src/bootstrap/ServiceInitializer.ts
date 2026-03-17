@@ -8,8 +8,8 @@ import { ComputerService } from '@services/ComputerService';
 import { ComputerStatusHistoryService } from '@services/ComputerStatusHistoryService';
 import { useAuthStore } from '@stores/AuthStore';
 import { useComponentsStore } from '@stores/ComponentStore';
-import { useComputerStatusHistoryStore } from '@stores/ComputerStatusHistoryStore';
 import { useComputersStore } from '@stores/ComputerStore';
+import { useComputerStatusHistoryStore } from '@stores/ComputerStatusHistoryStore';
 import { UserService } from '@services/UserService';
 import { useUsersStore } from '@stores/UsersStore';
 

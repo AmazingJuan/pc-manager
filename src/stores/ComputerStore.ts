@@ -3,8 +3,8 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import { computers } from '@seeders/ComputerSeeder';
 import type { ComputerInterface } from '@interfaces/ComputerInterface';
+import { computers } from '@seeders/ComputerSeeder';
 import type { CreateComputerDTO } from '@dtos/computer/CreateComputerDTO';
 import type { EditComputerDTO } from '@dtos/computer/EditComputerDTO';
 

@@ -4,15 +4,16 @@
 // Own Imports
 // -------------------------------
 import { AuthService } from '@services/AuthService';
-import ComponentsManagementView from '@views/dashboard/ComponentsManagementView.vue';
-import ComputersManagementView from '@views/dashboard/ComputersManagementView.vue';
-import ComputerReportView from '@views/dashboard/ComputersReportView.vue';
 import ComponentReportView from '@views/dashboard/ComponentsReportView.vue';
-import IndexView from '@/views/dashboard/IndexView.vue';
+import ComponentsManagementView from '@views/dashboard/ComponentsManagementView.vue';
+import ComputerReportView from '@views/dashboard/ComputersReportView.vue';
+import ComputersManagementView from '@views/dashboard/ComputersManagementView.vue';
+import IndexView from '@views/dashboard/IndexView.vue';
 import LoginView from '@views/auth/LoginView.vue';
 import RegisterView from '@views/auth/RegisterView.vue';
-import UsersManagementView from '@views/dashboard/UsersManagementView.vue';
 import StatusHistoryView from '@views/dashboard/StatusHistoryView.vue';
+import UsersManagementView from '@views/dashboard/UsersManagementView.vue';
+
 // -------------------------------
 // Third-Party Imports
 // -------------------------------

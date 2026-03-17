@@ -1,3 +1,5 @@
+// Author: Juan Pablo Avendaño
+
 export class BadgeUtils {
   private static readonly badgeConfig: Record<string, Record<string, { label: string; badgeClass: string }>> = {
     component: {

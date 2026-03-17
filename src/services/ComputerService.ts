@@ -1,24 +1,32 @@
 // Author: Juan Pablo Avendaño & Andru Quiroz
+
 // -------------------------------
 // Own Imports
 // -------------------------------
-import type { CreateComputerDTO } from '@dtos/computer/CreateComputerDTO';
-import type { EditComputerDTO } from '@dtos/computer/EditComputerDTO';
 import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import type { ComputerStatus } from '@app-types/Computer';
 import { ComputerStatusHistoryService } from '@services/ComputerStatusHistoryService';
+import type { CreateComputerDTO } from '@dtos/computer/CreateComputerDTO';
+import type { EditComputerDTO } from '@dtos/computer/EditComputerDTO';
 import { useComputersStore } from '@stores/ComputerStore';
 
+// -------------------------------
+// Class Definition
+// -------------------------------
 export class ComputerService {
-  private computersStore: ReturnType<typeof useComputersStore>;
-  private computerStatusHistoryService: ComputerStatusHistoryService;
+  // private properties
+  // singleton instance
   private static instance: ComputerService;
+  private computerStatusHistoryService: ComputerStatusHistoryService;
+  private computersStore: ReturnType<typeof useComputersStore>;
 
+  // constructor
   private constructor(computersStore: ReturnType<typeof useComputersStore>, computerStatusHistoryService: ComputerStatusHistoryService) {
     this.computersStore = computersStore;
     this.computerStatusHistoryService = computerStatusHistoryService;
   }
 
+  // getInstance()
   static getInstance(
     computersStore?: ReturnType<typeof useComputersStore>,
     computerStatusHistoryService?: ComputerStatusHistoryService,
@@ -30,6 +38,26 @@ export class ComputerService {
       this.instance = new ComputerService(computersStore, computerStatusHistoryService);
     }
     return this.instance;
+  }
+
+  // query methods (getAll, getById, stats, filters)
+  filterComputers(
+    computers: ComputerInterface[] = this.getAll(),
+    filters: { searchQuery?: string; status?: ComputerStatus | 'all'; userId?: number | 'all' } = {},
+  ): ComputerInterface[] {
+    const { searchQuery = '', status = 'all', userId = 'all' } = filters;
+    const normalizedSearchQuery = searchQuery.trim().toLowerCase();
+
+    return computers.filter((computer) => {
+      const matchesSearch =
+        !normalizedSearchQuery ||
+        computer.name.toLowerCase().includes(normalizedSearchQuery) ||
+        computer.location.toLowerCase().includes(normalizedSearchQuery);
+      const matchesStatus = status === 'all' || computer.status === status;
+      const matchesUser = userId === 'all' || computer.userId === userId;
+
+      return matchesSearch && matchesStatus && matchesUser;
+    });
   }
 
   getAll(): ComputerInterface[] {
@@ -59,27 +87,13 @@ export class ComputerService {
     return this.getCountByStatus(computers).find((entry) => entry.status === status)?.count ?? 0;
   }
 
-  filterComputers(
-    computers: ComputerInterface[] = this.getAll(),
-    filters: { searchQuery?: string; status?: ComputerStatus | 'all'; userId?: number | 'all' } = {},
-  ): ComputerInterface[] {
-    const { searchQuery = '', status = 'all', userId = 'all' } = filters;
-    const normalizedSearchQuery = searchQuery.trim().toLowerCase();
-
-    return computers.filter((computer) => {
-      const matchesSearch =
-        !normalizedSearchQuery ||
-        computer.name.toLowerCase().includes(normalizedSearchQuery) ||
-        computer.location.toLowerCase().includes(normalizedSearchQuery);
-      const matchesStatus = status === 'all' || computer.status === status;
-      const matchesUser = userId === 'all' || computer.userId === userId;
-
-      return matchesSearch && matchesStatus && matchesUser;
-    });
-  }
-
+  // mutation methods (create, update, delete)
   create(computerData: CreateComputerDTO): ComputerInterface {
     return this.computersStore.addComputer(computerData);
+  }
+
+  delete(id: number): boolean {
+    return this.computersStore.deleteComputerById(id);
   }
 
   update(id: number, computerData: EditComputerDTO): boolean {
@@ -90,9 +104,5 @@ export class ComputerService {
     }
 
     return this.computersStore.updateComputerById(id, computerData);
-  }
-
-  delete(id: number): boolean {
-    return this.computersStore.deleteComputerById(id);
   }
 }

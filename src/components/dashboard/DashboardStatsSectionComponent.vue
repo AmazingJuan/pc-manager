@@ -5,7 +5,7 @@
 import UiStatCardComponent from '@components/ui/UiStatCardComponent.vue';
 
 // -------------------------------
-// Third Party Imports
+// Third-Party Imports
 // -------------------------------
 import { Activity, AlertTriangle, Cpu, Monitor, TrendingUp, Users } from 'lucide-vue-next';
 

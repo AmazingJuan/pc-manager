@@ -4,12 +4,12 @@
 // -------------------------------
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
 import { ComponentSchema } from '@schemas/component/ComponentSchema';
-import type { ComponentType } from '@/types/Components';
+import type { ComponentType } from '@app-types/Components';
 import type { CreateComponentDTO } from '@dtos/components/CreateComponentDTO';
 import type { EditComponentDTO } from '@dtos/components/EditComponentDTO';
 
 // -------------------------------
-// Third Party Imports
+// Third-Party Imports
 // -------------------------------
 import { computed } from 'vue';
 import { ErrorMessage, Field, Form } from 'vee-validate';
@@ -34,7 +34,7 @@ const emit = defineEmits<{ create: [payload: CreateComponentDTO]; edit: [payload
 const availableStatuses: ComponentType[] = ['available', 'in-use', 'maintenance', 'damaged'];
 
 // -------------------------------
-// Reactive Variables
+// Reactive Variables / Computed
 // -------------------------------
 const initialValues = computed(() => ({
   name: props.component?.name ?? '',

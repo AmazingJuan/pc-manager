@@ -2,7 +2,7 @@
 
 <script setup lang="ts">
 // -------------------------------
-// Third Party Imports
+// Third-Party Imports
 // -------------------------------
 import type { Component } from 'vue';
 

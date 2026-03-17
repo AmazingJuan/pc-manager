@@ -2,35 +2,34 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
+import type { ComponentInterface } from '@interfaces/ComponentInterface';
+import { ComponentService } from '@services/ComponentService';
+import type { ComputerInterface } from '@interfaces/ComputerInterface';
+import { ComputerService } from '@services/ComputerService';
 import DashboardChartsSectionComponent from '@components/dashboard/DashboardChartsSectionComponent.vue';
 import DashboardStatsSectionComponent from '@components/dashboard/DashboardStatsSectionComponent.vue';
 import DashboardSummarySectionComponent from '@components/dashboard/DashboardSummarySectionComponent.vue';
-import type { ComponentInterface } from '@interfaces/ComponentInterface';
-import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import type { UserInterface } from '@interfaces/UserInterface';
-import { ComponentService } from '@services/ComponentService';
-import { ComputerService } from '@services/ComputerService';
 import { UserService } from '@services/UserService';
 
 // -------------------------------
-// Third Party Imports
+// Third-Party Imports
 // -------------------------------
 import { computed, onMounted, ref } from 'vue';
 
 // -------------------------------
-// Non Reactive Variables
+// Services
 // -------------------------------
 const computerService = ComputerService.getInstance();
 const componentService = ComponentService.getInstance();
 const userService = UserService.getInstance();
 
 // -------------------------------
-// Reactive Variables
+// Reactive Variables / Computed
 // -------------------------------
 const computers = ref<ComputerInterface[]>([]);
 const components = ref<ComponentInterface[]>([]);
 const users = ref<UserInterface[]>([]);
-
 const stats = computed(() => ({
   totalComputers: computers.value.length,
   activeComputers: computerService.getStatusCount('active', computers.value),

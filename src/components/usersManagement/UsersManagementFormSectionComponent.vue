@@ -3,13 +3,13 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import type { CreateUserDTO } from '@dtos/user/CreateUserDTO';
 import { createUserSchema } from '@schemas/user/UserSchema';
+import type { CreateUserDTO } from '@dtos/user/CreateUserDTO';
 import type { EditUserDTO } from '@dtos/user/EditUserDTO';
 import type { UserInterface } from '@interfaces/UserInterface';
 
 // -------------------------------
-// Third Party Imports
+// Third-Party Imports
 // -------------------------------
 import { computed } from 'vue';
 import { ErrorMessage, Field, Form } from 'vee-validate';
@@ -38,7 +38,6 @@ const initialValues = computed(() => ({
   password: props.user?.password ?? '',
   role: props.user?.role ?? 'user',
 }));
-
 const validationSchema = computed(() => createUserSchema(props.user?.id));
 
 // -------------------------------

@@ -2,9 +2,9 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import type { ComponentInterface } from '@interfaces/ComponentInterface';
-import { FormatUtils } from '@/utils/FormatUtils';
 import { BadgeUtils } from '@utils/BadgeUtils';
+import type { ComponentInterface } from '@interfaces/ComponentInterface';
+import { FormatUtils } from '@utils/FormatUtils';
 
 // -------------------------------
 // Props

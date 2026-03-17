@@ -2,11 +2,11 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
+import type { ComputerStatus } from '@app-types/Computer';
 import type { UserInterface } from '@interfaces/UserInterface';
-import type { ComputerStatus } from '@/types/Computer';
 
 // -------------------------------
-// Third Party Imports
+// Third-Party Imports
 // -------------------------------
 import { Filter, X } from 'lucide-vue-next';
 

@@ -3,8 +3,8 @@
 // Own Imports
 // -------------------------------
 import type { ComputerInterface } from '@interfaces/ComputerInterface';
-import ComputersStatusBarChartComponent from '@components/charts/ComputersStatusBarChartComponent.vue';
 import ComputersByLocationBarChartComponent from '@components/charts/ComputersByLocationBarChartComponent.vue';
+import ComputersStatusBarChartComponent from '@components/charts/ComputersStatusBarChartComponent.vue';
 
 // -------------------------------
 // Props

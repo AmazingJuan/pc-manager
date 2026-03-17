@@ -4,15 +4,15 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import { AuthService } from '@services/AuthService';
 import type { LoginDTO } from '@dtos/auth/LoginDTO';
 import { LoginSchema } from '@schemas/user/LoginSchema';
+import { AuthService } from '@services/AuthService';
 
 // -------------------------------
-// Third Party Imports
+// Third-Party Imports
 // -------------------------------
-import { ErrorMessage, Field, Form } from 'vee-validate';
 import { Lock, User } from 'lucide-vue-next';
+import { ErrorMessage, Field, Form } from 'vee-validate';
 import { ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 

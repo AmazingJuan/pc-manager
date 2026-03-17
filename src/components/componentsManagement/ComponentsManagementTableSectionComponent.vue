@@ -2,12 +2,12 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import type { ComponentInterface } from '@interfaces/ComponentInterface';
-import { FormatUtils } from '@/utils/FormatUtils';
 import { BadgeUtils } from '@utils/BadgeUtils';
+import type { ComponentInterface } from '@interfaces/ComponentInterface';
+import { FormatUtils } from '@utils/FormatUtils';
 
 // -------------------------------
-// Third Party Imports
+// Third-Party Imports
 // -------------------------------
 import { Pencil, Trash2 } from 'lucide-vue-next';
 
