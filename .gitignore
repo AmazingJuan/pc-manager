@@ -1,14 +1,22 @@
 # -------------------------------
-# Dependencies
+# Ignore source/project files
 # -------------------------------
+src/
+public/
 node_modules/
+.vscode/
+.idea/
+coverage/
+dist/
+dist-ssr/
+cypress/
+docs/
 
 # -------------------------------
-# Env & secrets (NO subir)
+# Env / secrets
 # -------------------------------
 .env
 .env.*
-!.env.example
 *.key
 *.pem
 *.p12
@@ -17,7 +25,7 @@ node_modules/
 *.cer
 
 # -------------------------------
-# Logs
+# Logs / caches
 # -------------------------------
 logs/
 *.log
@@ -26,31 +34,14 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
-# -------------------------------
-# Build/cache artifacts
-# -------------------------------
-dist-ssr/
-coverage/
 .vite/
 *.tsbuildinfo
-*.timestamp-*-*.mjs
 .eslintcache
 
 # -------------------------------
-# Test artifacts
-# -------------------------------
-cypress/videos/
-cypress/screenshots/
-__screenshots__/
-
-# -------------------------------
-# OS / Editor
+# OS junk
 # -------------------------------
 .DS_Store
-.idea/
-.vscode/*
-!.vscode/extensions.json
 *.suo
 *.ntvs*
 *.njsproj
@@ -58,13 +49,6 @@ __screenshots__/
 *.sw?
 
 # -------------------------------
-# Local-only files
+# Keep deploy output in root
 # -------------------------------
-*.local
-
-# -------------------------------
-# Deploy branch convenience
-# Keep these out if your branch should publish only dist
-# -------------------------------
-src/
-public/
+!nginx.conf
