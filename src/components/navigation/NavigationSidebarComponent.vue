@@ -24,13 +24,14 @@ const authStore = useAuthStore();
 const route = useRoute();
 const router = useRouter();
 const menuItems = [
-  { name: 'components-report', icon: BarChart3, label: 'Components Report', admin: false },
+  { name: 'dashboard', icon: LayoutDashboard, label: 'Dashboard', admin: false },
+  { name: 'computers', icon: Monitor, label: 'Computers Management', admin: true },
+
   { name: 'components', icon: Cpu, label: 'Components Management', admin: true },
+  { name: 'users', icon: Users, label: 'Users Management', admin: true },
   { name: 'computers-report', icon: Package, label: 'Computers Report', admin: false },
   { name: 'computers-status-history', icon: History, label: 'Computers Status History', admin: false },
-  { name: 'computers', icon: Monitor, label: 'Computers Management', admin: true },
-  { name: 'dashboard', icon: LayoutDashboard, label: 'Dashboard', admin: false },
-  { name: 'users', icon: Users, label: 'Users Management', admin: true },
+  { name: 'components-report', icon: BarChart3, label: 'Components Report', admin: false },
 ];
 
 // -------------------------------
