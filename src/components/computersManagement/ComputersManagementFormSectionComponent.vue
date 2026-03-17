@@ -10,7 +10,7 @@ import type { ComputerStatus } from '@/types/Computer';
 import type { CreateComputerDTO } from '@dtos/computer/CreateComputerDTO';
 import type { EditComputerDTO } from '@dtos/computer/EditComputerDTO';
 import type { UserInterface } from '@interfaces/UserInterface';
-import { Formatter } from '@utils/Formatter';
+import { FormatUtils } from '@/utils/FormatUtils';
 
 // -------------------------------
 // Third Party Imports
@@ -43,8 +43,8 @@ const initialValues = computed(() => ({
   userId: props.computer?.userId ? String(props.computer.userId) : '',
   status: (props.computer?.status ?? 'active') as ComputerStatus,
   componentIds: props.computer ? [...props.computer.componentIds] : [],
-  purchaseDate: props.computer ? Formatter.dateToString(props.computer.purchaseDate) : '',
-  warrantyExpiration: props.computer ? Formatter.dateToString(props.computer.warrantyExpirationDate) : '',
+  purchaseDate: props.computer ? FormatUtils.dateToString(props.computer.purchaseDate) : '',
+  warrantyExpiration: props.computer ? FormatUtils.dateToString(props.computer.warrantyExpirationDate) : '',
   notes: props.computer?.notes ?? '',
 }));
 

@@ -3,7 +3,7 @@
 // Own Imports
 // -------------------------------
 import ComponentsAveragePriceChartComponent from '@components/charts/ComponentsAveragePriceChartComponent.vue';
-import ComponentsReportTypeCountChartComponent from '@components/charts/ComponentsReportTypeCountChartComponent.vue';
+import ComponentsTypeCountChartComponent from '@components/charts/ComponentsTypeCountChartComponent.vue';
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
 
 // -------------------------------
@@ -18,7 +18,7 @@ defineProps<Props>();
 
 <template>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-    <ComponentsReportTypeCountChartComponent :components="components" />
+    <ComponentsTypeCountChartComponent :components="components" />
     <ComponentsAveragePriceChartComponent :components="components" />
   </div>
 </template>

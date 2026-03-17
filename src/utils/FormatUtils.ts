@@ -1,6 +1,6 @@
 // Author: Juan Pablo Avendaño & Andru Quiroz
 
-export class Formatter {
+export class FormatUtils {
   private static readonly locale = 'es-CO';
 
   static dateToString(value: string | Date | null | undefined): string {
@@ -28,7 +28,7 @@ export class Formatter {
       return '-';
     }
 
-    return date.toLocaleDateString(Formatter.locale, { year: 'numeric', month: 'short', day: 'numeric' });
+    return date.toLocaleDateString(FormatUtils.locale, { year: 'numeric', month: 'short', day: 'numeric' });
   }
 
   static formatDateTime(value: string | Date | null | undefined): string {
@@ -42,7 +42,7 @@ export class Formatter {
       return '-';
     }
 
-    return date.toLocaleString(Formatter.locale, { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleString(FormatUtils.locale, { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
   }
 
   static formatCurrency(value: number | null | undefined, currency = 'USD'): string {
@@ -50,7 +50,9 @@ export class Formatter {
       return '-';
     }
 
-    return new Intl.NumberFormat(Formatter.locale, { style: 'currency', currency, minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
+    return new Intl.NumberFormat(FormatUtils.locale, { style: 'currency', currency, minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(
+      value,
+    );
   }
 
   static formatNumber(value: number | null | undefined): string {
@@ -58,7 +60,7 @@ export class Formatter {
       return '-';
     }
 
-    return new Intl.NumberFormat(Formatter.locale).format(value);
+    return new Intl.NumberFormat(FormatUtils.locale).format(value);
   }
 
   static formatPercentage(value: number | null | undefined, digits = 1): string {

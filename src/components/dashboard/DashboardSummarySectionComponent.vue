@@ -2,7 +2,7 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import { Formatter } from '@utils/Formatter';
+import { FormatUtils } from '@/utils/FormatUtils';
 
 // -------------------------------
 // Third Party Imports
@@ -41,7 +41,7 @@ const availabilityRate = computed(() => {
         <div class="space-y-3">
           <div class="flex justify-between items-center p-4 bg-secondary/20 rounded-lg border border-border/40">
             <span class="text-foreground font-medium">Availability Rate</span>
-            <span class="text-primary font-bold text-lg">{{ Formatter.formatPercentage(availabilityRate) }}</span>
+            <span class="text-primary font-bold text-lg">{{ FormatUtils.formatPercentage(availabilityRate) }}</span>
           </div>
         </div>
       </div>

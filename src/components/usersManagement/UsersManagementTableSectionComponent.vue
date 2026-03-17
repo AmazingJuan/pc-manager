@@ -5,7 +5,7 @@
 // -------------------------------
 import type { UserInterface } from '@interfaces/UserInterface';
 import { BadgeUtils } from '@utils/BadgeUtils';
-import { Formatter } from '@utils/Formatter';
+import { FormatUtils } from '@/utils/FormatUtils';
 
 // -------------------------------
 // Third Party Imports
@@ -54,7 +54,7 @@ const emit = defineEmits<{ edit: [user: UserInterface]; delete: [user: UserInter
               {{ BadgeUtils.getBadgeLabel('user', user.role) }}
             </span>
           </td>
-          <td class="px-6 py-4 text-sm text-muted-foreground">{{ Formatter.formatDate(user.createdAt) }}</td>
+          <td class="px-6 py-4 text-sm text-muted-foreground">{{ FormatUtils.formatDate(user.createdAt) }}</td>
           <td class="px-6 py-4">
             <div class="flex gap-2">
               <button

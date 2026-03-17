@@ -3,7 +3,7 @@
 // Own Imports
 // -------------------------------
 import type { ComputerInterface } from '@interfaces/ComputerInterface';
-import { Formatter } from '@utils/Formatter';
+import { FormatUtils } from '@/utils/FormatUtils';
 import { BadgeUtils } from '@utils/BadgeUtils';
 
 // -------------------------------
@@ -52,7 +52,7 @@ const props = defineProps<Props>();
             </span>
           </td>
           <td class="px-4 py-3 text-muted-foreground">{{ computer.componentIds.length }}</td>
-          <td class="px-4 py-3 text-muted-foreground">{{ Formatter.formatDate(computer.warrantyExpirationDate) }}</td>
+          <td class="px-4 py-3 text-muted-foreground">{{ FormatUtils.formatDate(computer.warrantyExpirationDate) }}</td>
         </tr>
       </tbody>
     </table>
