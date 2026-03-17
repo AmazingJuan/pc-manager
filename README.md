@@ -12,7 +12,7 @@
 
 ## Getting Started
 ```sh
-git clone <your-repo-url>
+git clone <https://github.com/EAFIT-Works/pc-manager>
 cd pc-manager
 npm install
 npm run dev
