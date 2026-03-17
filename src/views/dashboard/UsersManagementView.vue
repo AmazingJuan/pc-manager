@@ -1,3 +1,4 @@
+<!-- Author: Juan Pablo Aveldaño -->
 <script setup lang="ts">
 // -------------------------------
 // Own Imports

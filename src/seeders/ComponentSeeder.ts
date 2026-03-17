@@ -1,4 +1,4 @@
-// Author: Juan Pablo Avendaño
+// Author: Juan Manuel Zapata
 
 // -------------------------------
 // Own Imports
