@@ -4,7 +4,7 @@
 // -------------------------------
 import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import type { ComputerStatusHistoryInterface } from '@interfaces/ComputerStatusHistoryInterface';
-import { Formatter } from '@utils/Formatter';
+import { FormatUtils } from '@/utils/FormatUtils';
 import { BadgeUtils } from '@utils/BadgeUtils';
 
 // -------------------------------
@@ -65,7 +65,7 @@ function getComputerName(computerId: number): string {
             </span>
           </td>
           <td class="px-4 py-3 text-muted-foreground">
-            {{ Formatter.formatDateTime(historyEntry.changedAt) }}
+            {{ FormatUtils.formatDateTime(historyEntry.changedAt) }}
           </td>
         </tr>
       </tbody>

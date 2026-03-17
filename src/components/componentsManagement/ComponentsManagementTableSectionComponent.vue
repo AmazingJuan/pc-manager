@@ -3,7 +3,7 @@
 // Own Imports
 // -------------------------------
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
-import { Formatter } from '@utils/Formatter';
+import { FormatUtils } from '@/utils/FormatUtils';
 import { BadgeUtils } from '@utils/BadgeUtils';
 
 // -------------------------------
@@ -56,9 +56,9 @@ const emit = defineEmits<{ edit: [component: ComponentInterface]; delete: [compo
             </span>
           </td>
           <td class="px-6 py-4 text-sm">
-            {{ Formatter.formatDate(component.purchaseDate) }}
+            {{ FormatUtils.formatDate(component.purchaseDate) }}
           </td>
-          <td class="px-6 py-4 text-sm">{{ Formatter.formatCurrency(component.price) }}</td>
+          <td class="px-6 py-4 text-sm">{{ FormatUtils.formatCurrency(component.price) }}</td>
           <td class="px-6 py-4">
             <div class="flex gap-2">
               <button

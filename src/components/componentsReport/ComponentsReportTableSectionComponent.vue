@@ -3,7 +3,7 @@
 // Own Imports
 // -------------------------------
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
-import { Formatter } from '@utils/Formatter';
+import { FormatUtils } from '@/utils/FormatUtils';
 import { BadgeUtils } from '@utils/BadgeUtils';
 
 // -------------------------------
@@ -52,8 +52,8 @@ const props = defineProps<Props>();
               {{ BadgeUtils.getBadgeLabel('component', component.status) }}
             </span>
           </td>
-          <td class="px-4 py-3 text-muted-foreground">{{ Formatter.formatCurrency(component.price) }}</td>
-          <td class="px-4 py-3 text-muted-foreground">{{ Formatter.formatDate(component.purchaseDate) }}</td>
+          <td class="px-4 py-3 text-muted-foreground">{{ FormatUtils.formatCurrency(component.price) }}</td>
+          <td class="px-4 py-3 text-muted-foreground">{{ FormatUtils.formatDate(component.purchaseDate) }}</td>
         </tr>
       </tbody>
     </table>
