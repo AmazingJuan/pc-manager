@@ -1,5 +1,5 @@
+<!-- Author: Juan Pablo Aveldaño -->
 <script setup lang="ts">
-// Author: Juan Pablo Avendaño
 // -------------------------------
 // Own Imports
 // -------------------------------

@@ -1,5 +1,4 @@
 <!-- Author: Juan Manuel Zapata -->
-
 <script setup lang="ts">
 // -------------------------------
 // Own Imports

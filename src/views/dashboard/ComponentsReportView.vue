@@ -1,5 +1,6 @@
+<!-- Author: Andru Yohanes Quiroz -->
+
 <script setup lang="ts">
-// Author: Andru Yohanes Quiroz
 // -------------------------------
 // Own Imports
 // -------------------------------

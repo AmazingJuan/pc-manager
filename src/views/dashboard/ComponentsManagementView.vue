@@ -1,6 +1,6 @@
-<script setup lang="ts">
-// Author: Juan Manuel Zapata
+<!-- Author: Juan Manuel Zapata -->
 
+<script setup lang="ts">
 // -------------------------------
 // Own Imports
 // -------------------------------

@@ -1,5 +1,4 @@
 <!-- Author: Juan Pablo Avendaño -->
-
 <script setup lang="ts">
 // -------------------------------
 // Third-Party Imports
