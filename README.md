@@ -1,48 +1,52 @@
-# pc-manager
+# PC Manager
 
-This template should help get you started developing with Vue 3 in Vite.
+**PC Manager** is a web dashboard designed to help organizations manage and monitor their IT equipment inventory. The platform allows administrators to register, classify, and manage computers and hardware components in a structured way, making it easier to track status changes, analyze inventory through key performance indicators (KPIs), and generate reports with interactive visualizations.
 
-## Recommended IDE Setup
+The system provides features for managing computers, components, and users, tracking computer status change history, and visualizing inventory data through charts and filters. Additionally, PC Manager includes role-based access control, where administrators have full CRUD access to all resources while regular users can view reports and inventory data.
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Tech Stack
 
-## Recommended Browser Setup
+- **Frontend**: Vue 3, TypeScript, Vite, Pinia, Vue Router, Tailwind CSS
+- **Package manager**: npm
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+## Project Structure
 
-## Type Support for `.vue` Imports in TS
+- `src/`: Vue 3 + Vite frontend application (main dashboard UI)
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## Prerequisites
 
-## Customize configuration
+- **Node.js**: version `^20.19.0` or `>=22.12.0`
+- **npm**: comes bundled with Node.js
 
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
+You can verify your versions with:
 ```sh
-npm install
+node -v
+npm -v
 ```
 
-### Compile and Hot-Reload for Development
+## How to Run the Project
 
+1. **Clone the repository**
 ```sh
-npm run dev
+   git clone <your-repo-url>
+   cd pc-manager
 ```
 
-### Type-Check, Compile and Minify for Production
-
+2. **Install dependencies**
 ```sh
-npm run build
+   npm install
 ```
 
-### Lint with [ESLint](https://eslint.org/)
-
+3. **Run the app in development mode**
 ```sh
-npm run lint
+   npm run dev
 ```
+
+4. **Open the app**
+   The dev server URL will be shown in the terminal (by default something like `http://localhost:5173`). Open it in your browser to access PC Manager.
+
+## Authors
+
+- **Juan Pablo Avendaño**
+- **Juan Manuel Zapata**
+- **Andru Quiroz**
