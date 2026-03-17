@@ -62,7 +62,7 @@ onMounted(loadData);
 <template>
   <div class="p-8 space-y-8 max-w-7xl mx-auto">
     <div>
-      <h1 class="text-3xl text-foreground mb-2">Computer Inventory</h1>
+      <h1 class="text-3xl text-foreground mb-2">Computers Reports</h1>
       <p class="text-muted-foreground">Management and analysis of computer inventory</p>
     </div>
 
