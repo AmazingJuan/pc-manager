@@ -7,7 +7,6 @@ node_modules/
 .vscode/
 .idea/
 coverage/
-dist/
 dist-ssr/
 cypress/
 docs/
@@ -47,8 +46,3 @@ lerna-debug.log*
 *.njsproj
 *.sln
 *.sw?
-
-# -------------------------------
-# Keep deploy output in root
-# -------------------------------
-!nginx.conf
