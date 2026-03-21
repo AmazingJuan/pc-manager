@@ -5,15 +5,17 @@
 // Own Imports
 // -------------------------------
 import type { LoginDTO } from '@dtos/auth/LoginDTO';
+import type { UserInterface } from '@interfaces/UserInterface';
 import { LoginSchema } from '@schemas/user/LoginSchema';
 import { AuthService } from '@services/AuthService';
+import { UserService } from '@services/UserService';
 
 // -------------------------------
 // Third-Party Imports
 // -------------------------------
 import { Lock, User } from 'lucide-vue-next';
 import { ErrorMessage, Field, Form } from 'vee-validate';
-import { ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 
 // -------------------------------
@@ -21,11 +23,15 @@ import { RouterLink, useRouter } from 'vue-router';
 // -------------------------------
 const router = useRouter();
 const authService = AuthService.getInstance();
+const userService = UserService.getInstance();
 
 // -------------------------------
 // Reactive Variables
 // -------------------------------
 const error = ref('');
+const users = ref<UserInterface[]>([]);
+const firstAdminUser = computed(() => users.value.find((user) => user.role === 'admin'));
+const firstStandardUser = computed(() => users.value.find((user) => user.role === 'user'));
 
 // -------------------------------
 // Functions
@@ -43,6 +49,12 @@ function handleSubmit(values: Record<string, unknown>): void {
 
   error.value = 'Invalid credentials';
 }
+
+function loadUsers(): void {
+  users.value = userService.getAll();
+}
+
+onMounted(loadUsers);
 </script>
 
 <template>
@@ -107,5 +119,17 @@ function handleSubmit(values: Record<string, unknown>): void {
   <div class="mt-6 text-center">
     <p class="text-sm text-muted-foreground mb-2">Don't have an account?</p>
     <RouterLink to="/register" class="text-sm text-primary hover:text-primary/80 transition-colors"> Sign up </RouterLink>
+  </div>
+
+  <div v-if="firstAdminUser || firstStandardUser" class="mt-6 p-4 bg-secondary/50 rounded-lg">
+    <p class="text-xs text-muted-foreground text-center mb-2">Test credentials:</p>
+    <div class="text-xs space-y-1">
+      <p v-if="firstAdminUser" class="text-foreground">
+        <span class="text-primary">Admin:</span> {{ firstAdminUser.username }} / {{ firstAdminUser.password }}
+      </p>
+      <p v-if="firstStandardUser" class="text-foreground">
+        <span class="text-primary">User:</span> {{ firstStandardUser.username }} / {{ firstStandardUser.password }}
+      </p>
+    </div>
   </div>
 </template>
