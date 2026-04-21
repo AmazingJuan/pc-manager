@@ -1,8 +1,19 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+// Author: Juan Pablo Avendaño
 
-async function bootstrap() {
+// -------------------------------
+// Own Imports
+// -------------------------------
+import { AppModule } from '@/app.module';
+
+// -------------------------------
+// Third-Party Imports
+// -------------------------------
+import { NestFactory } from '@nestjs/core';
+
+async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api');
   await app.listen(process.env.PORT ?? 3000);
 }
-bootstrap();
+
+void bootstrap().catch(console.error);
