@@ -7,6 +7,7 @@ import { AuthGuard } from '@/auth/guards/auth.guard';
 import { AuthService } from '@auth/auth.service';
 import type { JwtPayload } from '@auth/types/jwt-payload.type';
 import { LoginDto } from '@auth/dtos/login.dto';
+import { RegisterDto } from '@auth/dtos/register.dto';
 import { UserResponseDto } from '@users/dtos/user-response.dto';
 
 // -------------------------------
@@ -28,6 +29,13 @@ export class AuthController {
   @Post('login')
   login(@Body() loginDto: LoginDto): Promise<{ access_token: string }> {
     return this.authService.login(loginDto);
+  }
+
+  @Post('register')
+  register(
+    @Body() registerDto: RegisterDto,
+  ): Promise<{ access_token: string }> {
+    return this.authService.register(registerDto);
   }
 
   @UseGuards(AuthGuard)
