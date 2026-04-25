@@ -1,3 +1,8 @@
 // Author: Juan Pablo Avendaño
 
-export type UserRole = 'admin' | 'user';
+// -------------------------------
+// Own Imports
+// -------------------------------
+import { USER_ROLES } from '@users/constants';
+
+export type UserRole = (typeof USER_ROLES)[number];
