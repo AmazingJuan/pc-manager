@@ -5,7 +5,7 @@
 // -------------------------------
 import { CreateUserDto } from '@users/dtos/create-user.dto';
 import { UpdateUserDto } from '@users/dtos/update-user.dto';
-import { User } from '@users/entities/user.entity';
+import { UserResponseDto } from '@users/dtos/user-response.dto';
 import { UsersService } from '@users/users.service';
 
 // -------------------------------
@@ -27,26 +27,30 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  findAll(): Promise<User[]> {
-    return this.usersService.findAll();
+  async findAll(): Promise<UserResponseDto[]> {
+    const users = await this.usersService.findAll();
+    return UserResponseDto.fromEntities(users);
   }
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.usersService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto): Promise<UserResponseDto> {
+    const user = await this.usersService.create(createUserDto);
+    return UserResponseDto.fromEntity(user);
   }
 
   @Get(':id')
-  findById(@Param('id') id: number): Promise<User> {
-    return this.usersService.findById(id);
+  async findById(@Param('id') id: number): Promise<UserResponseDto> {
+    const user = await this.usersService.findById(id);
+    return UserResponseDto.fromEntity(user);
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: number,
     @Body() updateUserDto: UpdateUserDto,
-  ): Promise<User> {
-    return this.usersService.update(id, updateUserDto);
+  ): Promise<UserResponseDto> {
+    const user = await this.usersService.update(id, updateUserDto);
+    return UserResponseDto.fromEntity(user);
   }
 
   @Delete(':id')

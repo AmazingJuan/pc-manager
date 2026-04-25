@@ -76,7 +76,7 @@ export class UsersService {
         username: updateUserDto.username,
       });
 
-      if (usernameExists) {
+      if (usernameExists && usernameExists.id !== user.id) {
         throw new ConflictException('Username already exists');
       }
     }
@@ -87,7 +87,7 @@ export class UsersService {
         email: updateUserDto.email,
       });
 
-      if (emailExists) {
+      if (emailExists && emailExists.id !== user.id) {
         throw new ConflictException('Email already exists');
       }
     }

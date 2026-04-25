@@ -7,6 +7,7 @@ import { CreateUserDto } from '@users/dtos/create-user.dto';
 import type { JwtPayload } from '@auth/types/jwt-payload.type';
 import { LoginDto } from '@auth/dtos/login.dto';
 import { RegisterDto } from '@auth/dtos/register.dto';
+import { UserResponseDto } from '@users/dtos/user-response.dto';
 import type { UserRole } from '@users/types/user-role.type';
 import { UsersService } from '@users/users.service';
 import { USER_ROLES } from '@users/constants';
@@ -61,5 +62,11 @@ export class AuthService {
     const accessToken = await this.jwtService.signAsync(payload);
 
     return { access_token: accessToken };
+  }
+
+  async getProfile(jwtPayload: JwtPayload): Promise<UserResponseDto> {
+    const user = await this.usersService.findById(jwtPayload.sub);
+
+    return UserResponseDto.fromEntity(user);
   }
 }

@@ -5,8 +5,9 @@
 // -------------------------------
 import { AuthGuard } from '@/auth/guards/auth.guard';
 import { AuthService } from '@auth/auth.service';
+import type { JwtPayload } from '@auth/types/jwt-payload.type';
 import { LoginDto } from '@auth/dtos/login.dto';
-import { User } from '@users/entities/user.entity';
+import { UserResponseDto } from '@users/dtos/user-response.dto';
 
 // -------------------------------
 // Third-Party Imports
@@ -31,7 +32,11 @@ export class AuthController {
 
   @UseGuards(AuthGuard)
   @Get('profile')
-  getProfile(@Request() req: Request & { user: User }): Promise<User> {
-    return Promise.resolve(req.user);
+  async getProfile(
+    @Request() req: Request & { user: JwtPayload },
+  ): Promise<UserResponseDto> {
+    const user = await this.authService.getProfile(req.user);
+
+    return user;
   }
 }
