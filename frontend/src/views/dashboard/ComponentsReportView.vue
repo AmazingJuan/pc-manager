@@ -46,8 +46,8 @@ function clearFilters(): void {
   toDate.value = '';
 }
 
-function loadData(): void {
-  components.value = ComponentService.getAll();
+async function loadData(): Promise<void> {
+  components.value = await ComponentService.getAll();
 }
 
 // -------------------------------

@@ -38,7 +38,7 @@ const stats = computed(() => ({
 // -------------------------------
 async function loadData(): Promise<void> {
   computers.value = ComputerService.getAll();
-  components.value = ComponentService.getAll();
+  components.value = await ComponentService.getAll();
   users.value = await UserService.getAll();
 }
 

@@ -30,6 +30,8 @@ const components = ref<ComponentInterface[]>([]);
 const editingComponent = ref<ComponentInterface | null>(null);
 const isModalOpen = ref(false);
 const successMessage = ref('');
+const isLoading = ref(false);
+const errorMessage = ref('');
 
 // -------------------------------
 // Functions
@@ -40,47 +42,83 @@ function showSuccess(message: string): void {
   }
 
   successMessage.value = message;
+  errorMessage.value = '';
   successTimeout = setTimeout(() => {
     successMessage.value = '';
     successTimeout = null;
   }, 3000);
 }
 
-function loadData(): void {
-  components.value = ComponentService.getAll();
+function showError(message: string): void {
+  errorMessage.value = message;
+  successMessage.value = '';
 }
 
-function handleCreate(payload: CreateComponentDTO): void {
-  ComponentService.create(payload);
-
-  showSuccess('Component created successfully');
-  loadData();
-  closeModal();
+async function loadData(): Promise<void> {
+  try {
+    isLoading.value = true;
+    components.value = await ComponentService.getAll();
+    errorMessage.value = '';
+  } catch (error) {
+    console.error('Error loading components:', error);
+    showError('Failed to load components. Please try again.');
+  } finally {
+    isLoading.value = false;
+  }
 }
 
-function handleUpdate(payload: EditComponentDTO): void {
+async function handleCreate(payload: CreateComponentDTO): Promise<void> {
+  try {
+    isLoading.value = true;
+    await ComponentService.create(payload);
+    showSuccess('Component created successfully');
+    await loadData();
+    closeModal();
+  } catch (error) {
+    console.error('Error creating component:', error);
+    showError('Failed to create component. Please try again.');
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+async function handleUpdate(payload: EditComponentDTO): Promise<void> {
   if (!editingComponent.value) {
     return;
   }
 
-  ComponentService.update(editingComponent.value.id, payload);
-
-  showSuccess('Component updated successfully');
-  loadData();
-  closeModal();
+  try {
+    isLoading.value = true;
+    await ComponentService.update(editingComponent.value.id, payload);
+    showSuccess('Component updated successfully');
+    await loadData();
+    closeModal();
+  } catch (error) {
+    console.error('Error updating component:', error);
+    showError('Failed to update component. Please try again.');
+  } finally {
+    isLoading.value = false;
+  }
 }
 
-function handleDelete(component: ComponentInterface): void {
+async function handleDelete(component: ComponentInterface): Promise<void> {
   if (window.confirm(`Are you sure you want to delete component "${component.name}"?`)) {
-    ComponentService.delete(component.id);
-    loadData();
-    showSuccess('Component deleted successfully');
+    try {
+      isLoading.value = true;
+      await ComponentService.delete(component.id);
+      await loadData();
+      showSuccess('Component deleted successfully');
+    } catch (error) {
+      console.error('Error deleting component:', error);
+      showError('Failed to delete component. Please try again.');
+    } finally {
+      isLoading.value = false;
+    }
   }
 }
 
 function openModal(component?: ComponentInterface): void {
   editingComponent.value = component ?? null;
-
   isModalOpen.value = true;
 }
 
@@ -110,7 +148,8 @@ onMounted(loadData);
         <p class="text-muted-foreground">Manage inventory components</p>
       </div>
       <button
-        class="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
+        :disabled="isLoading"
+        class="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
         @click="openModal()"
       >
         <Plus class="w-5 h-5" />
@@ -118,13 +157,23 @@ onMounted(loadData);
       </button>
     </div>
 
+    <!-- Error Feedback -->
+    <div v-if="errorMessage" class="mt-4 mb-4 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+      {{ errorMessage }}
+    </div>
+
     <!-- Success Feedback -->
     <div v-if="successMessage" class="mt-4 mb-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-400">
       {{ successMessage }}
     </div>
 
+    <!-- Loading State -->
+    <div v-if="isLoading && !components.length" class="mt-4 rounded-lg border border-border bg-card p-8 text-center text-muted-foreground">
+      Loading components...
+    </div>
+
     <!-- Components Table -->
-    <ComponentsManagementTableSection :components="components" @edit="openModal" @delete="handleDelete" />
+    <ComponentsManagementTableSection v-else :components="components" @edit="openModal" @delete="handleDelete" />
 
     <!-- Create/Edit Modal -->
     <UiModalComponent :is-open="isModalOpen" :title="editingComponent ? 'Edit Component' : 'Add Component'" max-width="max-w-4xl" @close="closeModal">
@@ -132,3 +181,4 @@ onMounted(loadData);
     </UiModalComponent>
   </div>
 </template>
+

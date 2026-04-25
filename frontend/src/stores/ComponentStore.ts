@@ -4,9 +4,6 @@
 // Own Imports
 // -------------------------------
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
-import type { CreateComponentDTO } from '@dtos/components/CreateComponentDTO';
-import { components } from '@seeders/ComponentSeeder';
-import type { EditComponentDTO } from '@dtos/components/EditComponentDTO';
 
 // -------------------------------
 // Third-Party Imports
@@ -14,43 +11,37 @@ import type { EditComponentDTO } from '@dtos/components/EditComponentDTO';
 import { defineStore } from 'pinia';
 
 export const useComponentsStore = defineStore('components', {
-  state: () => ({ components: components, lastId: components.reduce((maxId, component) => Math.max(maxId, component.id), 0) }),
+  state: () => ({
+    components: [] as ComponentInterface[],
+    isLoading: false,
+    error: null as string | null,
+  }),
   actions: {
-    getNextComponentId(): number {
-      this.lastId += 1;
-      return this.lastId;
+    setComponents(components: ComponentInterface[]) {
+      this.components = components;
     },
 
-    addComponent(componentData: CreateComponentDTO): ComponentInterface {
-      const newComponent: ComponentInterface = { id: this.getNextComponentId(), ...componentData, createdAt: new Date() };
-
-      this.components.push(newComponent);
-      return newComponent;
+    addComponent(component: ComponentInterface) {
+      this.components.push(component);
     },
 
-    updateComponentById(id: number, componentData: EditComponentDTO): boolean {
-      const component = this.components.find((currentComponent) => currentComponent.id === id);
-
-      if (!component) {
-        return false;
+    updateComponent(id: number, updated: Partial<ComponentInterface>) {
+      const index = this.components.findIndex((c) => c.id === id);
+      if (index !== -1) {
+        this.components[index] = { ...this.components[index], ...updated };
       }
-
-      Object.assign(component, componentData);
-      return true;
     },
 
-    deleteComponentById(id: number): boolean {
-      const previousLength = this.components.length;
-      this.components = this.components.filter((component) => component.id !== id);
-
-      return this.components.length < previousLength;
+    removeComponent(id: number) {
+      this.components = this.components.filter((c) => c.id !== id);
     },
-  },
-  persist: {
-    afterHydrate: (ctx) => {
-      ctx.store.components = ctx.store.components.map(
-        (component: ComponentInterface): ComponentInterface => ({ ...component, createdAt: new Date(component.createdAt) }),
-      );
+
+    setLoading(loading: boolean) {
+      this.isLoading = loading;
+    },
+
+    setError(error: string | null) {
+      this.error = error;
     },
   },
 });

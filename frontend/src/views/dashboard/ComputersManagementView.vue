@@ -54,7 +54,7 @@ function showSuccess(message: string): void {
 async function loadData(): Promise<void> {
   computers.value = ComputerService.getAll();
   users.value = await UserService.getAll();
-  components.value = ComponentService.getAll();
+  components.value = await ComponentService.getAll();
 }
 
 async function handleCreate(payload: CreateComputerDTO): Promise<void> {
