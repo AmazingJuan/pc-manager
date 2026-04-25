@@ -11,18 +11,22 @@ import type { UserInterface } from '@interfaces/UserInterface';
 import { defineStore } from 'pinia';
 
 export const useAuthStore = defineStore('auth', {
-  state: () => ({ loggedInUser: null as UserInterface | null }),
-  getters: { hasLoggedInUser: (state) => !!state.loggedInUser },
+  state: () => ({ accessToken: '' as string, refreshToken: '' as string, loggedInUser: null as UserInterface | null }),
   actions: {
-    setLoggedInUser(user: UserInterface | null) {
+    setTokens(accessToken: string, refreshToken = ''): void {
+      this.accessToken = accessToken;
+      this.refreshToken = refreshToken;
+    },
+
+    setLoggedInUser(user: UserInterface | null): void {
       this.loggedInUser = user;
     },
-  },
-  persist: {
-    afterHydrate: (ctx) => {
-      if (ctx.store.loggedInUser) {
-        ctx.store.loggedInUser = { ...ctx.store.loggedInUser, createdAt: new Date(ctx.store.loggedInUser.createdAt) };
-      }
+
+    clearSession(): void {
+      this.accessToken = '';
+      this.refreshToken = '';
+      this.loggedInUser = null;
     },
   },
+  persist: true,
 });

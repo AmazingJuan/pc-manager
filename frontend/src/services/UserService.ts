@@ -3,75 +3,75 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
+import { api } from '@api/client';
 import type { CreateUserDTO } from '@dtos/user/CreateUserDTO';
 import type { EditUserDTO } from '@dtos/user/EditUserDTO';
 import type { UserInterface } from '@interfaces/UserInterface';
-import { useUsersStore } from '@stores/UsersStore';
-
-// -------------------------------
-// Class Definition
-// -------------------------------
+import axios from 'axios';
 export class UserService {
-  // private properties
-  // singleton instance
-  private static instance: UserService;
-  private usersStore: ReturnType<typeof useUsersStore>;
-
-  // constructor
-  private constructor(usersStore: ReturnType<typeof useUsersStore>) {
-    this.usersStore = usersStore;
-  }
-
-  // getInstance()
-  static getInstance(usersStore?: ReturnType<typeof useUsersStore>): UserService {
-    if (!this.instance) {
-      if (!usersStore) {
-        throw new Error('You should put a store here');
-      }
-      this.instance = new UserService(usersStore);
-    }
-    return this.instance;
-  }
-
   // query methods (getAll, getById, stats, filters)
-  getAll(): UserInterface[] {
-    return this.usersStore.users;
-  }
-
-  getById(id: number): UserInterface | undefined {
-    return this.usersStore.users.find((user) => user.id === id);
-  }
-
-  isUniqueEmail(email: string, excludeUserId?: number): boolean {
-    const normalizedEmail = email.trim().toLowerCase();
-
-    if (!normalizedEmail) {
-      return true;
+  static async getAll(): Promise<UserInterface[]> {
+    const response = await api.get('/users');
+    if (!response.data) {
+      throw new Error('Failed to get users');
     }
-
-    return !this.usersStore.users.some((user) => user.id !== excludeUserId && user.email.trim().toLowerCase() === normalizedEmail);
+    return response.data as UserInterface[];
   }
 
-  isUniqueUsername(username: string, excludeUserId?: number): boolean {
-    const normalizedUsername = username.trim().toLowerCase();
-
-    if (!normalizedUsername) {
-      return true;
+  static async getById(id: number): Promise<UserInterface | undefined> {
+    const response = await api.get(`/users/${id}`);
+    if (!response.data) {
+      throw new Error('Failed to get user');
     }
-
-    return !this.usersStore.users.some((user) => user.id !== excludeUserId && user.username.trim().toLowerCase() === normalizedUsername);
+    return response.data as UserInterface;
   }
 
   // mutation methods (create, update, delete)
-  create(userData: CreateUserDTO): UserInterface {
-    return this.usersStore.addUser(userData);
+  static async create(userData: CreateUserDTO): Promise<UserInterface> {
+    try {
+      const response = await api.post('/users', userData);
+      if (!response.data) {
+        throw new Error('Failed to create user');
+      }
+      return response.data as UserInterface;
+    } catch (error: unknown) {
+      if (!axios.isAxiosError(error)) {
+        throw ['Failed to create user'];
+      }
+
+      throw error.response?.data?.message;
+    }
   }
 
-  delete(id: number): boolean {
-    return this.usersStore.deleteUserById(id);
+  static async delete(id: number): Promise<boolean> {
+    try {
+      const response = await api.delete(`/users/${id}`);
+      if (response.status !== 204) {
+        throw new Error('Failed to delete user');
+      }
+      return true;
+    } catch (error: unknown) {
+      if (!axios.isAxiosError(error)) {
+        throw ['Failed to delete user'];
+      }
+
+      throw error.response?.data?.message;
+    }
   }
 
-  update(id: number, userData: EditUserDTO): boolean {
-    return this.usersStore.updateUserById(id, userData);
+  static async update(id: number, userData: EditUserDTO): Promise<UserInterface> {
+    try {
+      const response = await api.patch(`/users/${id}`, userData);
+      if (!response.data) {
+        throw new Error('Failed to update user');
+      }
+      return response.data as UserInterface;
+    } catch (error: unknown) {
+      if (!axios.isAxiosError(error)) {
+        throw ['Failed to update user'];
+      }
+
+      throw error.response?.data?.message;
+    }
   }
 }
