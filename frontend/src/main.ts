@@ -4,7 +4,6 @@
 // Own Imports
 // -------------------------------
 import App from '@/App.vue';
-import { setupInterceptors } from '@api/interceptors';
 import { ServiceInitializer } from '@bootstrap/ServiceInitializer';
 import router from '@/router';
 import '@assets/main.css';
@@ -28,7 +27,6 @@ pinia.use(piniaPluginPersistedstate);
 app.use(pinia);
 app.use(router);
 
-setupInterceptors();
 ServiceInitializer.initialize();
 
 app.mount('#app');

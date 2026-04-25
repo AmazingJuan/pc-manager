@@ -29,6 +29,11 @@ interface Props {
 const props = defineProps<Props>();
 
 // -------------------------------
+// Services
+// -------------------------------
+const computerService = ComputerService.getInstance();
+
+// -------------------------------
 // Reactive Variables / Computed
 // -------------------------------
 const options = ChartUtils.getBarChartOptions({
@@ -39,7 +44,7 @@ const options = ChartUtils.getBarChartOptions({
     y: ChartUtils.getBaseAxisOptions({ beginAtZero: true, ticks: { stepSize: 1 } }),
   },
 });
-const chartValues = computed(() => ComputerService.getCountByStatus(props.computers).map((entry) => entry.count));
+const chartValues = computed(() => computerService.getCountByStatus(props.computers).map((entry) => entry.count));
 const chartData = computed(() => ({
   labels: ['Active', 'Inactive', 'Maintenance'],
   datasets: [ChartUtils.buildBarDataset('Count', chartValues.value, { barThickness: 45 })],

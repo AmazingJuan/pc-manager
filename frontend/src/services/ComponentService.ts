@@ -13,8 +13,29 @@ import { useComponentsStore } from '@stores/ComponentStore';
 // Class Definition
 // -------------------------------
 export class ComponentService {
+  // private properties
+  // singleton instance
+  private static instance: ComponentService;
+  private componentsStore: ReturnType<typeof useComponentsStore>;
+
+  // constructor
+  private constructor(componentsStore: ReturnType<typeof useComponentsStore>) {
+    this.componentsStore = componentsStore;
+  }
+
+  // getInstance()
+  static getInstance(componentsStore?: ReturnType<typeof useComponentsStore>): ComponentService {
+    if (!this.instance) {
+      if (!componentsStore) {
+        throw new Error('You should put a store here');
+      }
+      this.instance = new ComponentService(componentsStore);
+    }
+    return this.instance;
+  }
+
   // query methods (getAll, getById, stats, filters)
-  static filterComponents(
+  filterComponents(
     components: ComponentInterface[] = this.getAll(),
     filters: { type?: string; status?: ComponentType | 'all'; fromDate?: string; toDate?: string } = {},
   ): ComponentInterface[] {
@@ -30,11 +51,11 @@ export class ComponentService {
     });
   }
 
-  static getAll(): ComponentInterface[] {
-    return useComponentsStore().components;
+  getAll(): ComponentInterface[] {
+    return this.componentsStore.components;
   }
 
-  static getAveragePriceByType(components: ComponentInterface[] = this.getAll()): { type: string; averagePrice: number }[] {
+  getAveragePriceByType(components: ComponentInterface[] = this.getAll()): { type: string; averagePrice: number }[] {
     const grouped = new Map<string, { sum: number; count: number }>();
 
     for (const component of components) {
@@ -51,11 +72,11 @@ export class ComponentService {
     return Array.from(grouped.entries()).map(([type, totals]) => ({ type, averagePrice: Number((totals.sum / totals.count).toFixed(2)) }));
   }
 
-  static getById(id: number): ComponentInterface | undefined {
-    return useComponentsStore().components.find((component) => component.id === id);
+  getById(id: number): ComponentInterface | undefined {
+    return this.componentsStore.components.find((component) => component.id === id);
   }
 
-  static getCountByStatus(components: ComponentInterface[] = this.getAll()): { status: ComponentType; count: number }[] {
+  getCountByStatus(components: ComponentInterface[] = this.getAll()): { status: ComponentType; count: number }[] {
     const statusOrder: ComponentType[] = ['available', 'in-use', 'maintenance', 'damaged'];
     const counts = new Map<ComponentType, number>();
 
@@ -70,7 +91,7 @@ export class ComponentService {
     return statusOrder.map((status) => ({ status, count: counts.get(status) ?? 0 }));
   }
 
-  static getCountByType(components: ComponentInterface[] = this.getAll()): { type: string; count: number }[] {
+  getCountByType(components: ComponentInterface[] = this.getAll()): { type: string; count: number }[] {
     const counts = new Map<string, number>();
 
     for (const component of components) {
@@ -81,15 +102,15 @@ export class ComponentService {
   }
 
   // mutation methods (create, update, delete)
-  static create(componentData: CreateComponentDTO): ComponentInterface {
-    return useComponentsStore().addComponent(componentData);
+  create(componentData: CreateComponentDTO): ComponentInterface {
+    return this.componentsStore.addComponent(componentData);
   }
 
-  static delete(id: number): boolean {
-    return useComponentsStore().deleteComponentById(id);
+  delete(id: number): boolean {
+    return this.componentsStore.deleteComponentById(id);
   }
 
-  static update(id: number, componentData: EditComponentDTO): boolean {
-    return useComponentsStore().updateComponentById(id, componentData);
+  update(id: number, componentData: EditComponentDTO): boolean {
+    return this.componentsStore.updateComponentById(id, componentData);
   }
 }

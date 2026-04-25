@@ -3,6 +3,7 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
+import { createUserSchema } from '@schemas/user/UserSchema';
 import type { CreateUserDTO } from '@dtos/user/CreateUserDTO';
 import type { EditUserDTO } from '@dtos/user/EditUserDTO';
 import type { UserInterface } from '@interfaces/UserInterface';
@@ -10,14 +11,14 @@ import type { UserInterface } from '@interfaces/UserInterface';
 // -------------------------------
 // Third-Party Imports
 // -------------------------------
-import { computed, ref, watch } from 'vue';
+import { computed } from 'vue';
+import { ErrorMessage, Field, Form } from 'vee-validate';
 
 // -------------------------------
 // Props
 // -------------------------------
 interface Props {
   user: UserInterface | null;
-  errorMessages?: string[];
 }
 
 const props = defineProps<Props>();
@@ -28,114 +29,126 @@ const props = defineProps<Props>();
 const emit = defineEmits<{ create: [payload: CreateUserDTO]; edit: [payload: EditUserDTO]; cancel: [] }>();
 
 // -------------------------------
-// Reactive Variables
+// Computed Variables
 // -------------------------------
-const name = ref('');
-const username = ref('');
-const email = ref('');
-const password = ref('');
-const role = ref<'admin' | 'user'>('user');
-const isEditMode = computed(() => Boolean(props.user));
+const initialValues = computed(() => ({
+  name: props.user?.name ?? '',
+  username: props.user?.username ?? '',
+  email: props.user?.email ?? '',
+  password: props.user?.password ?? '',
+  role: props.user?.role ?? 'user',
+}));
+const validationSchema = computed(() => createUserSchema(props.user?.id));
 
 // -------------------------------
 // Functions
 // -------------------------------
-function syncFormValues(user: UserInterface | null): void {
-  name.value = user?.name ?? '';
-  username.value = user?.username ?? '';
-  email.value = user?.email ?? '';
-  password.value = '';
-  role.value = user?.role === 'admin' ? 'admin' : 'user';
-}
+function handleSubmit(values: Record<string, unknown>): void {
+  const payload: CreateUserDTO = {
+    name: String(values.name ?? '').trim(),
+    username: String(values.username ?? '').trim(),
+    email: String(values.email ?? '').trim(),
+    password: String(values.password ?? ''),
+    role: (values.role === 'admin' ? 'admin' : 'user') as CreateUserDTO['role'],
+    computerIds: props.user?.computerIds ?? null,
+  };
 
-function handleSubmit(): void {
-  if (isEditMode.value) {
-    const payload: EditUserDTO = {};
-    const normalizedName = name.value.trim();
-    const normalizedUsername = username.value.trim();
-    const normalizedEmail = email.value.trim();
-
-    if (normalizedName) payload.name = normalizedName;
-    if (normalizedUsername) payload.username = normalizedUsername;
-    if (normalizedEmail) payload.email = normalizedEmail;
-    if (password.value.trim()) payload.password = password.value;
-    if (role.value) payload.role = role.value;
-
+  if (props.user) {
     emit('edit', payload);
     return;
   }
 
-  emit('create', { name: name.value.trim(), username: username.value.trim(), email: email.value.trim(), password: password.value, role: role.value });
+  emit('create', payload);
 }
-
-watch(() => props.user, syncFormValues, { immediate: true });
 </script>
 
 <template>
-  <form class="space-y-4" @submit.prevent="handleSubmit">
+  <Form
+    :key="user ? `edit-${user.id}` : 'create-user'"
+    :initial-values="initialValues"
+    :validation-schema="validationSchema"
+    class="space-y-4"
+    @submit="handleSubmit"
+  >
     <div>
-      <label class="block text-sm text-foreground mb-2">Full Name</label>
-      <input
-        v-model="name"
-        type="text"
-        class="w-full px-4 py-2 bg-input rounded-lg border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-        placeholder="Enter full name"
-        :required="!isEditMode"
-      />
+      <label class="block text-sm text-foreground mb-2">Full Name *</label>
+      <Field v-slot="{ field, errorMessage }" name="name">
+        <input
+          v-bind="field"
+          type="text"
+          class="w-full px-4 py-2 bg-input rounded-lg border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+          :class="errorMessage ? 'border-destructive' : 'border-border'"
+          placeholder="Enter full name"
+        />
+      </Field>
+      <ErrorMessage name="name" v-slot="{ message }">
+        <p class="text-xs text-destructive mt-1">{{ message }}</p>
+      </ErrorMessage>
     </div>
 
     <div>
-      <label class="block text-sm text-foreground mb-2">Username</label>
-      <input
-        v-model="username"
-        type="text"
-        class="w-full px-4 py-2 bg-input rounded-lg border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-        placeholder="Enter username"
-        :required="!isEditMode"
-      />
+      <label class="block text-sm text-foreground mb-2">Username *</label>
+      <Field v-slot="{ field, errorMessage }" name="username">
+        <input
+          v-bind="field"
+          type="text"
+          class="w-full px-4 py-2 bg-input rounded-lg border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+          :class="errorMessage ? 'border-destructive' : 'border-border'"
+          placeholder="Enter username"
+        />
+      </Field>
+      <ErrorMessage name="username" v-slot="{ message }">
+        <p class="text-xs text-destructive mt-1">{{ message }}</p>
+      </ErrorMessage>
     </div>
 
     <div>
-      <label class="block text-sm text-foreground mb-2">Email</label>
-      <input
-        v-model="email"
-        type="email"
-        class="w-full px-4 py-2 bg-input rounded-lg border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-        placeholder="example@email.com"
-        :required="!isEditMode"
-      />
+      <label class="block text-sm text-foreground mb-2">Email *</label>
+      <Field v-slot="{ field, errorMessage }" name="email">
+        <input
+          v-bind="field"
+          type="email"
+          class="w-full px-4 py-2 bg-input rounded-lg border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+          :class="errorMessage ? 'border-destructive' : 'border-border'"
+          placeholder="example@email.com"
+        />
+      </Field>
+      <ErrorMessage name="email" v-slot="{ message }">
+        <p class="text-xs text-destructive mt-1">{{ message }}</p>
+      </ErrorMessage>
     </div>
 
     <div>
-      <label class="block text-sm text-foreground mb-2">
-        Password
-        <span v-if="!isEditMode">*</span>
-      </label>
-      <input
-        v-model="password"
-        type="password"
-        class="w-full px-4 py-2 bg-input rounded-lg border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-        :placeholder="isEditMode ? 'Leave empty to keep current password' : 'Minimum 8 characters'"
-        :required="!isEditMode"
-      />
+      <label class="block text-sm text-foreground mb-2">Password *</label>
+      <Field v-slot="{ field, errorMessage }" name="password">
+        <input
+          v-bind="field"
+          type="password"
+          class="w-full px-4 py-2 bg-input rounded-lg border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+          :class="errorMessage ? 'border-destructive' : 'border-border'"
+          placeholder="Minimum 8 characters"
+        />
+      </Field>
+      <ErrorMessage name="password" v-slot="{ message }">
+        <p class="text-xs text-destructive mt-1">{{ message }}</p>
+      </ErrorMessage>
     </div>
 
     <div>
-      <label class="block text-sm text-foreground mb-2">Role</label>
-      <select
-        v-model="role"
-        class="w-full px-4 py-2 bg-input rounded-lg border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-        :required="!isEditMode"
-      >
-        <option value="user">User</option>
-        <option value="admin">Administrator</option>
-      </select>
-    </div>
-
-    <div v-if="errorMessages?.length" class="rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-      <ul class="list-disc pl-5">
-        <li v-for="message in errorMessages" :key="message">{{ message }}</li>
-      </ul>
+      <label class="block text-sm text-foreground mb-2">Role *</label>
+      <Field v-slot="{ field, errorMessage }" name="role">
+        <select
+          v-bind="field"
+          class="w-full px-4 py-2 bg-input rounded-lg border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+          :class="errorMessage ? 'border-destructive' : 'border-border'"
+        >
+          <option value="user">User</option>
+          <option value="admin">Administrator</option>
+        </select>
+      </Field>
+      <ErrorMessage name="role" v-slot="{ message }">
+        <p class="text-xs text-destructive mt-1">{{ message }}</p>
+      </ErrorMessage>
     </div>
 
     <div class="flex gap-3 pt-4">
@@ -150,5 +163,5 @@ watch(() => props.user, syncFormValues, { immediate: true });
         Cancel
       </button>
     </div>
-  </form>
+  </Form>
 </template>

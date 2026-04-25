@@ -22,6 +22,13 @@ import { Plus } from 'lucide-vue-next';
 import { onMounted, onUnmounted, ref } from 'vue';
 
 // -------------------------------
+// Services
+// -------------------------------
+const computerService = ComputerService.getInstance();
+const componentService = ComponentService.getInstance();
+const userService = UserService.getInstance();
+
+// -------------------------------
 // Non Reactive Variables
 // -------------------------------
 let successTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -51,35 +58,35 @@ function showSuccess(message: string): void {
   }, 3000);
 }
 
-async function loadData(): Promise<void> {
-  computers.value = ComputerService.getAll();
-  users.value = await UserService.getAll();
-  components.value = ComponentService.getAll();
+function loadData(): void {
+  computers.value = computerService.getAll();
+  users.value = userService.getAll();
+  components.value = componentService.getAll();
 }
 
-async function handleCreate(payload: CreateComputerDTO): Promise<void> {
-  ComputerService.create(payload);
+function handleCreate(payload: CreateComputerDTO): void {
+  computerService.create(payload);
   showSuccess('Computer created successfully');
 
-  await loadData();
+  loadData();
   closeModal();
 }
 
-async function handleUpdate(payload: EditComputerDTO): Promise<void> {
+function handleUpdate(payload: EditComputerDTO): void {
   if (!editingComputer.value) {
     return;
   }
 
-  ComputerService.update(editingComputer.value.id, payload);
+  computerService.update(editingComputer.value.id, payload);
   showSuccess('Computer updated successfully');
-  await loadData();
+  loadData();
   closeModal();
 }
 
-async function handleDelete(computer: ComputerInterface): Promise<void> {
+function handleDelete(computer: ComputerInterface): void {
   if (window.confirm(`Are you sure you want to delete computer "${computer.name}"?`)) {
-    ComputerService.delete(computer.id);
-    await loadData();
+    computerService.delete(computer.id);
+    loadData();
     showSuccess('Computer deleted successfully');
   }
 }

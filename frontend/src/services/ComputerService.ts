@@ -5,17 +5,43 @@
 // -------------------------------
 import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import type { ComputerStatus } from '@app-types/Computer';
+import { ComputerStatusHistoryService } from '@services/ComputerStatusHistoryService';
 import type { CreateComputerDTO } from '@dtos/computer/CreateComputerDTO';
 import type { EditComputerDTO } from '@dtos/computer/EditComputerDTO';
-import { ComputerStatusHistoryService } from '@services/ComputerStatusHistoryService';
 import { useComputersStore } from '@stores/ComputerStore';
 
 // -------------------------------
 // Class Definition
 // -------------------------------
 export class ComputerService {
+  // private properties
+  // singleton instance
+  private static instance: ComputerService;
+  private computerStatusHistoryService: ComputerStatusHistoryService;
+  private computersStore: ReturnType<typeof useComputersStore>;
+
+  // constructor
+  private constructor(computersStore: ReturnType<typeof useComputersStore>, computerStatusHistoryService: ComputerStatusHistoryService) {
+    this.computersStore = computersStore;
+    this.computerStatusHistoryService = computerStatusHistoryService;
+  }
+
+  // getInstance()
+  static getInstance(
+    computersStore?: ReturnType<typeof useComputersStore>,
+    computerStatusHistoryService?: ComputerStatusHistoryService,
+  ): ComputerService {
+    if (!this.instance) {
+      if (!computersStore || !computerStatusHistoryService) {
+        throw new Error('You should put a store here');
+      }
+      this.instance = new ComputerService(computersStore, computerStatusHistoryService);
+    }
+    return this.instance;
+  }
+
   // query methods (getAll, getById, stats, filters)
-  static filterComputers(
+  filterComputers(
     computers: ComputerInterface[] = this.getAll(),
     filters: { searchQuery?: string; status?: ComputerStatus | 'all'; userId?: number | 'all' } = {},
   ): ComputerInterface[] {
@@ -34,15 +60,15 @@ export class ComputerService {
     });
   }
 
-  static getAll(): ComputerInterface[] {
-    return useComputersStore().computers;
+  getAll(): ComputerInterface[] {
+    return this.computersStore.computers;
   }
 
-  static getById(id: number): ComputerInterface | undefined {
-    return useComputersStore().computers.find((computer) => computer.id === id);
+  getById(id: number): ComputerInterface | undefined {
+    return this.computersStore.computers.find((computer) => computer.id === id);
   }
 
-  static getCountByStatus(computers: ComputerInterface[] = this.getAll()): { status: ComputerStatus; count: number }[] {
+  getCountByStatus(computers: ComputerInterface[] = this.getAll()): { status: ComputerStatus; count: number }[] {
     const statusOrder: ComputerStatus[] = ['active', 'inactive', 'maintenance'];
     const counts = new Map<ComputerStatus, number>();
 
@@ -57,26 +83,26 @@ export class ComputerService {
     return statusOrder.map((status) => ({ status, count: counts.get(status) ?? 0 }));
   }
 
-  static getStatusCount(status: ComputerStatus, computers: ComputerInterface[] = this.getAll()): number {
+  getStatusCount(status: ComputerStatus, computers: ComputerInterface[] = this.getAll()): number {
     return this.getCountByStatus(computers).find((entry) => entry.status === status)?.count ?? 0;
   }
 
   // mutation methods (create, update, delete)
-  static create(computerData: CreateComputerDTO): ComputerInterface {
-    return useComputersStore().addComputer(computerData);
+  create(computerData: CreateComputerDTO): ComputerInterface {
+    return this.computersStore.addComputer(computerData);
   }
 
-  static delete(id: number): boolean {
-    return useComputersStore().deleteComputerById(id);
+  delete(id: number): boolean {
+    return this.computersStore.deleteComputerById(id);
   }
 
-  static update(id: number, computerData: EditComputerDTO): boolean {
+  update(id: number, computerData: EditComputerDTO): boolean {
     const computer = this.getById(id);
 
     if (computer && computerData.status && computer.status !== computerData.status) {
-      ComputerStatusHistoryService.record({ computerId: id, previousStatus: computer.status, newStatus: computerData.status });
+      this.computerStatusHistoryService.record({ computerId: id, previousStatus: computer.status, newStatus: computerData.status });
     }
 
-    return useComputersStore().updateComputerById(id, computerData);
+    return this.computersStore.updateComputerById(id, computerData);
   }
 }

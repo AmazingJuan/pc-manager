@@ -22,49 +22,45 @@ import { createRouter, createWebHistory } from 'vue-router';
 const routes = [
   // Guest routes
   { path: '/', redirect: '/login' },
-  { path: '/login', name: 'login', component: LoginView, meta: { title: 'Computer Manager', subtitle: 'TI Devices Management', guestOnly: true } },
+  { path: '/login', name: 'login', component: LoginView, meta: { title: 'Computer Manager', subtitle: 'TI Devices Management' } },
 
-  {
-    path: '/register',
-    name: 'register',
-    component: RegisterView,
-    meta: { title: 'Create an account', subtitle: 'Complete this form to register', guestOnly: true },
-  },
+  { path: '/register', name: 'register', component: RegisterView, meta: { title: 'Create an account', subtitle: 'Complete this form to register' } },
 
   // Routes that require login
-  { path: '/dashboard', name: 'dashboard', component: IndexView, meta: { requiresAuth: true } },
-  { path: '/dashboard/components/report', name: 'components-report', component: ComponentReportView, meta: { requiresAuth: true } },
-  { path: '/dashboard/computers/report', name: 'computers-report', component: ComputerReportView, meta: { requiresAuth: true } },
-  { path: '/dashboard/computers/status-history', name: 'computers-status-history', component: StatusHistoryView, meta: { requiresAuth: true } },
+  { path: '/dashboard', name: 'dashboard', component: IndexView },
+  { path: '/dashboard/components/report', name: 'components-report', component: ComponentReportView },
+  { path: '/dashboard/computers/report', name: 'computers-report', component: ComputerReportView },
+  { path: '/dashboard/computers/status-history', name: 'computers-status-history', component: StatusHistoryView },
 
   // Admin only routes
-  { path: '/dashboard/users', name: 'users', component: UsersManagementView, meta: { requiresAuth: true, admin: true } },
-  { path: '/dashboard/computers', name: 'computers', component: ComputersManagementView, meta: { requiresAuth: true, admin: true } },
-  { path: '/dashboard/components', name: 'components', component: ComponentsManagementView, meta: { requiresAuth: true, admin: true } },
+  { path: '/dashboard/users', name: 'users', component: UsersManagementView },
+  { path: '/dashboard/computers', name: 'computers', component: ComputersManagementView },
+  { path: '/dashboard/components', name: 'components', component: ComponentsManagementView },
 ];
 
 const router = createRouter({ history: createWebHistory(import.meta.env.BASE_URL), routes });
 
 // Routes validation
-router.beforeEach(async (to) => {
-  const isAuthenticated = AuthService.hasLoggedInUser();
-  let loggedInUser = AuthService.getCachedLoggedInUser();
-
-  if (!loggedInUser && isAuthenticated && (to.meta.requiresAuth || to.meta.admin)) {
-    loggedInUser = await AuthService.getLoggedInUser().catch(() => null);
-  }
-
+router.beforeEach((to) => {
+  const authService = AuthService.getInstance();
+  const isAuthenticated = authService.hasLoggedInUser();
+  const loggedInUser = authService.getLoggedInUser();
   const isAdmin = loggedInUser?.role === 'admin';
 
-  if (!isAuthenticated && to.meta.requiresAuth) {
+  const guestOnlyRouteNames = new Set(['login', 'register']);
+  const adminOnlyRouteNames = new Set(['users', 'computers', 'components']);
+
+  const isDashboardRoute = to.path.startsWith('/dashboard');
+  const isGuestOnlyRoute = guestOnlyRouteNames.has(String(to.name ?? ''));
+  const isAdminOnlyRoute = adminOnlyRouteNames.has(String(to.name ?? ''));
+
+  // Not authenticated trying to access dashboard
+  if (!isAuthenticated && isDashboardRoute) {
     return { name: 'login' };
   }
 
-  if (isAuthenticated && to.meta.guestOnly) {
-    return { name: 'dashboard' };
-  }
-
-  if (isAuthenticated && to.meta.admin && !isAdmin) {
+  // Authenticated trying to access guest-only routes
+  if ((isAuthenticated && isGuestOnlyRoute) || (isAuthenticated && isAdminOnlyRoute && !isAdmin)) {
     return { name: 'dashboard' };
   }
 

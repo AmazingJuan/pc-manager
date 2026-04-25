@@ -29,10 +29,15 @@ interface Props {
 const props = defineProps<Props>();
 
 // -------------------------------
+// Services
+// -------------------------------
+const componentService = ComponentService.getInstance();
+
+// -------------------------------
 // Reactive Variables / Computed
 // -------------------------------
 const chartData = computed<ChartData<'line'>>(() => {
-  const averages = ComponentService.getAveragePriceByType(props.components);
+  const averages = componentService.getAveragePriceByType(props.components);
   const labels = averages.map((entry) => entry.type);
   const values = averages.map((entry) => entry.averagePrice);
 

@@ -3,73 +3,79 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import { api } from '@api/client';
 import type { LoginDTO } from '@dtos/auth/LoginDTO';
 import type { RegisterDTO } from '@dtos/auth/RegisterDTO';
 import { useAuthStore } from '@stores/AuthStore';
-import { useUsersStore } from '@stores/UsersStore';
 import type { UserInterface } from '@interfaces/UserInterface';
-import axios from 'axios';
+import { useUsersStore } from '@stores/UsersStore';
 
+// -------------------------------
+// Class Definition
+// -------------------------------
 export class AuthService {
-  public static async login(loginDto: LoginDTO): Promise<void> {
-    try {
-      const response = await api.post('/auth/login', loginDto);
+  // private properties
+  // singleton instance
+  private authStore: ReturnType<typeof useAuthStore>;
+  private static instance: AuthService;
+  private usersStore: ReturnType<typeof useUsersStore>;
 
-      const accessToken = response.data.access_token ?? response.data.accessToken ?? '';
-      const authStore = useAuthStore();
-      authStore.setTokens(accessToken);
-      authStore.setLoggedInUser(null);
-    } catch (error: unknown) {
-      if (!axios.isAxiosError(error)) {
-        throw ['Invalid credentials'];
+  // constructor
+  private constructor(authStore: ReturnType<typeof useAuthStore>, usersStore: ReturnType<typeof useUsersStore>) {
+    this.authStore = authStore;
+    this.usersStore = usersStore;
+  }
+
+  // getInstance()
+  static getInstance(authStore?: ReturnType<typeof useAuthStore>, usersStore?: ReturnType<typeof useUsersStore>): AuthService {
+    if (!this.instance) {
+      if (!authStore || !usersStore) {
+        throw new Error('You should put authStore and usersStore here');
       }
-
-      throw error.response?.data?.message;
+      this.instance = new AuthService(authStore, usersStore);
     }
+
+    return this.instance;
   }
 
-  public static async register(registerDto: RegisterDTO): Promise<void> {
-    try {
-      const response = await api.post('/auth/register', registerDto);
+  // query methods (getAll, getById, stats, filters)
+  getLoggedInUser(): UserInterface | null {
+    return this.authStore.loggedInUser;
+  }
 
-      const accessToken = response.data.access_token ?? response.data.accessToken ?? '';
-      const authStore = useAuthStore();
-      authStore.setTokens(accessToken);
-      authStore.setLoggedInUser(null);
-    } catch (error: unknown) {
-      if (!axios.isAxiosError(error)) {
-        throw ['Registration failed'];
-      }
+  hasLoggedInUser(): boolean {
+    return this.authStore.hasLoggedInUser;
+  }
 
-      throw error.response?.data?.message;
+  // mutation methods (create, update, delete)
+  login(credentials: LoginDTO): boolean {
+    const user = this.usersStore.users.find(
+      (currentUser) => currentUser.username === credentials.username && currentUser.password === credentials.password,
+    );
+
+    if (!user) {
+      return false;
     }
+
+    this.authStore.setLoggedInUser(user);
+    return true;
   }
 
-  public static logout(): void {
-    const authStore = useAuthStore();
-    const usersStore = useUsersStore();
-
-    authStore.clearSession();
-    usersStore.$reset();
+  logout(): void {
+    this.authStore.setLoggedInUser(null);
   }
 
-  public static hasLoggedInUser(): boolean {
-    return Boolean(useAuthStore().accessToken);
-  }
+  register(registerData: RegisterDTO): boolean {
+    const userExists = this.usersStore.users.some(
+      (currentUser) => currentUser.username === registerData.username || currentUser.email === registerData.email,
+    );
 
-  public static async getLoggedInUser(): Promise<UserInterface | null> {
-    const response = await api.get('/auth/profile');
-    if (!response.data) {
-      throw new Error('Failed to get logged in user');
+    if (userExists) {
+      return false;
     }
-    const authStore = useAuthStore();
-    authStore.setLoggedInUser(response.data);
 
-    return response.data;
-  }
+    const newUser: UserInterface = this.usersStore.addUser({ ...registerData, role: 'user', computerIds: null });
+    this.authStore.setLoggedInUser(newUser);
 
-  public static getCachedLoggedInUser(): UserInterface | null {
-    return useAuthStore().loggedInUser;
+    return true;
   }
 }

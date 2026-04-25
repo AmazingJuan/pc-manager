@@ -19,6 +19,12 @@ import { History } from 'lucide-vue-next';
 import { computed, onMounted, ref } from 'vue';
 
 // -------------------------------
+// Services
+// -------------------------------
+const computerService = ComputerService.getInstance();
+const computerStatusHistoryService = ComputerStatusHistoryService.getInstance();
+
+// -------------------------------
 // Reactive Variables / Computed
 // -------------------------------
 const computers = ref<ComputerInterface[]>([]);
@@ -27,20 +33,20 @@ const selectedComputerId = ref<number | 'all'>('all');
 const selectedOldStatus = ref<ComputerStatus | 'all'>('all');
 const selectedStatus = ref<ComputerStatus | 'all'>('all');
 const filteredComputerStatusHistoryEntries = computed(() => {
-  return ComputerStatusHistoryService.filterHistoryEntries(computerStatusHistoryEntries.value, {
+  return computerStatusHistoryService.filterHistoryEntries(computerStatusHistoryEntries.value, {
     computerId: selectedComputerId.value,
     previousStatus: selectedOldStatus.value,
     newStatus: selectedStatus.value,
   });
 });
-const computerStatusHistoryStats = computed(() => ComputerStatusHistoryService.getStatusChangeStats(filteredComputerStatusHistoryEntries.value));
+const computerStatusHistoryStats = computed(() => computerStatusHistoryService.getStatusChangeStats(filteredComputerStatusHistoryEntries.value));
 
 // -------------------------------
 // Functions
 // -------------------------------
 function loadData(): void {
-  computers.value = ComputerService.getAll();
-  computerStatusHistoryEntries.value = ComputerStatusHistoryService.getAll();
+  computers.value = computerService.getAll();
+  computerStatusHistoryEntries.value = computerStatusHistoryService.getAll();
 }
 
 // -------------------------------

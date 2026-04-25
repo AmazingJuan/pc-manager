@@ -7,7 +7,6 @@
 
     "paths": {
       "@/*": ["./src/*"],
-      "@api/*": ["./src/api/*"],
       "@assets/*": ["./src/assets/*"],
       "@bootstrap/*": ["./src/bootstrap/*"],
       "@components/*": ["./src/components/*"],
