@@ -8,8 +8,10 @@ import { UsersModule } from '@users/users.module';
 // -------------------------------
 // Third-Party Imports
 // -------------------------------
+import { AuthModule } from './auth/auth.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -23,6 +25,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       synchronize: true,
     }),
     UsersModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
