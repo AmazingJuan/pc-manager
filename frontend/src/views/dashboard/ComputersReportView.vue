@@ -18,12 +18,6 @@ import { UserService } from '@services/UserService';
 import { computed, onMounted, ref } from 'vue';
 
 // -------------------------------
-// Services
-// -------------------------------
-const computerService = ComputerService.getInstance();
-const userService = UserService.getInstance();
-
-// -------------------------------
 // Reactive Variables / Computed
 // -------------------------------
 const computers = ref<ComputerInterface[]>([]);
@@ -32,7 +26,7 @@ const searchQuery = ref<string>('');
 const selectedStatus = ref<ComputerStatus | 'all'>('all');
 const selectedUserId = ref<number | 'all'>('all');
 const filteredComputers = computed(() =>
-  computerService.filterComputers(computers.value, { searchQuery: searchQuery.value, status: selectedStatus.value, userId: selectedUserId.value }),
+  ComputerService.filterComputers(computers.value, { searchQuery: searchQuery.value, status: selectedStatus.value, userId: selectedUserId.value }),
 );
 
 // -------------------------------
@@ -48,9 +42,9 @@ function clearFilters(): void {
   selectedUserId.value = 'all';
 }
 
-function loadData(): void {
-  computers.value = computerService.getAll();
-  users.value = userService.getAll();
+async function loadData(): Promise<void> {
+  computers.value = ComputerService.getAll();
+  users.value = await UserService.getAll();
 }
 
 // -------------------------------
