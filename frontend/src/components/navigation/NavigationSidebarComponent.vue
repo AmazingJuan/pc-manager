@@ -3,19 +3,25 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import type { UserInterface } from '@interfaces/UserInterface';
 import { AuthService } from '@services/AuthService';
+import { useAuthStore } from '@stores/AuthStore';
 
 // -------------------------------
 // Third-Party Imports
 // -------------------------------
 import { BarChart3, Cpu, History, LayoutDashboard, LogOut, Monitor, Package, Shield, Users } from 'lucide-vue-next';
-import { onMounted, ref } from 'vue';
+import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+
+// -------------------------------
+// Services
+// -------------------------------
+const authService = AuthService.getInstance();
 
 // -------------------------------
 // Non-Reactive Variables
 // -------------------------------
+const authStore = useAuthStore();
 const route = useRoute();
 const router = useRouter();
 const menuItems = [
@@ -32,8 +38,8 @@ const menuItems = [
 // -------------------------------
 // Reactive Variables / Computed
 // -------------------------------
-const isAdmin = ref(false);
-const user = ref<UserInterface | null>(null);
+const isAdmin = computed(() => user.value?.role === 'admin');
+const user = computed(() => authStore.loggedInUser);
 
 // -------------------------------
 // Functions
@@ -43,15 +49,9 @@ function isActive(routeName: string): boolean {
 }
 
 function logout(): void {
-  AuthService.logout();
+  authService.logout();
   router.push({ name: 'login' });
 }
-
-onMounted(async () => {
-  user.value = await AuthService.getLoggedInUser();
-  isAdmin.value = user.value?.role === 'admin';
-  console.log(isAdmin.value);
-});
 
 // -------------------------------
 // Watchers / Lifecycle
@@ -70,7 +70,7 @@ onMounted(async () => {
 
     <nav class="flex-1 p-4 overflow-y-auto">
       <ul class="space-y-1">
-        <li v-for="item in menuItems.filter((item) => !item.admin || isAdmin)" :key="item.name">
+        <li v-for="item in menuItems" :key="item.name" v-show="!item.admin || isAdmin">
           <RouterLink
             :to="{ name: item.name }"
             class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all"

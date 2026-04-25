@@ -6,10 +6,12 @@
 // -------------------------------
 import { AuthService } from '@services/AuthService';
 import type { RegisterDTO } from '@dtos/auth/RegisterDTO';
+import { RegisterSchema } from '@schemas/user/RegisterSchema';
 
 // -------------------------------
 // Third Party Imports
 // -------------------------------
+import { ErrorMessage, Field, Form } from 'vee-validate';
 import { ArrowLeft, Lock, Mail, User } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
@@ -18,96 +20,144 @@ import { RouterLink, useRouter } from 'vue-router';
 // Non Reactive Variables
 // -------------------------------
 const router = useRouter();
+const authService = AuthService.getInstance();
 
 // -------------------------------
 // Reactive Variables
 // -------------------------------
-const errorMessages = ref<string[]>([]);
-const name = ref('');
-const username = ref('');
-const email = ref('');
-const password = ref('');
+const error = ref('');
 
 // -------------------------------
 // Functions
 // -------------------------------
-async function onSubmit(): Promise<void> {
-  const registerData: RegisterDTO = { name: name.value, username: username.value, email: email.value, password: password.value };
+function onSubmit(values: Record<string, unknown>): void {
+  const registerData: RegisterDTO = {
+    name: String(values.name ?? ''),
+    username: String(values.username ?? ''),
+    email: String(values.email ?? ''),
+    password: String(values.password ?? ''),
+  };
 
-  try {
-    await AuthService.register(registerData);
-    errorMessages.value = [];
+  const success = authService.register(registerData);
+
+  if (success) {
+    error.value = '';
     router.push({ name: 'dashboard' });
-  } catch (requestError: unknown) {
-    if (Array.isArray(requestError)) {
-      errorMessages.value = requestError as string[];
-    } else {
-      errorMessages.value = ['Registration failed'];
-    }
+    return;
   }
+
+  error.value = 'Username or email already exists';
 }
 </script>
 
 <template>
-  <form @submit.prevent="onSubmit" class="space-y-5">
+  <Form @submit="onSubmit" :validation-schema="RegisterSchema" class="space-y-5">
     <!-- Name Field -->
     <div>
       <label class="block text-sm text-foreground mb-2">Full Name</label>
-      <div class="relative">
-        <User class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-        <input
-          v-model="name"
-          type="text"
-          class="w-full pl-11 pr-4 py-3 bg-input rounded-lg border border-border text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
-          placeholder="Enter your full name"
-          required
-        />
-      </div>
+      <Field
+        v-slot="{ field, errorMessage }"
+        name="name"
+        :validate-on-blur="false"
+        :validate-on-change="false"
+        :validate-on-input="false"
+        :validate-on-model-update="false"
+      >
+        <div class="relative">
+          <User class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+          <input
+            v-bind="field"
+            type="text"
+            class="w-full pl-11 pr-4 py-3 bg-input rounded-lg border text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+            :class="errorMessage ? 'border-destructive' : 'border-border'"
+            placeholder="Enter your full name"
+          />
+        </div>
+      </Field>
+      <ErrorMessage name="name" v-slot="{ message }">
+        <p class="text-xs text-destructive mt-1">{{ message }}</p>
+      </ErrorMessage>
     </div>
 
     <!-- Username Field -->
     <div>
       <label class="block text-sm text-foreground mb-2">Username</label>
-      <div class="relative">
-        <User class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-        <input
-          v-model="username"
-          type="text"
-          class="w-full pl-11 pr-4 py-3 bg-input rounded-lg border border-border text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
-          placeholder="Enter your username"
-          required
-        />
-      </div>
+      <Field
+        v-slot="{ field, errorMessage }"
+        name="username"
+        :validate-on-blur="false"
+        :validate-on-change="false"
+        :validate-on-input="false"
+        :validate-on-model-update="false"
+      >
+        <div class="relative">
+          <User class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+          <input
+            v-bind="field"
+            type="text"
+            class="w-full pl-11 pr-4 py-3 bg-input rounded-lg border text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+            :class="errorMessage ? 'border-destructive' : 'border-border'"
+            placeholder="Enter your username"
+          />
+        </div>
+      </Field>
+      <ErrorMessage name="username" v-slot="{ message }">
+        <p class="text-xs text-destructive mt-1">{{ message }}</p>
+      </ErrorMessage>
     </div>
 
     <!-- Email Field -->
     <div>
       <label class="block text-sm text-foreground mb-2">Email</label>
-      <div class="relative">
-        <Mail class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-        <input
-          v-model="email"
-          type="email"
-          class="w-full pl-11 pr-4 py-3 bg-input rounded-lg border border-border text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
-          placeholder="example@email.com"
-          required
-        />
-      </div>
+      <Field
+        v-slot="{ field, errorMessage }"
+        name="email"
+        :validate-on-blur="false"
+        :validate-on-change="false"
+        :validate-on-input="false"
+        :validate-on-model-update="false"
+      >
+        <div class="relative">
+          <Mail class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+          <input
+            v-bind="field"
+            type="email"
+            class="w-full pl-11 pr-4 py-3 bg-input rounded-lg border text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+            :class="errorMessage ? 'border-destructive' : 'border-border'"
+            placeholder="example@email.com"
+          />
+        </div>
+      </Field>
+      <ErrorMessage name="email" v-slot="{ message }">
+        <p class="text-xs text-destructive mt-1">{{ message }}</p>
+      </ErrorMessage>
     </div>
 
     <!-- Password Field -->
     <div>
       <label class="block text-sm text-foreground mb-2">Password</label>
-      <div class="relative">
-        <Lock class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-        <input
-          v-model="password"
-          type="password"
-          class="w-full pl-11 pr-4 py-3 bg-input rounded-lg border border-border text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
-          placeholder="Minimum 8 characters"
-          required
-        />
-      </div>
+      <Field
+        v-slot="{ field, errorMessage }"
+        name="password"
+        :validate-on-blur="false"
+        :validate-on-change="false"
+        :validate-on-input="false"
+        :validate-on-model-update="false"
+      >
+        <div class="relative">
+          <Lock class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+          <input
+            v-bind="field"
+            type="password"
+            class="w-full pl-11 pr-4 py-3 bg-input rounded-lg border text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+            :class="errorMessage ? 'border-destructive' : 'border-border'"
+            placeholder="Minimum 8 characters"
+          />
+        </div>
+      </Field>
+      <ErrorMessage name="password" v-slot="{ message }">
+        <p class="text-xs text-destructive mt-1">{{ message }}</p>
+      </ErrorMessage>
     </div>
 
     <button
@@ -116,14 +166,12 @@ async function onSubmit(): Promise<void> {
     >
       Create Account
     </button>
-  </form>
+  </Form>
 
   <!-- Error message card -->
-  <div v-if="errorMessages.length" role="alert" aria-live="polite" class="mt-4 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3">
+  <div v-if="error" role="alert" aria-live="polite" class="mt-4 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3">
     <p class="text-sm font-medium text-destructive-foreground">Registration error</p>
-    <ul class="mt-1 list-disc pl-5 text-xs text-destructive-foreground/90">
-      <li v-for="message in errorMessages" :key="message">{{ message }}</li>
-    </ul>
+    <p class="mt-1 text-xs text-destructive-foreground/90">{{ error }}</p>
   </div>
 
   <!-- Back to login link -->

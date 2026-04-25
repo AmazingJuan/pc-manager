@@ -19,6 +19,11 @@ import { Plus } from 'lucide-vue-next';
 import { onMounted, onUnmounted, ref } from 'vue';
 
 // -------------------------------
+// Services
+// -------------------------------
+const componentService = ComponentService.getInstance();
+
+// -------------------------------
 // Non Reactive Variables
 // -------------------------------
 let successTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -47,11 +52,11 @@ function showSuccess(message: string): void {
 }
 
 function loadData(): void {
-  components.value = ComponentService.getAll();
+  components.value = componentService.getAll();
 }
 
 function handleCreate(payload: CreateComponentDTO): void {
-  ComponentService.create(payload);
+  componentService.create(payload);
 
   showSuccess('Component created successfully');
   loadData();
@@ -63,7 +68,7 @@ function handleUpdate(payload: EditComponentDTO): void {
     return;
   }
 
-  ComponentService.update(editingComponent.value.id, payload);
+  componentService.update(editingComponent.value.id, payload);
 
   showSuccess('Component updated successfully');
   loadData();
@@ -72,7 +77,7 @@ function handleUpdate(payload: EditComponentDTO): void {
 
 function handleDelete(component: ComponentInterface): void {
   if (window.confirm(`Are you sure you want to delete component "${component.name}"?`)) {
-    ComponentService.delete(component.id);
+    componentService.delete(component.id);
     loadData();
     showSuccess('Component deleted successfully');
   }

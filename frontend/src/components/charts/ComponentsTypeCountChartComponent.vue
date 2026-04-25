@@ -33,10 +33,15 @@ const props = defineProps<Props>();
 // -------------------------------
 
 // -------------------------------
+// Services
+// -------------------------------
+const componentService = ComponentService.getInstance();
+
+// -------------------------------
 // Reactive Variables / Computed
 // -------------------------------
 const chartData = computed<ChartData<'bar'>>(() => {
-  const typeCounts = ComponentService.getCountByType(props.components);
+  const typeCounts = componentService.getCountByType(props.components);
   const labels = typeCounts.map((entry) => entry.type);
   const values = typeCounts.map((entry) => entry.count);
 

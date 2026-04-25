@@ -17,6 +17,11 @@ import ComponentsReportTableSection from '@components/componentsReport/Component
 import { computed, onMounted, ref } from 'vue';
 
 // -------------------------------
+// Services
+// -------------------------------
+const componentService = ComponentService.getInstance();
+
+// -------------------------------
 // Reactive Variables / Computed
 // -------------------------------
 const components = ref<ComponentInterface[]>([]);
@@ -25,7 +30,7 @@ const selectedStatus = ref<ComponentType | 'all'>('all');
 const fromDate = ref<string>('');
 const toDate = ref<string>('');
 const filteredComponents = computed(() =>
-  ComponentService.filterComponents(components.value, {
+  componentService.filterComponents(components.value, {
     type: selectedType.value,
     status: selectedStatus.value,
     fromDate: fromDate.value,
@@ -47,7 +52,7 @@ function clearFilters(): void {
 }
 
 function loadData(): void {
-  components.value = ComponentService.getAll();
+  components.value = componentService.getAll();
 }
 
 // -------------------------------

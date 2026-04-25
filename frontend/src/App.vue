@@ -6,9 +6,14 @@
 import AuthLayout from '@layouts/AuthLayout.vue';
 import { AuthService } from '@services/AuthService';
 import MainLayout from '@layouts/MainLayout.vue';
+
+// -------------------------------
+// Services
+// -------------------------------
+const authService = AuthService.getInstance();
 </script>
 
 <template>
-  <MainLayout v-if="AuthService.hasLoggedInUser()" />
+  <MainLayout v-if="authService.hasLoggedInUser()" />
   <AuthLayout v-else />
 </template>

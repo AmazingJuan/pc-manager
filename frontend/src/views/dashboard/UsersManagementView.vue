@@ -18,99 +18,60 @@ import { Plus, Shield } from 'lucide-vue-next';
 import { onMounted, ref } from 'vue';
 
 // -------------------------------
+// Services
+// -------------------------------
+const userService = UserService.getInstance();
+
+// -------------------------------
 // Reactive Variables / Computed
 // -------------------------------
 const users = ref<UserInterface[]>([]);
 const isModalOpen = ref(false);
 const editingUser = ref<UserInterface | null>(null);
 const successMessage = ref('');
-const errorMessages = ref<string[]>([]);
-const formErrorMessages = ref<string[]>([]);
 
 // -------------------------------
 // Functions
 // -------------------------------
-async function loadData(): Promise<void> {
-  try {
-    users.value = await UserService.getAll();
-  } catch (error) {
-    if (Array.isArray(error)) {
-      errorMessages.value = error as string[];
-    } else {
-      errorMessages.value = ['An unknown error occurred'];
-    }
-  }
+function loadData(): void {
+  users.value = userService.getAll();
 }
 
 function showSuccess(message: string): void {
-  errorMessages.value = [];
-  formErrorMessages.value = [];
   successMessage.value = message;
   setTimeout(() => (successMessage.value = ''), 3000);
 }
 
-function showError(messages: string[]): void {
-  successMessage.value = '';
-  formErrorMessages.value = messages;
-}
-
 function openModal(user?: UserInterface): void {
   editingUser.value = user ?? null;
-  formErrorMessages.value = [];
   isModalOpen.value = true;
 }
 
 function closeModal(): void {
   isModalOpen.value = false;
   editingUser.value = null;
-  formErrorMessages.value = [];
 }
 
-async function handleCreate(payload: CreateUserDTO): Promise<void> {
-  try {
-    await UserService.create(payload);
-    showSuccess('User created successfully');
-    await loadData();
-    closeModal();
-  } catch (error) {
-    if (Array.isArray(error)) {
-      showError(error as string[]);
-    } else {
-      showError(['An unknown error occurred']);
-    }
-  }
+function handleCreate(payload: CreateUserDTO): void {
+  userService.create(payload);
+  showSuccess('User created successfully');
+  loadData();
+  closeModal();
 }
 
-async function handleUpdate(payload: EditUserDTO): Promise<void> {
+function handleUpdate(payload: EditUserDTO): void {
   if (!editingUser.value) return;
-
-  try {
-    await UserService.update(editingUser.value.id, payload);
-    showSuccess('User updated successfully');
-    await loadData();
-    closeModal();
-  } catch (error) {
-    if (Array.isArray(error)) {
-      showError(error as string[]);
-    } else {
-      showError(['An unknown error occurred']);
-    }
-  }
+  userService.update(editingUser.value.id, payload);
+  showSuccess('User updated successfully');
+  loadData();
+  closeModal();
 }
 
-async function handleDelete(user: UserInterface): Promise<void> {
+function handleDelete(user: UserInterface): void {
   if (window.confirm(`Are you sure you want to delete user "${user.username}"?`)) {
-    try {
-      await UserService.delete(user.id);
-      await loadData();
-      showSuccess('User deleted successfully');
-    } catch (error) {
-      if (Array.isArray(error)) {
-        showError(error as string[]);
-      } else {
-        showError(['An unknown error occurred']);
-      }
-    }
+    userService.delete(user.id);
+    loadData();
+    showSuccess('User deleted successfully');
   }
 }
 
@@ -145,25 +106,12 @@ onMounted(loadData);
       {{ successMessage }}
     </div>
 
-    <!-- Error Feedback -->
-    <div v-if="errorMessages.length" class="mt-4 mb-4 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-      <ul class="list-disc pl-5">
-        <li v-for="message in errorMessages" :key="message">{{ message }}</li>
-      </ul>
-    </div>
-
     <!-- Users Table -->
     <UsersManagementTableSection :users="users" @edit="openModal" @delete="handleDelete" />
 
     <!-- Create/Edit Modal -->
     <UiModalComponent :is-open="isModalOpen" :title="editingUser ? 'Edit User' : 'Add User'" @close="closeModal">
-      <UsersManagementFormSection
-        :user="editingUser"
-        :error-messages="formErrorMessages"
-        @create="handleCreate"
-        @edit="handleUpdate"
-        @cancel="closeModal"
-      />
+      <UsersManagementFormSection :user="editingUser" @create="handleCreate" @edit="handleUpdate" @cancel="closeModal" />
     </UiModalComponent>
   </div>
 </template>
