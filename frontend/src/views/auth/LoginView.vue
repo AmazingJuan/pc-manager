@@ -6,7 +6,6 @@
 // -------------------------------
 import type { LoginDTO } from '@dtos/auth/LoginDTO';
 import type { UserInterface } from '@interfaces/UserInterface';
-import { LoginSchema } from '@schemas/user/LoginSchema';
 import { AuthService } from '@services/AuthService';
 import { UserService } from '@services/UserService';
 
@@ -14,7 +13,6 @@ import { UserService } from '@services/UserService';
 // Third-Party Imports
 // -------------------------------
 import { Lock, User } from 'lucide-vue-next';
-import { ErrorMessage, Field, Form } from 'vee-validate';
 import { computed, onMounted, ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 
@@ -22,36 +20,38 @@ import { RouterLink, useRouter } from 'vue-router';
 // Non Reactive Variables
 // -------------------------------
 const router = useRouter();
-const authService = AuthService.getInstance();
-const userService = UserService.getInstance();
 
 // -------------------------------
 // Reactive Variables
 // -------------------------------
-const error = ref('');
+const errorMessages = ref<string[]>([]);
 const users = ref<UserInterface[]>([]);
+const username = ref('');
+const password = ref('');
 const firstAdminUser = computed(() => users.value.find((user) => user.role === 'admin'));
 const firstStandardUser = computed(() => users.value.find((user) => user.role === 'user'));
 
 // -------------------------------
 // Functions
 // -------------------------------
-function handleSubmit(values: Record<string, unknown>): void {
-  const credentials: LoginDTO = { username: String(values.username), password: String(values.password) };
+async function handleSubmit(): Promise<void> {
+  const credentials: LoginDTO = { username: username.value, password: password.value };
 
-  const success = authService.login(credentials);
-
-  if (success) {
-    error.value = '';
+  try {
+    await AuthService.login(credentials);
+    errorMessages.value = [];
     router.push({ name: 'dashboard' });
-    return;
+  } catch (requestError: unknown) {
+    if (Array.isArray(requestError)) {
+      errorMessages.value = requestError as string[];
+    } else {
+      errorMessages.value = ['Invalid credentials'];
+    }
   }
-
-  error.value = 'Invalid credentials';
 }
 
-function loadUsers(): void {
-  users.value = userService.getAll();
+async function loadUsers(): Promise<void> {
+  users.value = await UserService.getAll();
 }
 
 onMounted(loadUsers);
@@ -59,51 +59,43 @@ onMounted(loadUsers);
 
 <template>
   <!-- Login Form -->
-  <Form @submit="handleSubmit" :validation-schema="LoginSchema" class="space-y-6">
+  <form @submit.prevent="handleSubmit" class="space-y-6">
     <!-- Username field -->
     <div>
       <label class="block text-sm text-foreground mb-2"> Username </label>
-      <Field v-slot="{ field, errorMessage }" name="username">
-        <div class="relative">
-          <User class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-          <input
-            v-bind="field"
-            type="text"
-            class="w-full pl-11 pr-4 py-3 bg-input rounded-lg border text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
-            :class="errorMessage ? 'border-destructive' : 'border-border'"
-            placeholder="Enter your username"
-          />
-        </div>
-      </Field>
-      <ErrorMessage name="username" v-slot="{ message }">
-        <p class="text-xs text-destructive mt-1">{{ message }}</p>
-      </ErrorMessage>
+      <div class="relative">
+        <User class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+        <input
+          v-model="username"
+          type="text"
+          class="w-full pl-11 pr-4 py-3 bg-input rounded-lg border border-border text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+          placeholder="Enter your username"
+          required
+        />
+      </div>
     </div>
 
     <!-- Password field -->
     <div>
       <label class="block text-sm text-foreground mb-2"> Password </label>
-      <Field v-slot="{ field, errorMessage }" name="password">
-        <div class="relative">
-          <Lock class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-          <input
-            v-bind="field"
-            type="password"
-            class="w-full pl-11 pr-4 py-3 bg-input rounded-lg border text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
-            :class="errorMessage ? 'border-destructive' : 'border-border'"
-            placeholder="Enter your password"
-          />
-        </div>
-      </Field>
-      <ErrorMessage name="password" v-slot="{ message }">
-        <p class="text-xs text-destructive mt-1">{{ message }}</p>
-      </ErrorMessage>
+      <div class="relative">
+        <Lock class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+        <input
+          v-model="password"
+          type="password"
+          class="w-full pl-11 pr-4 py-3 bg-input rounded-lg border border-border text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+          placeholder="Enter your password"
+          required
+        />
+      </div>
     </div>
 
     <!-- Error message card -->
-    <div v-if="error" role="alert" aria-live="polite" class="mt-4 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3">
+    <div v-if="errorMessages.length" role="alert" aria-live="polite" class="mt-4 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3">
       <p class="text-sm font-medium text-destructive-foreground">Login error</p>
-      <p class="mt-1 text-xs text-destructive-foreground/90">{{ error }}</p>
+      <ul class="mt-1 list-disc pl-5 text-xs text-destructive-foreground/90">
+        <li v-for="message in errorMessages" :key="message">{{ message }}</li>
+      </ul>
     </div>
 
     <!-- Login Button -->
@@ -113,7 +105,7 @@ onMounted(loadUsers);
     >
       Sign In
     </button>
-  </Form>
+  </form>
 
   <!-- Register Anchor -->
   <div class="mt-6 text-center">

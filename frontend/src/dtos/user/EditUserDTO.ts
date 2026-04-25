@@ -1,4 +1,4 @@
 // Author: Juan Pablo Avendaño
-import type { UserInterface } from '@interfaces/UserInterface';
+import type { CreateUserDTO } from '@dtos/user/CreateUserDTO';
 
-export type EditUserDTO = Omit<UserInterface, 'id' | 'createdAt'>;
+export type EditUserDTO = Partial<CreateUserDTO>;

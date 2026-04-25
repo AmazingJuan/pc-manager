@@ -29,11 +29,6 @@ interface Props {
 const props = defineProps<Props>();
 
 // -------------------------------
-// Services
-// -------------------------------
-const componentService = ComponentService.getInstance();
-
-// -------------------------------
 // Non-Reactive Variables
 // -------------------------------
 const COLORS = ['#dc2626', '#ef4444', '#f87171', '#fca5a5'];
@@ -43,7 +38,7 @@ const STATUS_LABELS = ['Available', 'In Use', 'Maintenance', 'Damaged'];
 // Reactive Variables / Computed
 // -------------------------------
 const chartLabels = computed(() => STATUS_LABELS);
-const chartValues = computed(() => componentService.getCountByStatus(props.components).map((entry) => entry.count));
+const chartValues = computed(() => ComponentService.getCountByStatus(props.components).map((entry) => entry.count));
 const chartData = computed(() => ({ labels: chartLabels.value, datasets: [ChartUtils.buildPieDataset(chartValues.value, COLORS)] }));
 const options = ChartUtils.getPieChartOptions({
   animation: { animateRotate: true, duration: 2000 },
