@@ -10,5 +10,4 @@ export interface UserInterface {
   password: string;
   role: UserRole;
   createdAt: Date;
-  computerIds: number[] | null;
 }

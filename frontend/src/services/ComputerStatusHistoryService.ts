@@ -12,37 +12,16 @@ import { useComputerStatusHistoryStore } from '@stores/ComputerStatusHistoryStor
 // Class Definition
 // -------------------------------
 export class ComputerStatusHistoryService {
-  // private properties
-  // singleton instance
-  private static instance: ComputerStatusHistoryService;
-  private computerStatusHistoryStore: ReturnType<typeof useComputerStatusHistoryStore>;
-
-  // constructor
-  private constructor(computerStatusHistoryStore: ReturnType<typeof useComputerStatusHistoryStore>) {
-    this.computerStatusHistoryStore = computerStatusHistoryStore;
-  }
-
-  // getInstance()
-  static getInstance(computerStatusHistoryStore?: ReturnType<typeof useComputerStatusHistoryStore>): ComputerStatusHistoryService {
-    if (!this.instance) {
-      if (!computerStatusHistoryStore) {
-        throw new Error('You should put a store here');
-      }
-      this.instance = new ComputerStatusHistoryService(computerStatusHistoryStore);
-    }
-    return this.instance;
-  }
-
   // query methods (getAll, getById, stats, filters)
-  getAll(): ComputerStatusHistoryInterface[] {
-    return this.computerStatusHistoryStore.historyEntries;
+  static getAll(): ComputerStatusHistoryInterface[] {
+    return useComputerStatusHistoryStore().historyEntries;
   }
 
-  getByComputerId(computerId: number): ComputerStatusHistoryInterface[] {
-    return this.computerStatusHistoryStore.historyEntries.filter((historyEntry) => historyEntry.computerId === computerId);
+  static getByComputerId(computerId: number): ComputerStatusHistoryInterface[] {
+    return useComputerStatusHistoryStore().historyEntries.filter((historyEntry) => historyEntry.computerId === computerId);
   }
 
-  filterHistoryEntries(
+  static filterHistoryEntries(
     historyEntries: ComputerStatusHistoryInterface[] = this.getAll(),
     filters: { computerId?: number | 'all'; previousStatus?: ComputerStatus | 'all'; newStatus?: ComputerStatus | 'all' } = {},
   ): ComputerStatusHistoryInterface[] {
@@ -57,7 +36,7 @@ export class ComputerStatusHistoryService {
     });
   }
 
-  getStatusChangeStats(historyEntries: ComputerStatusHistoryInterface[] = this.getAll()): {
+  static getStatusChangeStats(historyEntries: ComputerStatusHistoryInterface[] = this.getAll()): {
     total: number;
     toActive: number;
     toMaintenance: number;
@@ -72,7 +51,7 @@ export class ComputerStatusHistoryService {
   }
 
   // mutation methods (create, update, delete)
-  record(dto: RecordComputerStatusChange): void {
-    this.computerStatusHistoryStore.addHistoryEntry(dto);
+  static record(dto: RecordComputerStatusChange): void {
+    useComputerStatusHistoryStore().addHistoryEntry(dto);
   }
 }

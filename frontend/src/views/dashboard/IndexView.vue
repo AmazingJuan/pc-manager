@@ -19,13 +19,6 @@ import { UserService } from '@services/UserService';
 import { computed, onMounted, ref } from 'vue';
 
 // -------------------------------
-// Services
-// -------------------------------
-const computerService = ComputerService.getInstance();
-const componentService = ComponentService.getInstance();
-const userService = UserService.getInstance();
-
-// -------------------------------
 // Reactive Variables / Computed
 // -------------------------------
 const computers = ref<ComputerInterface[]>([]);
@@ -33,8 +26,8 @@ const components = ref<ComponentInterface[]>([]);
 const users = ref<UserInterface[]>([]);
 const stats = computed(() => ({
   totalComputers: computers.value.length,
-  activeComputers: computerService.getStatusCount('active', computers.value),
-  maintenanceComputers: computerService.getStatusCount('maintenance', computers.value),
+  activeComputers: ComputerService.getStatusCount('active', computers.value),
+  maintenanceComputers: ComputerService.getStatusCount('maintenance', computers.value),
   totalComponents: components.value.length,
   availableComponents: components.value.filter((component) => component.status === 'available').length,
   totalUsers: users.value.length,
@@ -43,10 +36,10 @@ const stats = computed(() => ({
 // -------------------------------
 // Functions
 // -------------------------------
-function loadData(): void {
-  computers.value = computerService.getAll();
-  components.value = componentService.getAll();
-  users.value = userService.getAll();
+async function loadData(): Promise<void> {
+  computers.value = ComputerService.getAll();
+  components.value = ComponentService.getAll();
+  users.value = await UserService.getAll();
 }
 
 // -------------------------------
