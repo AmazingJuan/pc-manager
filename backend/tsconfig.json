@@ -18,7 +18,9 @@
       "@/*": ["./src/*"],
       "@users/*": ["./src/users/*"],
       "@auth/*": ["./src/auth/*"],
-      "@components/*": ["./src/components/*"]
+      "@components/*": ["./src/components/*"],
+      "@computers/*": ["./src/computers/*"],
+      "@utils/*": ["./src/utils/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
