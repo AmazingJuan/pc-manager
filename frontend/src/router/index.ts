@@ -47,25 +47,43 @@ const router = createRouter({ history: createWebHistory(import.meta.env.BASE_URL
 
 // Routes validation
 router.beforeEach(async (to) => {
-  const isAuthenticated = AuthService.hasLoggedInUser();
-  let loggedInUser = AuthService.getCachedLoggedInUser();
+  const hasToken = AuthService.hasAccessToken();
+  const requiresAuth = Boolean(to.meta.requiresAuth || to.meta.admin);
+  const guestOnly = Boolean(to.meta.guestOnly);
+  const needsAdmin = Boolean(to.meta.admin);
 
-  if (!loggedInUser && isAuthenticated && (to.meta.requiresAuth || to.meta.admin)) {
-    loggedInUser = await AuthService.getLoggedInUser().catch(() => null);
+  let user = AuthService.getCachedLoggedInUser();
+
+  if (requiresAuth) {
+    if (!hasToken) {
+      return { name: 'login' };
+    }
+    if (!user) {
+      try {
+        user = await AuthService.getLoggedInUser();
+      } catch {
+        AuthService.clearSession();
+        return { name: 'login' };
+      }
+    }
+    if (needsAdmin && user?.role !== 'admin') {
+      return { name: 'dashboard' };
+    }
+    return true;
   }
 
-  const isAdmin = loggedInUser?.role === 'admin';
-
-  if (!isAuthenticated && to.meta.requiresAuth) {
-    return { name: 'login' };
-  }
-
-  if (isAuthenticated && to.meta.guestOnly) {
-    return { name: 'dashboard' };
-  }
-
-  if (isAuthenticated && to.meta.admin && !isAdmin) {
-    return { name: 'dashboard' };
+  if (guestOnly && hasToken) {
+    if (!user) {
+      try {
+        user = await AuthService.getLoggedInUser();
+      } catch {
+        AuthService.clearSession();
+        return true;
+      }
+    }
+    if (user) {
+      return { name: 'dashboard' };
+    }
   }
 
   return true;

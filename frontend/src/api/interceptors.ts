@@ -4,15 +4,15 @@
 // Own Imports
 // -------------------------------
 import { api } from '@api/client';
-import { useAuthStore } from '@stores/AuthStore';
+import { AuthService } from '@services/AuthService';
+import router from '@/router';
 
 export function setupInterceptors(): void {
-  const authStore = useAuthStore();
-
   api.interceptors.request.use((config) => {
-    if (authStore.accessToken) {
+    const token = AuthService.getAccessToken();
+    if (token) {
       config.headers = config.headers ?? {};
-      config.headers.Authorization = `Bearer ${authStore.accessToken}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
 
     return config;
@@ -23,7 +23,11 @@ export function setupInterceptors(): void {
     (error: unknown) => {
       const status = (error as { response?: { status?: number } })?.response?.status;
       if (status === 401) {
-        authStore.clearSession();
+        AuthService.clearSession();
+        const name = router.currentRoute.value.name;
+        if (name !== 'login' && name !== 'register') {
+          void router.replace({ name: 'login' });
+        }
       }
 
       return Promise.reject(error);

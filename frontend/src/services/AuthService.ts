@@ -9,6 +9,10 @@ import type { RegisterDTO } from '@dtos/auth/RegisterDTO';
 import { useAuthStore } from '@stores/AuthStore';
 import { useUsersStore } from '@stores/UsersStore';
 import type { UserInterface } from '@interfaces/UserInterface';
+
+// -------------------------------
+// Third-Party Imports
+// -------------------------------
 import axios from 'axios';
 
 export class AuthService {
@@ -47,15 +51,26 @@ export class AuthService {
   }
 
   public static logout(): void {
-    const authStore = useAuthStore();
+    AuthService.clearSession();
     const usersStore = useUsersStore();
-
-    authStore.clearSession();
     usersStore.$reset();
   }
 
-  public static hasLoggedInUser(): boolean {
+  /** Clears persisted tokens and user (invalid/expired session, 401, etc.). */
+  public static clearSession(): void {
+    useAuthStore().clearSession();
+  }
+
+  public static getAccessToken(): string {
+    return useAuthStore().accessToken;
+  }
+
+  public static hasAccessToken(): boolean {
     return Boolean(useAuthStore().accessToken);
+  }
+
+  public static hasLoggedInUser(): boolean {
+    return AuthService.hasAccessToken();
   }
 
   public static async getLoggedInUser(): Promise<UserInterface | null> {
