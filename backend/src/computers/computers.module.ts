@@ -4,34 +4,24 @@
 // Own Imports
 // -------------------------------
 import { ComponentsModule } from '@components/components.module';
-import { ComputersModule } from '@computers/computers.module';
+import { Computer } from '@computers/entities/computer.entity';
+import { ComputersController } from '@computers/computers.controller';
+import { ComputersService } from '@computers/computers.service';
 import { UsersModule } from '@users/users.module';
 
 // -------------------------------
 // Third-Party Imports
 // -------------------------------
-import { AuthModule } from './auth/auth.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'Lol225533*',
-      database: 'test',
-      autoLoadEntities: true,
-      synchronize: true,
-    }),
+    TypeOrmModule.forFeature([Computer]),
     UsersModule,
-    AuthModule,
     ComponentsModule,
-    ComputersModule,
   ],
-  controllers: [],
-  providers: [],
+  controllers: [ComputersController],
+  providers: [ComputersService],
 })
-export class AppModule {}
+export class ComputersModule {}

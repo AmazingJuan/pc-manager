@@ -1,12 +1,18 @@
 // Author: Juan Pablo Avendaño
 
 // -------------------------------
+// Own Imports
+// -------------------------------
+import { Computer } from '@computers/entities/computer.entity';
+
+// -------------------------------
 // Third-Party Imports
 // -------------------------------
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -33,5 +39,6 @@ export class User {
   @CreateDateColumn()
   createdAt: Date;
 
-  //RELATIONS PENDING
+  @OneToMany(() => Computer, (computer: Computer) => computer.user)
+  computers: Computer[];
 }
