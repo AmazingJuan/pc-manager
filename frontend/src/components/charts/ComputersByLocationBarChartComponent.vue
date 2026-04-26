@@ -5,6 +5,7 @@
 // -------------------------------
 import { ChartUtils } from '@utils/ChartUtils';
 import type { ComputerInterface } from '@interfaces/ComputerInterface';
+import UiResourceEmptyStateComponent from '@components/ui/UiResourceEmptyStateComponent.vue';
 
 // -------------------------------
 // Third-Party Imports
@@ -12,6 +13,7 @@ import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import { Bar } from 'vue-chartjs';
 import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Tooltip } from 'chart.js';
 import { computed } from 'vue';
+import { MapPin } from 'lucide-vue-next';
 
 // -------------------------------
 // Setup / Library Configuration
@@ -30,6 +32,7 @@ const props = defineProps<Props>();
 // -------------------------------
 // Reactive Variables / Computed
 // -------------------------------
+const isEmpty = computed(() => !props.computers.length);
 const groupedByLocation = computed<Record<string, number>>(() => {
   return props.computers.reduce<Record<string, number>>((accumulator, computer) => {
     const key = computer.location || 'Unknown';
@@ -56,7 +59,13 @@ const options = ChartUtils.getBarChartOptions({
 <template>
   <div class="bg-card border border-border rounded-xl p-6 shadow-sm">
     <h2 class="text-xl font-semibold mb-6">Computers by Location</h2>
-    <div class="h-75">
+    <UiResourceEmptyStateComponent
+      v-if="isEmpty"
+      :icon="MapPin"
+      title="No location data"
+      description="Add computers with a location to see the distribution by site."
+    />
+    <div v-else class="h-75">
       <Bar :data="chartData" :options="options" />
     </div>
   </div>

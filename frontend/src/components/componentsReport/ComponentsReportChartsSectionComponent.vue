@@ -12,13 +12,22 @@ import type { ComponentInterface } from '@interfaces/ComponentInterface';
 // -------------------------------
 interface Props {
   components: ComponentInterface[];
+  loading?: boolean;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 </script>
 
 <template>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+  <div
+    v-if="props.loading"
+    class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6"
+    aria-busy="true"
+  >
+    <div class="h-[22rem] rounded-xl border border-border bg-card animate-pulse" />
+    <div class="h-[22rem] rounded-xl border border-border bg-card animate-pulse" />
+  </div>
+  <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
     <ComponentsTypeCountChartComponent :components="components" />
     <ComponentsAveragePriceChartComponent :components="components" />
   </div>

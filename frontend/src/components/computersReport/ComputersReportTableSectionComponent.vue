@@ -13,6 +13,7 @@ import { FormatUtils } from '@utils/FormatUtils';
 interface Props {
   computers: ComputerInterface[];
   getUserName: (userId: number) => string;
+  totalInInventory: number;
 }
 
 const props = defineProps<Props>();
@@ -36,7 +37,10 @@ const props = defineProps<Props>();
       </thead>
       <tbody>
         <tr v-if="!props.computers.length">
-          <td colspan="6" class="px-4 py-8 text-center text-muted-foreground">No computers found for the selected filters</td>
+          <td colspan="6" class="px-4 py-8 text-center text-muted-foreground max-w-prose mx-auto">
+            <template v-if="props.totalInInventory === 0">No computers in the system yet. Add one from the computers management page.</template>
+            <template v-else>No computers match the current filters. Try clearing or adjusting them.</template>
+          </td>
         </tr>
         <tr
           v-for="computer in props.computers"

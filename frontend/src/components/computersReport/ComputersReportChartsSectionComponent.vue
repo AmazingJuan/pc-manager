@@ -12,13 +12,22 @@ import ComputersStatusBarChartComponent from '@components/charts/ComputersStatus
 // -------------------------------
 interface Props {
   computers: ComputerInterface[];
+  loading?: boolean;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 </script>
 
 <template>
-  <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <section
+    v-if="props.loading"
+    class="grid grid-cols-1 lg:grid-cols-2 gap-6"
+    aria-busy="true"
+  >
+    <div class="h-[22rem] rounded-xl border border-border bg-card animate-pulse" />
+    <div class="h-[22rem] rounded-xl border border-border bg-card animate-pulse" />
+  </section>
+  <section v-else class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <ComputersStatusBarChartComponent :computers="computers" />
     <ComputersByLocationBarChartComponent :computers="computers" />
   </section>

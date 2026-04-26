@@ -22,6 +22,7 @@ import { computed, onMounted, ref } from 'vue';
 // -------------------------------
 const computers = ref<ComputerInterface[]>([]);
 const users = ref<UserInterface[]>([]);
+const isLoading = ref(true);
 const searchQuery = ref<string>('');
 const selectedStatus = ref<ComputerStatus | 'all'>('all');
 const selectedUserId = ref<number | 'all'>('all');
@@ -43,8 +44,13 @@ function clearFilters(): void {
 }
 
 async function loadData(): Promise<void> {
-  computers.value = ComputerService.getAll();
-  users.value = await UserService.getAll();
+  isLoading.value = true;
+  try {
+    computers.value = ComputerService.getAll();
+    users.value = await UserService.getAll();
+  } finally {
+    isLoading.value = false;
+  }
 }
 
 // -------------------------------
@@ -73,8 +79,12 @@ onMounted(loadData);
       @clear-filters="clearFilters"
     />
 
-    <ComputersReportChartsSection :computers="computers" />
+    <ComputersReportChartsSection :loading="isLoading" :computers="computers" />
 
-    <ComputersReportTableSection :computers="filteredComputers" :get-user-name="getUserName" />
+    <ComputersReportTableSection
+      :computers="filteredComputers"
+      :get-user-name="getUserName"
+      :total-in-inventory="computers.length"
+    />
   </div>
 </template>

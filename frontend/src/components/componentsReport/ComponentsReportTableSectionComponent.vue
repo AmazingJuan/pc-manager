@@ -12,6 +12,8 @@ import { FormatUtils } from '@utils/FormatUtils';
 // -------------------------------
 interface Props {
   components: ComponentInterface[];
+  /** Full inventory size (before filters) — used to choose the empty message */
+  totalInInventory: number;
 }
 
 const props = defineProps<Props>();
@@ -37,7 +39,10 @@ const props = defineProps<Props>();
 
       <tbody>
         <tr v-if="!props.components.length">
-          <td colspan="6" class="px-4 py-8 text-center text-muted-foreground">No components found for the selected filters</td>
+          <td colspan="6" class="px-4 py-8 text-center text-muted-foreground max-w-prose mx-auto">
+            <template v-if="props.totalInInventory === 0">No components in the system yet. Add one from the components management page.</template>
+            <template v-else>No components match the current filters. Try clearing or adjusting them.</template>
+          </td>
         </tr>
         <tr
           v-for="component in props.components"
