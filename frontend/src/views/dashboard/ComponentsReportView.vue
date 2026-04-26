@@ -20,6 +20,7 @@ import { computed, onMounted, ref } from 'vue';
 // Reactive Variables / Computed
 // -------------------------------
 const components = ref<ComponentInterface[]>([]);
+const isLoading = ref(true);
 const selectedType = ref<string>('all');
 const selectedStatus = ref<ComponentType | 'all'>('all');
 const fromDate = ref<string>('');
@@ -46,8 +47,13 @@ function clearFilters(): void {
   toDate.value = '';
 }
 
-function loadData(): void {
-  components.value = ComponentService.getAll();
+async function loadData(): Promise<void> {
+  isLoading.value = true;
+  try {
+    components.value = await ComponentService.getAll();
+  } finally {
+    isLoading.value = false;
+  }
 }
 
 // -------------------------------
@@ -77,8 +83,8 @@ onMounted(loadData);
       @clear-filters="clearFilters"
     />
 
-    <ComponentsReportChartsSection :components="components" />
+    <ComponentsReportChartsSection :loading="isLoading" :components="components" />
 
-    <ComponentsReportTableSection :components="filteredComponents" />
+    <ComponentsReportTableSection :components="filteredComponents" :total-in-inventory="components.length" />
   </div>
 </template>

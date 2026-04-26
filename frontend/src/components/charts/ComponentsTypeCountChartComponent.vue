@@ -6,6 +6,7 @@
 import { ChartUtils } from '@utils/ChartUtils';
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
 import { ComponentService } from '@services/ComponentService';
+import UiResourceEmptyStateComponent from '@components/ui/UiResourceEmptyStateComponent.vue';
 
 // -------------------------------
 // Third-Party Imports
@@ -13,6 +14,7 @@ import { ComponentService } from '@services/ComponentService';
 import { Bar } from 'vue-chartjs';
 import { BarElement, CategoryScale, Chart as ChartJS, type ChartData, Legend, LinearScale, Tooltip } from 'chart.js';
 import { computed } from 'vue';
+import { LayoutGrid } from 'lucide-vue-next';
 
 // -------------------------------
 // Setup / Library Configuration
@@ -35,6 +37,7 @@ const props = defineProps<Props>();
 // -------------------------------
 // Reactive Variables / Computed
 // -------------------------------
+const isEmpty = computed(() => !props.components.length);
 const chartData = computed<ChartData<'bar'>>(() => {
   const typeCounts = ComponentService.getCountByType(props.components);
   const labels = typeCounts.map((entry) => entry.type);
@@ -63,7 +66,13 @@ const chartOptions = ChartUtils.getBarChartOptions({
 <template>
   <div class="bg-card border border-border rounded-xl p-6 shadow-sm">
     <h2 class="text-xl font-semibold mb-6">Components by Type</h2>
-    <div class="h-75">
+    <UiResourceEmptyStateComponent
+      v-if="isEmpty"
+      :icon="LayoutGrid"
+      title="No components by type"
+      description="Add components to see how many you have in each type."
+    />
+    <div v-else class="h-75">
       <Bar :data="chartData" :options="chartOptions" />
     </div>
   </div>

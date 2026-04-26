@@ -7,9 +7,11 @@ import { api } from '@api/client';
 import type { CreateUserDTO } from '@dtos/user/CreateUserDTO';
 import type { EditUserDTO } from '@dtos/user/EditUserDTO';
 import type { UserInterface } from '@interfaces/UserInterface';
+// -------------------------------
+// Third-Party Imports
+// -------------------------------
 import axios from 'axios';
 export class UserService {
-  // query methods (getAll, getById, stats, filters)
   static async getAll(): Promise<UserInterface[]> {
     const response = await api.get('/users');
     if (!response.data) {

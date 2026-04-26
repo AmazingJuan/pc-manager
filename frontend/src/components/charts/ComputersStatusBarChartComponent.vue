@@ -6,11 +6,13 @@
 import { ChartUtils } from '@utils/ChartUtils';
 import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import { ComputerService } from '@services/ComputerService';
+import UiResourceEmptyStateComponent from '@components/ui/UiResourceEmptyStateComponent.vue';
 
 // -------------------------------
 // Third-Party Imports
 // -------------------------------
 import { Bar } from 'vue-chartjs';
+import { BarChart3 } from 'lucide-vue-next';
 import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Tooltip } from 'chart.js';
 import { computed } from 'vue';
 
@@ -31,6 +33,7 @@ const props = defineProps<Props>();
 // -------------------------------
 // Reactive Variables / Computed
 // -------------------------------
+const isEmpty = computed(() => !props.computers.length);
 const options = ChartUtils.getBarChartOptions({
   animation: { duration: 1500, easing: 'easeOutQuart' },
   plugins: { legend: { display: false }, tooltip: { padding: 12 } },
@@ -49,7 +52,13 @@ const chartData = computed(() => ({
 <template>
   <div class="bg-card border border-border rounded-xl p-6 shadow-sm">
     <h2 class="text-xl font-semibold mb-6">Computers by Status</h2>
-    <div class="h-75">
+    <UiResourceEmptyStateComponent
+      v-if="isEmpty"
+      :icon="BarChart3"
+      title="No computers to show"
+      description="Register at least one computer to see the status distribution."
+    />
+    <div v-else class="h-75">
       <Bar :data="chartData" :options="options" />
     </div>
   </div>

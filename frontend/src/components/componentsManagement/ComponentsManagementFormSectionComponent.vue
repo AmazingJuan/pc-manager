@@ -4,7 +4,6 @@
 // Own Imports
 // -------------------------------
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
-import { ComponentSchema } from '@schemas/component/ComponentSchema';
 import type { ComponentType } from '@app-types/Components';
 import type { CreateComponentDTO } from '@dtos/components/CreateComponentDTO';
 import type { EditComponentDTO } from '@dtos/components/EditComponentDTO';
@@ -12,8 +11,7 @@ import type { EditComponentDTO } from '@dtos/components/EditComponentDTO';
 // -------------------------------
 // Third-Party Imports
 // -------------------------------
-import { computed } from 'vue';
-import { ErrorMessage, Field, Form } from 'vee-validate';
+import { reactive, watch } from 'vue';
 
 // -------------------------------
 // Props
@@ -35,41 +33,76 @@ const emit = defineEmits<{ create: [payload: CreateComponentDTO]; edit: [payload
 const availableStatuses: ComponentType[] = ['available', 'in-use', 'maintenance', 'damaged'];
 
 // -------------------------------
-// Reactive Variables / Computed
+// Form state
 // -------------------------------
-const initialValues = computed(() => ({
-  name: props.component?.name ?? '',
-  status: (props.component?.status ?? 'available') as ComponentType,
-  type: props.component?.type ?? '',
-  manufacturer: props.component?.manufacturer ?? '',
-  model: props.component?.model ?? '',
-  serialNumber: props.component?.serialNumber ?? '',
-  purchaseDate: props.component?.purchaseDate ?? '',
-  price: props.component?.price ?? 0,
-}));
+const form = reactive({
+  name: '',
+  status: 'available' as ComponentType,
+  type: '',
+  manufacturer: '',
+  model: '',
+  serialNumber: '',
+  purchaseDate: '',
+  price: 0,
+});
+
+function resetForm(): void {
+  form.name = '';
+  form.status = 'available';
+  form.type = '';
+  form.manufacturer = '';
+  form.model = '';
+  form.serialNumber = '';
+  form.purchaseDate = '';
+  form.price = 0;
+}
+
+function applyComponent(component: ComponentInterface | null): void {
+  if (!component) {
+    resetForm();
+    return;
+  }
+
+  form.name = component.name;
+  form.status = component.status;
+  form.type = component.type;
+  form.manufacturer = component.manufacturer;
+  form.model = component.model;
+  form.serialNumber = component.serialNumber;
+  form.purchaseDate = String(component.purchaseDate ?? '').slice(0, 10);
+  form.price = component.price;
+}
+
+watch(
+  () => props.component,
+  (current) => {
+    applyComponent(current);
+  },
+  { immediate: true },
+);
 
 // -------------------------------
 // Functions
 // -------------------------------
-function handleSubmit(values: Record<string, unknown>): void {
-  const parsedStatus = String(values.status ?? 'available');
+function handleSubmit(): void {
+  const token = (v: string) => String(v ?? '').trim();
+  const parsedStatus = String(form.status ?? 'available');
   const normalizedStatus = availableStatuses.includes(parsedStatus as ComponentType) ? (parsedStatus as ComponentType) : 'available';
-  const parsedPrice = Number(values.price ?? 0);
+  const parsedPrice = Number(form.price);
 
   const componentData: CreateComponentDTO = {
-    name: String(values.name ?? '').trim(),
+    name: token(form.name),
     status: normalizedStatus,
-    type: String(values.type ?? '').trim(),
-    manufacturer: String(values.manufacturer ?? '').trim(),
-    model: String(values.model ?? '').trim(),
-    serialNumber: String(values.serialNumber ?? '').trim(),
-    purchaseDate: String(values.purchaseDate ?? ''),
+    type: token(form.type),
+    manufacturer: token(form.manufacturer),
+    model: token(form.model),
+    serialNumber: token(form.serialNumber),
+    purchaseDate: String(form.purchaseDate ?? ''),
     price: Number.isFinite(parsedPrice) ? parsedPrice : 0,
   };
 
   if (props.component) {
     const editPayload: EditComponentDTO = { ...componentData };
-
     emit('edit', editPayload);
     return;
   }
@@ -79,153 +112,129 @@ function handleSubmit(values: Record<string, unknown>): void {
 </script>
 
 <template>
-  <Form
+  <form
     :key="component ? `edit-${component.id}` : 'create-component'"
-    :initial-values="initialValues"
-    :validation-schema="ComponentSchema"
     class="space-y-4"
-    @submit="handleSubmit"
+    @submit.prevent="handleSubmit"
   >
     <div class="grid grid-cols-2 gap-4">
       <div>
         <label class="block text-sm text-foreground mb-2" for="component-name">Name *</label>
-        <Field v-slot="{ field, errorMessage }" name="name">
-          <input
-            id="component-name"
-            v-bind="field"
-            type="text"
-            class="w-full px-4 py-2 bg-input rounded-lg border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-            :class="errorMessage ? 'border-destructive' : 'border-border'"
-            placeholder="Component name"
-          />
-        </Field>
-        <ErrorMessage name="name" v-slot="{ message }">
-          <p class="text-xs text-destructive mt-1">{{ message }}</p>
-        </ErrorMessage>
+        <input
+          id="component-name"
+          v-model="form.name"
+          type="text"
+          name="name"
+          required
+          minlength="2"
+          maxlength="100"
+          class="w-full px-4 py-2 bg-input rounded-lg border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+          placeholder="Component name"
+        />
       </div>
 
       <div>
         <label class="block text-sm text-foreground mb-2" for="component-type">Type *</label>
-        <Field v-slot="{ field, errorMessage }" name="type">
-          <input
-            id="component-type"
-            v-bind="field"
-            type="text"
-            class="w-full px-4 py-2 bg-input rounded-lg border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-            :class="errorMessage ? 'border-destructive' : 'border-border'"
-            placeholder="E.g.: Processor, RAM, etc."
-          />
-        </Field>
-        <ErrorMessage name="type" v-slot="{ message }">
-          <p class="text-xs text-destructive mt-1">{{ message }}</p>
-        </ErrorMessage>
+        <input
+          id="component-type"
+          v-model="form.type"
+          type="text"
+          name="type"
+          required
+          minlength="2"
+          maxlength="60"
+          class="w-full px-4 py-2 bg-input rounded-lg border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+          placeholder="E.g.: Processor, RAM, etc."
+        />
       </div>
     </div>
 
     <div class="grid grid-cols-2 gap-4">
       <div>
         <label class="block text-sm text-foreground mb-2" for="component-manufacturer">Manufacturer *</label>
-        <Field v-slot="{ field, errorMessage }" name="manufacturer">
-          <input
-            id="component-manufacturer"
-            v-bind="field"
-            type="text"
-            class="w-full px-4 py-2 bg-input rounded-lg border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-            :class="errorMessage ? 'border-destructive' : 'border-border'"
-          />
-        </Field>
-        <ErrorMessage name="manufacturer" v-slot="{ message }">
-          <p class="text-xs text-destructive mt-1">{{ message }}</p>
-        </ErrorMessage>
+        <input
+          id="component-manufacturer"
+          v-model="form.manufacturer"
+          type="text"
+          name="manufacturer"
+          required
+          minlength="2"
+          maxlength="80"
+          class="w-full px-4 py-2 bg-input rounded-lg border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+        />
       </div>
 
       <div>
         <label class="block text-sm text-foreground mb-2" for="component-model">Model *</label>
-        <Field v-slot="{ field, errorMessage }" name="model">
-          <input
-            id="component-model"
-            v-bind="field"
-            type="text"
-            class="w-full px-4 py-2 bg-input rounded-lg border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-            :class="errorMessage ? 'border-destructive' : 'border-border'"
-          />
-        </Field>
-        <ErrorMessage name="model" v-slot="{ message }">
-          <p class="text-xs text-destructive mt-1">{{ message }}</p>
-        </ErrorMessage>
+        <input
+          id="component-model"
+          v-model="form.model"
+          type="text"
+          name="model"
+          required
+          minlength="1"
+          maxlength="80"
+          class="w-full px-4 py-2 bg-input rounded-lg border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+        />
       </div>
     </div>
 
     <div class="grid grid-cols-2 gap-4">
       <div>
         <label class="block text-sm text-foreground mb-2" for="component-serial-number">Serial Number *</label>
-        <Field v-slot="{ field, errorMessage }" name="serialNumber">
-          <input
-            id="component-serial-number"
-            v-bind="field"
-            type="text"
-            class="w-full px-4 py-2 bg-input rounded-lg border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-            :class="errorMessage ? 'border-destructive' : 'border-border'"
-          />
-        </Field>
-        <ErrorMessage name="serialNumber" v-slot="{ message }">
-          <p class="text-xs text-destructive mt-1">{{ message }}</p>
-        </ErrorMessage>
+        <input
+          id="component-serial-number"
+          v-model="form.serialNumber"
+          type="text"
+          name="serialNumber"
+          required
+          minlength="3"
+          maxlength="100"
+          class="w-full px-4 py-2 bg-input rounded-lg border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+        />
       </div>
 
       <div>
         <label class="block text-sm text-foreground mb-2" for="component-status">Status *</label>
-        <Field v-slot="{ field, errorMessage }" name="status">
-          <select
-            id="component-status"
-            v-bind="field"
-            class="w-full px-4 py-2 bg-input rounded-lg border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-            :class="errorMessage ? 'border-destructive' : 'border-border'"
-          >
-            <option value="available">Available</option>
-            <option value="in-use">In Use</option>
-            <option value="maintenance">Maintenance</option>
-            <option value="damaged">Damaged</option>
-          </select>
-        </Field>
-        <ErrorMessage name="status" v-slot="{ message }">
-          <p class="text-xs text-destructive mt-1">{{ message }}</p>
-        </ErrorMessage>
-      </div>
-
-      <div>
-        <label class="block text-sm text-foreground mb-2" for="component-purchase-date">Purchase Date *</label>
-        <Field v-slot="{ field, errorMessage }" name="purchaseDate">
-          <input
-            id="component-purchase-date"
-            v-bind="field"
-            type="date"
-            class="w-full px-4 py-2 bg-input rounded-lg border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-            :class="errorMessage ? 'border-destructive' : 'border-border'"
-          />
-        </Field>
-        <ErrorMessage name="purchaseDate" v-slot="{ message }">
-          <p class="text-xs text-destructive mt-1">{{ message }}</p>
-        </ErrorMessage>
+        <select
+          id="component-status"
+          v-model="form.status"
+          name="status"
+          required
+          class="w-full px-4 py-2 bg-input rounded-lg border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+        >
+          <option value="available">Available</option>
+          <option value="in-use">In Use</option>
+          <option value="maintenance">Maintenance</option>
+          <option value="damaged">Damaged</option>
+        </select>
       </div>
     </div>
 
     <div>
+      <label class="block text-sm text-foreground mb-2" for="component-purchase-date">Purchase Date *</label>
+      <input
+        id="component-purchase-date"
+        v-model="form.purchaseDate"
+        type="date"
+        name="purchaseDate"
+        required
+        class="w-full px-4 py-2 bg-input rounded-lg border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+      />
+    </div>
+
+    <div>
       <label class="block text-sm text-foreground mb-2" for="component-price">Price *</label>
-      <Field v-slot="{ field, errorMessage }" name="price">
-        <input
-          id="component-price"
-          v-bind="field"
-          type="number"
-          min="0"
-          step="0.01"
-          class="w-full px-4 py-2 bg-input rounded-lg border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-          :class="errorMessage ? 'border-destructive' : 'border-border'"
-        />
-      </Field>
-      <ErrorMessage name="price" v-slot="{ message }">
-        <p class="text-xs text-destructive mt-1">{{ message }}</p>
-      </ErrorMessage>
+      <input
+        id="component-price"
+        v-model.number="form.price"
+        type="number"
+        name="price"
+        required
+        min="0"
+        step="0.01"
+        class="w-full px-4 py-2 bg-input rounded-lg border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+      />
     </div>
 
     <div class="flex gap-3 pt-4">
@@ -240,5 +249,5 @@ function handleSubmit(values: Record<string, unknown>): void {
         Cancel
       </button>
     </div>
-  </Form>
+  </form>
 </template>

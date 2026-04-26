@@ -24,6 +24,7 @@ import { computed, onMounted, ref } from 'vue';
 const computers = ref<ComputerInterface[]>([]);
 const components = ref<ComponentInterface[]>([]);
 const users = ref<UserInterface[]>([]);
+const isLoading = ref(true);
 const stats = computed(() => ({
   totalComputers: computers.value.length,
   activeComputers: ComputerService.getStatusCount('active', computers.value),
@@ -37,9 +38,14 @@ const stats = computed(() => ({
 // Functions
 // -------------------------------
 async function loadData(): Promise<void> {
-  computers.value = ComputerService.getAll();
-  components.value = ComponentService.getAll();
-  users.value = await UserService.getAll();
+  isLoading.value = true;
+  try {
+    computers.value = ComputerService.getAll();
+    components.value = await ComponentService.getAll();
+    users.value = await UserService.getAll();
+  } finally {
+    isLoading.value = false;
+  }
 }
 
 // -------------------------------
@@ -55,12 +61,12 @@ onMounted(loadData);
     </div>
 
     <!-- Stats -->
-    <DashboardStatsSectionComponent :stats="stats" />
+    <DashboardStatsSectionComponent :stats="stats" :loading="isLoading" />
 
     <!-- Charts -->
-    <DashboardChartsSectionComponent :computers="computers" :components="components" />
+    <DashboardChartsSectionComponent :loading="isLoading" :computers="computers" :components="components" />
 
     <!-- System summary section -->
-    <DashboardSummarySectionComponent :stats="stats" />
+    <DashboardSummarySectionComponent :stats="stats" :loading="isLoading" />
   </div>
 </template>

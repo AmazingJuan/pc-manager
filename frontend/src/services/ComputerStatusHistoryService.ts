@@ -9,10 +9,7 @@ import type { RecordComputerStatusChange } from '@dtos/computerStatusHistory/Rec
 import { useComputerStatusHistoryStore } from '@stores/ComputerStatusHistoryStore';
 
 // -------------------------------
-// Class Definition
-// -------------------------------
 export class ComputerStatusHistoryService {
-  // query methods (getAll, getById, stats, filters)
   static getAll(): ComputerStatusHistoryInterface[] {
     return useComputerStatusHistoryStore().historyEntries;
   }

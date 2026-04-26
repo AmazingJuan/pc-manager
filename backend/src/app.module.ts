@@ -4,7 +4,7 @@
 // Own Imports
 // -------------------------------
 import { UsersModule } from '@users/users.module';
-
+import { ComponentsModule } from '@components/components.module';
 // -------------------------------
 // Third-Party Imports
 // -------------------------------
@@ -26,6 +26,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     }),
     UsersModule,
     AuthModule,
+    ComponentsModule,
   ],
   controllers: [],
   providers: [],
