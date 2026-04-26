@@ -1,12 +1,19 @@
 // Author: Juan Manuel Zapata
 
 // -------------------------------
+// Own Imports
+// -------------------------------
+import { Computer } from '@computers/entities/computer.entity';
+
+// -------------------------------
 // Third-Party Imports
 // -------------------------------
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -42,5 +49,10 @@ export class Component {
   @CreateDateColumn()
   createdAt: Date;
 
-  //RELATIONS PENDING
+  @ManyToOne(() => Computer, (computer) => computer.components, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn({ name: 'computerId' })
+  computer: Computer | null;
 }

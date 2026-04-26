@@ -11,12 +11,13 @@ import { UpdateComponentDto } from '@components/dtos/update-component.dto';
 // Third-Party Imports
 // -------------------------------
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class ComponentsService {
@@ -52,6 +53,24 @@ export class ComponentsService {
     }
 
     return component;
+  }
+
+  async findByIds(ids: number[]): Promise<Component[]> {
+    if (ids.length === 0) {
+      return [];
+    }
+    return this.componentsRepository.find({
+      where: { id: In([...new Set(ids)]) },
+    });
+  }
+
+  async findByIdsOrThrow(componentIds: number[]): Promise<Component[]> {
+    const unique = [...new Set(componentIds)];
+    const found = await this.findByIds(unique);
+    if (found.length !== unique.length) {
+      throw new BadRequestException('One or more component ids are invalid');
+    }
+    return found;
   }
 
   async update(
