@@ -30,11 +30,11 @@ export class Component {
   @Column()
   model: string;
 
-  @Column()
+  @Column({ unique: true })
   serialNumber: string;
 
   @Column()
-  purchaseDate: string;
+  purchaseDate: Date;
 
   @Column('decimal', { precision: 10, scale: 2 })
   price: number;

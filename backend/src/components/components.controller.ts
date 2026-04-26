@@ -18,6 +18,7 @@ import {
   Get,
   HttpCode,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -37,13 +38,13 @@ export class ComponentsController {
   }
 
   @Get(':id')
-  findById(@Param('id') id: number): Promise<Component> {
+  findById(@Param('id', ParseIntPipe) id: number): Promise<Component> {
     return this.componentsService.findById(id);
   }
 
   @Patch(':id')
   update(
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateComponentDto: UpdateComponentDto,
   ): Promise<Component> {
     return this.componentsService.update(id, updateComponentDto);
@@ -51,7 +52,7 @@ export class ComponentsController {
 
   @Delete(':id')
   @HttpCode(204)
-  delete(@Param('id') id: number): Promise<void> {
+  delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.componentsService.delete(id);
   }
 }
