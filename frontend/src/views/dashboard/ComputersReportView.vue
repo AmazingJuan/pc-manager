@@ -46,7 +46,7 @@ function clearFilters(): void {
 async function loadData(): Promise<void> {
   isLoading.value = true;
   try {
-    computers.value = ComputerService.getAll();
+    computers.value = await ComputerService.getAll();
     users.value = await UserService.getAll();
   } finally {
     isLoading.value = false;
@@ -81,10 +81,6 @@ onMounted(loadData);
 
     <ComputersReportChartsSection :loading="isLoading" :computers="computers" />
 
-    <ComputersReportTableSection
-      :computers="filteredComputers"
-      :get-user-name="getUserName"
-      :total-in-inventory="computers.length"
-    />
+    <ComputersReportTableSection :computers="filteredComputers" :get-user-name="getUserName" :total-in-inventory="computers.length" />
   </div>
 </template>

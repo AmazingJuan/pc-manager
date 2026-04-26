@@ -40,7 +40,7 @@ const stats = computed(() => ({
 async function loadData(): Promise<void> {
   isLoading.value = true;
   try {
-    computers.value = ComputerService.getAll();
+    computers.value = await ComputerService.getAll();
     components.value = await ComponentService.getAll();
     users.value = await UserService.getAll();
   } finally {

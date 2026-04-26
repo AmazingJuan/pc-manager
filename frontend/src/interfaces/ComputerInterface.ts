@@ -9,11 +9,10 @@ export interface ComputerInterface {
   id: number;
   name: string;
   location: string;
-  userId: number;
   status: ComputerStatus;
-  componentIds: number[];
-  purchaseDate: Date;
-  warrantyExpirationDate: Date;
+  purchaseDate: string;
+  warrantyExpirationDate: string;
   notes: string;
-  createdAt: Date;
+  createdAt: string;
+  userId: number | null;
 }

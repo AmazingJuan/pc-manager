@@ -31,13 +31,12 @@ const props = defineProps<Props>();
           <th class="text-left px-4 py-3 font-medium">Location</th>
           <th class="text-left px-4 py-3 font-medium">Assigned User</th>
           <th class="text-left px-4 py-3 font-medium">Status</th>
-          <th class="text-left px-4 py-3 font-medium">Components</th>
           <th class="text-left px-4 py-3 font-medium">Warranty</th>
         </tr>
       </thead>
       <tbody>
         <tr v-if="!props.computers.length">
-          <td colspan="6" class="px-4 py-8 text-center text-muted-foreground max-w-prose mx-auto">
+          <td colspan="5" class="px-4 py-8 text-center text-muted-foreground max-w-prose mx-auto">
             <template v-if="props.totalInInventory === 0">No computers in the system yet. Add one from the computers management page.</template>
             <template v-else>No computers match the current filters. Try clearing or adjusting them.</template>
           </td>
@@ -50,13 +49,12 @@ const props = defineProps<Props>();
         >
           <td class="px-4 py-3 text-foreground">{{ computer.name }}</td>
           <td class="px-4 py-3 text-muted-foreground">{{ computer.location }}</td>
-          <td class="px-4 py-3 text-muted-foreground">{{ props.getUserName(computer.userId) }}</td>
+          <td class="px-4 py-3 text-muted-foreground">{{ props.getUserName(computer.userId ?? 0) }}</td>
           <td class="px-4 py-3">
             <span class="px-2 py-1 rounded text-xs border" :class="BadgeUtils.getBadgeClass('computer', computer.status)">
               {{ BadgeUtils.getBadgeLabel('computer', computer.status) }}
             </span>
           </td>
-          <td class="px-4 py-3 text-muted-foreground">{{ computer.componentIds.length }}</td>
           <td class="px-4 py-3 text-muted-foreground">{{ FormatUtils.formatDate(computer.warrantyExpirationDate) }}</td>
         </tr>
       </tbody>

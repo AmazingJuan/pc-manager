@@ -3,17 +3,22 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
+import { api } from '@api/client';
+import { ComputerStatusHistoryService } from '@services/ComputerStatusHistoryService';
+import type { ComponentInterface } from '@interfaces/ComponentInterface';
 import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import type { ComputerStatus } from '@app-types/Computer';
 import type { CreateComputerDTO } from '@dtos/computer/CreateComputerDTO';
 import type { EditComputerDTO } from '@dtos/computer/EditComputerDTO';
-import { ComputerStatusHistoryService } from '@services/ComputerStatusHistoryService';
-import { useComputersStore } from '@stores/ComputerStore';
 
 // -------------------------------
+// Third-Party Imports
+// -------------------------------
+import axios from 'axios';
+
 export class ComputerService {
   static filterComputers(
-    computers: ComputerInterface[] = this.getAll(),
+    computers: ComputerInterface[],
     filters: { searchQuery?: string; status?: ComputerStatus | 'all'; userId?: number | 'all' } = {},
   ): ComputerInterface[] {
     const { searchQuery = '', status = 'all', userId = 'all' } = filters;
@@ -25,26 +30,50 @@ export class ComputerService {
         computer.name.toLowerCase().includes(normalizedSearchQuery) ||
         computer.location.toLowerCase().includes(normalizedSearchQuery);
       const matchesStatus = status === 'all' || computer.status === status;
-      const matchesUser = userId === 'all' || computer.userId === userId;
+      const ownerId = computer.userId;
+      const matchesUser = userId === 'all' || (userId === 0 ? ownerId == null || ownerId === 0 : ownerId === userId);
 
       return matchesSearch && matchesStatus && matchesUser;
     });
   }
 
-  static getAll(): ComputerInterface[] {
-    return useComputersStore().computers;
+  static async getAll(): Promise<ComputerInterface[]> {
+    const response = await api.get<ComputerInterface[]>('/computers');
+    if (!response.data) {
+      throw new Error('Failed to get computers');
+    }
+    return response.data;
   }
 
-  static getById(id: number): ComputerInterface | undefined {
-    return useComputersStore().computers.find((computer) => computer.id === id);
+  static async getById(id: number): Promise<ComputerInterface | undefined> {
+    try {
+      const response = await api.get<ComputerInterface>(`/computers/${id}`);
+      if (!response.data) {
+        return undefined;
+      }
+      return response.data;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        return undefined;
+      }
+      throw error;
+    }
   }
 
-  static getCountByStatus(computers: ComputerInterface[] = this.getAll()): { status: ComputerStatus; count: number }[] {
+  static async getComponentsByComputerId(computerId: number): Promise<ComponentInterface[]> {
+    const response = await api.get<ComponentInterface[]>(`/computers/${computerId}/components`);
+    if (!response.data) {
+      throw new Error('Failed to get computer components');
+    }
+    return response.data;
+  }
+
+  static getCountByStatus(computers: ComputerInterface[]): { status: ComputerStatus; count: number }[] {
     const statusOrder: ComputerStatus[] = ['active', 'inactive', 'maintenance'];
     const counts = new Map<ComputerStatus, number>();
 
-    for (const status of statusOrder) {
-      counts.set(status, 0);
+    for (const s of statusOrder) {
+      counts.set(s, 0);
     }
 
     for (const computer of computers) {
@@ -54,26 +83,79 @@ export class ComputerService {
     return statusOrder.map((status) => ({ status, count: counts.get(status) ?? 0 }));
   }
 
-  static getStatusCount(status: ComputerStatus, computers: ComputerInterface[] = this.getAll()): number {
+  static getStatusCount(status: ComputerStatus, computers: ComputerInterface[]): number {
     return this.getCountByStatus(computers).find((entry) => entry.status === status)?.count ?? 0;
   }
 
-  // mutation methods (create, update, delete)
-  static create(computerData: CreateComputerDTO): ComputerInterface {
-    return useComputersStore().addComputer(computerData);
-  }
-
-  static delete(id: number): boolean {
-    return useComputersStore().deleteComputerById(id);
-  }
-
-  static update(id: number, computerData: EditComputerDTO): boolean {
-    const computer = this.getById(id);
-
-    if (computer && computerData.status && computer.status !== computerData.status) {
-      ComputerStatusHistoryService.record({ computerId: id, previousStatus: computer.status, newStatus: computerData.status });
+  static async create(computerData: CreateComputerDTO): Promise<ComputerInterface> {
+    const { notes, userId, ...rest } = computerData;
+    const body: Record<string, unknown> = { ...rest };
+    if (notes != null && notes !== '') {
+      body.notes = notes;
+    }
+    if (userId > 0) {
+      body.userId = userId;
     }
 
-    return useComputersStore().updateComputerById(id, computerData);
+    try {
+      const response = await api.post<ComputerInterface>('/computers', body);
+      if (!response.data) {
+        throw new Error('Failed to create computer');
+      }
+      return response.data;
+    } catch (error: unknown) {
+      if (!axios.isAxiosError(error)) {
+        throw new Error('Failed to create computer');
+      }
+      throw error.response?.data?.message;
+    }
+  }
+
+  static async delete(id: number): Promise<boolean> {
+    try {
+      const response = await api.delete(`/computers/${id}`);
+      if (response.status < 200 || response.status >= 300) {
+        throw new Error('Failed to delete computer');
+      }
+      return true;
+    } catch (error: unknown) {
+      if (!axios.isAxiosError(error)) {
+        throw new Error('Failed to delete computer');
+      }
+      throw error.response?.data?.message;
+    }
+  }
+
+  static async update(id: number, computerData: EditComputerDTO): Promise<ComputerInterface> {
+    const previous = await this.getById(id);
+    const body: Record<string, unknown> = {};
+    (Object.keys(computerData) as (keyof EditComputerDTO)[]).forEach((key) => {
+      const value = computerData[key];
+      if (value === undefined) {
+        return;
+      }
+      if (key === 'userId') {
+        body.userId = typeof value === 'number' && value > 0 ? value : null;
+        return;
+      }
+      (body as Record<string, unknown>)[key] = value;
+    });
+
+    try {
+      const response = await api.patch<ComputerInterface>(`/computers/${id}`, body);
+      if (!response.data) {
+        throw new Error('Failed to update computer');
+      }
+      const updated = response.data;
+      if (previous && previous.status !== updated.status) {
+        ComputerStatusHistoryService.record({ computerId: id, previousStatus: previous.status, newStatus: updated.status });
+      }
+      return updated;
+    } catch (error: unknown) {
+      if (!axios.isAxiosError(error)) {
+        throw new Error('Failed to update computer');
+      }
+      throw error.response?.data?.message;
+    }
   }
 }

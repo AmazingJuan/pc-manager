@@ -34,6 +34,7 @@ const users = ref<UserInterface[]>([]);
 const components = ref<ComponentInterface[]>([]);
 const isModalOpen = ref(false);
 const editingComputer = ref<ComputerInterface | null>(null);
+const editingComponentIds = ref<number[]>([]);
 const successMessage = ref('');
 
 // -------------------------------
@@ -52,15 +53,14 @@ function showSuccess(message: string): void {
 }
 
 async function loadData(): Promise<void> {
-  computers.value = ComputerService.getAll();
+  computers.value = await ComputerService.getAll();
   users.value = await UserService.getAll();
   components.value = await ComponentService.getAll();
 }
 
 async function handleCreate(payload: CreateComputerDTO): Promise<void> {
-  ComputerService.create(payload);
+  await ComputerService.create(payload);
   showSuccess('Computer created successfully');
-
   await loadData();
   closeModal();
 }
@@ -70,7 +70,7 @@ async function handleUpdate(payload: EditComputerDTO): Promise<void> {
     return;
   }
 
-  ComputerService.update(editingComputer.value.id, payload);
+  await ComputerService.update(editingComputer.value.id, payload);
   showSuccess('Computer updated successfully');
   await loadData();
   closeModal();
@@ -78,16 +78,19 @@ async function handleUpdate(payload: EditComputerDTO): Promise<void> {
 
 async function handleDelete(computer: ComputerInterface): Promise<void> {
   if (window.confirm(`Are you sure you want to delete computer "${computer.name}"?`)) {
-    ComputerService.delete(computer.id);
+    await ComputerService.delete(computer.id);
     await loadData();
     showSuccess('Computer deleted successfully');
   }
 }
 
-function openModal(computer?: ComputerInterface): void {
+async function openModal(computer?: ComputerInterface): Promise<void> {
   if (computer) {
+    const assigned = await ComputerService.getComponentsByComputerId(computer.id);
+    editingComponentIds.value = assigned.map((c) => c.id);
     editingComputer.value = computer;
   } else {
+    editingComponentIds.value = [];
     editingComputer.value = null;
   }
 
@@ -97,6 +100,7 @@ function openModal(computer?: ComputerInterface): void {
 function closeModal(): void {
   isModalOpen.value = false;
   editingComputer.value = null;
+  editingComponentIds.value = [];
 }
 
 // -------------------------------
@@ -143,6 +147,7 @@ onMounted(loadData);
     <UiModalComponent :is-open="isModalOpen" :title="editingComputer ? 'Edit Computer' : 'Add Computer'" max-width="max-w-3xl" @close="closeModal">
       <ComputersManagementFormSection
         :computer="editingComputer"
+        :initial-component-ids="editingComponentIds"
         :users="users"
         :components="components"
         @create="handleCreate"
