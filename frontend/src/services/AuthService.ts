@@ -7,7 +7,6 @@ import { api } from '@api/client';
 import type { LoginDTO } from '@dtos/auth/LoginDTO';
 import type { RegisterDTO } from '@dtos/auth/RegisterDTO';
 import { useAuthStore } from '@stores/AuthStore';
-import { useUsersStore } from '@stores/UsersStore';
 import type { UserInterface } from '@interfaces/UserInterface';
 
 // -------------------------------
@@ -51,13 +50,6 @@ export class AuthService {
   }
 
   public static logout(): void {
-    AuthService.clearSession();
-    const usersStore = useUsersStore();
-    usersStore.$reset();
-  }
-
-  /** Clears persisted tokens and user (invalid/expired session, 401, etc.). */
-  public static clearSession(): void {
     useAuthStore().clearSession();
   }
 

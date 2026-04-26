@@ -47,15 +47,27 @@ function logout(): void {
   router.push({ name: 'login' });
 }
 
-onMounted(async () => {
-  user.value = await AuthService.getLoggedInUser();
-  isAdmin.value = user.value?.role === 'admin';
-  console.log(isAdmin.value);
-});
+async function loadData(): Promise<void> {
+  if (!AuthService.hasAccessToken()) {
+    user.value = null;
+    isAdmin.value = false;
+    return;
+  }
+  let u = AuthService.getCachedLoggedInUser();
+  if (!u) {
+    try {
+      u = await AuthService.getLoggedInUser();
+    } catch {
+      u = null;
+    }
+  }
+  user.value = u;
+  isAdmin.value = u?.role === 'admin';
+}
 
-// -------------------------------
-// Watchers / Lifecycle
-// -------------------------------
+onMounted(() => {
+  void loadData();
+});
 </script>
 
 <template>
