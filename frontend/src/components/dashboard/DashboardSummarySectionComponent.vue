@@ -33,9 +33,7 @@ const availabilityRate = computed(() => {
 
   return (props.stats.activeComputers / props.stats.totalComputers) * 100;
 });
-const isInventoryEmpty = computed(
-  () => !props.stats.totalComputers && !props.stats.totalComponents,
-);
+const isInventoryEmpty = computed(() => !props.stats.totalComputers && !props.stats.totalComponents);
 </script>
 
 <template>

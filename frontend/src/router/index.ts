@@ -45,24 +45,22 @@ const routes = [
 
 const router = createRouter({ history: createWebHistory(import.meta.env.BASE_URL), routes });
 
-// Routes validation
 router.beforeEach(async (to) => {
   const hasToken = AuthService.hasAccessToken();
   const requiresAuth = Boolean(to.meta.requiresAuth || to.meta.admin);
   const guestOnly = Boolean(to.meta.guestOnly);
   const needsAdmin = Boolean(to.meta.admin);
 
-  let user = AuthService.getCachedLoggedInUser();
-
   if (requiresAuth) {
     if (!hasToken) {
       return { name: 'login' };
     }
+    let user = AuthService.getCachedLoggedInUser();
     if (!user) {
       try {
         user = await AuthService.getLoggedInUser();
       } catch {
-        AuthService.clearSession();
+        AuthService.logout();
         return { name: 'login' };
       }
     }
@@ -73,16 +71,17 @@ router.beforeEach(async (to) => {
   }
 
   if (guestOnly && hasToken) {
-    if (!user) {
-      try {
-        user = await AuthService.getLoggedInUser();
-      } catch {
-        AuthService.clearSession();
-        return true;
-      }
-    }
-    if (user) {
+    const cached = AuthService.getCachedLoggedInUser();
+    if (cached) {
       return { name: 'dashboard' };
+    }
+    try {
+      const user = await AuthService.getLoggedInUser();
+      if (user) {
+        return { name: 'dashboard' };
+      }
+    } catch {
+      AuthService.logout();
     }
   }
 

@@ -19,7 +19,6 @@ export default defineConfig({
       '@interfaces': fileURLToPath(new URL('./src/interfaces', import.meta.url)),
       '@layouts': fileURLToPath(new URL('./src/layouts', import.meta.url)),
       '@router': fileURLToPath(new URL('./src/router', import.meta.url)),
-      '@schemas': fileURLToPath(new URL('./src/schemas', import.meta.url)),
       '@seeders': fileURLToPath(new URL('./src/seeders', import.meta.url)),
       '@services': fileURLToPath(new URL('./src/services', import.meta.url)),
       '@stores': fileURLToPath(new URL('./src/stores', import.meta.url)),

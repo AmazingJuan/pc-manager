@@ -23,7 +23,7 @@ export function setupInterceptors(): void {
     (error: unknown) => {
       const status = (error as { response?: { status?: number } })?.response?.status;
       if (status === 401) {
-        AuthService.clearSession();
+        AuthService.logout();
         const name = router.currentRoute.value.name;
         if (name !== 'login' && name !== 'register') {
           void router.replace({ name: 'login' });

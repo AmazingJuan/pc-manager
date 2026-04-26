@@ -38,8 +38,8 @@ const computerStatusHistoryStats = computed(() => ComputerStatusHistoryService.g
 // -------------------------------
 // Functions
 // -------------------------------
-function loadData(): void {
-  computers.value = ComputerService.getAll();
+async function loadData(): Promise<void> {
+  computers.value = await ComputerService.getAll();
   computerStatusHistoryEntries.value = ComputerStatusHistoryService.getAll();
 }
 

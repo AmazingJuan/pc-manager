@@ -64,6 +64,12 @@ export class ComponentsService {
     });
   }
 
+  findByComputerId(computerId: number): Promise<Component[]> {
+    return this.componentsRepository.find({
+      where: { computer: { id: computerId } },
+    });
+  }
+
   async findByIdsOrThrow(componentIds: number[]): Promise<Component[]> {
     const unique = [...new Set(componentIds)];
     const found = await this.findByIds(unique);

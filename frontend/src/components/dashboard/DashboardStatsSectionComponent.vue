@@ -29,12 +29,7 @@ const props = defineProps<Props>();
 </script>
 
 <template>
-  <section
-    v-if="props.loading"
-    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-    aria-busy="true"
-    aria-label="Loading summary statistics"
-  >
+  <section v-if="props.loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" aria-busy="true" aria-label="Loading summary statistics">
     <div v-for="n in 6" :key="n" class="h-28 rounded-lg border border-border bg-card animate-pulse" />
   </section>
   <section v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

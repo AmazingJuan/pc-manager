@@ -17,6 +17,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  RelationId,
 } from 'typeorm';
 
 @Entity()
@@ -48,7 +49,6 @@ export class Computer {
   // Relations
 
   @OneToMany(() => Component, (component: Component) => component.computer, {
-    /** Permite un solo `save(computer)` tras asignar `components` (actualiza el FK en cada fila hija). */
     cascade: ['update'],
   })
   components: Component[];
@@ -59,4 +59,7 @@ export class Computer {
   })
   @JoinColumn({ name: 'userId' })
   user: User | null;
+
+  @RelationId((c: Computer) => c.user)
+  userId: number | null;
 }

@@ -3,6 +3,15 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import type { ComputerInterface } from '@interfaces/ComputerInterface';
+import type { ComputerStatus } from '@app-types/Computer';
 
-export type CreateComputerDTO = Omit<ComputerInterface, 'id' | 'createdAt'>;
+export type CreateComputerDTO = {
+  name: string;
+  location: string;
+  status: ComputerStatus;
+  purchaseDate: Date;
+  warrantyExpirationDate: Date;
+  notes: string;
+  userId: number;
+  componentIds: number[];
+};

@@ -181,4 +181,3 @@ onMounted(loadData);
     </UiModalComponent>
   </div>
 </template>
-

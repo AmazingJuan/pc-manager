@@ -14,6 +14,6 @@ export interface ComponentInterface {
   model: string;
   serialNumber: string;
   purchaseDate: string;
-  price: number;
+  price: number | string;
   createdAt: Date;
 }

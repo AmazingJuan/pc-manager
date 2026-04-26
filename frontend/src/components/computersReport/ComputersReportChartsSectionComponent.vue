@@ -19,11 +19,7 @@ const props = defineProps<Props>();
 </script>
 
 <template>
-  <section
-    v-if="props.loading"
-    class="grid grid-cols-1 lg:grid-cols-2 gap-6"
-    aria-busy="true"
-  >
+  <section v-if="props.loading" class="grid grid-cols-1 lg:grid-cols-2 gap-6" aria-busy="true">
     <div class="h-[22rem] rounded-xl border border-border bg-card animate-pulse" />
     <div class="h-[22rem] rounded-xl border border-border bg-card animate-pulse" />
   </section>
