@@ -10,9 +10,13 @@ import { User } from '@users/entities/user.entity';
 // -------------------------------
 // Third-Party Imports
 // -------------------------------
-import { ConflictException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { hash } from 'bcrypt';
-import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -61,6 +65,17 @@ export class UsersService {
     }
 
     return user;
+  }
+
+  async assertUserExists(id: number): Promise<void> {
+    try {
+      await this.findById(id);
+    } catch (e) {
+      if (e instanceof NotFoundException) {
+        throw new BadRequestException('User does not exist');
+      }
+      throw e;
+    }
   }
 
   async findByUsername(username: string): Promise<User | null> {
