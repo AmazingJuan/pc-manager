@@ -52,13 +52,14 @@ export class ComponentService {
     const grouped = new Map<string, { sum: number; count: number }>();
 
     for (const component of components) {
+      const price = Number(component.price);
       const current = grouped.get(component.type);
 
       if (current) {
-        current.sum += component.price;
+        current.sum += price;
         current.count += 1;
       } else {
-        grouped.set(component.type, { sum: component.price, count: 1 });
+        grouped.set(component.type, { sum: price, count: 1 });
       }
     }
 
@@ -138,4 +139,3 @@ export class ComponentService {
     }
   }
 }
-

@@ -45,14 +45,16 @@ export class FormatUtils {
     return date.toLocaleString(FormatUtils.locale, { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
   }
 
-  static formatCurrency(value: number | null | undefined, currency = 'USD'): string {
-    if (value === null || value === undefined || Number.isNaN(value)) {
+  static formatCurrency(value: number | string | null | undefined, currency = 'USD'): string {
+    if (value === null || value === undefined) {
+      return '-';
+    }
+    const n = typeof value === 'string' ? parseFloat(value) : value;
+    if (Number.isNaN(n)) {
       return '-';
     }
 
-    return new Intl.NumberFormat(FormatUtils.locale, { style: 'currency', currency, minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(
-      value,
-    );
+    return new Intl.NumberFormat(FormatUtils.locale, { style: 'currency', currency, minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
   }
 
   static formatNumber(value: number | null | undefined): string {

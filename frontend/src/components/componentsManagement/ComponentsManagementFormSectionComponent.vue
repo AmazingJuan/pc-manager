@@ -70,7 +70,7 @@ function applyComponent(component: ComponentInterface | null): void {
   form.model = component.model;
   form.serialNumber = component.serialNumber;
   form.purchaseDate = String(component.purchaseDate ?? '').slice(0, 10);
-  form.price = component.price;
+  form.price = Number(component.price);
 }
 
 watch(
@@ -112,11 +112,7 @@ function handleSubmit(): void {
 </script>
 
 <template>
-  <form
-    :key="component ? `edit-${component.id}` : 'create-component'"
-    class="space-y-4"
-    @submit.prevent="handleSubmit"
-  >
+  <form :key="component ? `edit-${component.id}` : 'create-component'" class="space-y-4" @submit.prevent="handleSubmit">
     <div class="grid grid-cols-2 gap-4">
       <div>
         <label class="block text-sm text-foreground mb-2" for="component-name">Name *</label>

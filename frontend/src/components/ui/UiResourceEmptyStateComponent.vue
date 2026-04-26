@@ -18,9 +18,7 @@ interface Props {
   size?: 'default' | 'compact';
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  size: 'compact',
-});
+const props = withDefaults(defineProps<Props>(), { size: 'compact' });
 </script>
 
 <template>
@@ -28,15 +26,8 @@ const props = withDefaults(defineProps<Props>(), {
     class="flex flex-col items-center justify-center text-center w-full"
     :class="props.size === 'compact' ? 'min-h-[14rem] py-6 px-4' : 'min-h-[12rem] py-10 px-6'"
   >
-    <div
-      class="rounded-2xl bg-muted/50 flex items-center justify-center mb-4"
-      :class="props.size === 'compact' ? 'w-14 h-14' : 'w-20 h-20'"
-    >
-      <component
-        :is="props.icon ?? Inbox"
-        class="text-muted-foreground"
-        :class="props.size === 'compact' ? 'w-7 h-7' : 'w-10 h-10'"
-      />
+    <div class="rounded-2xl bg-muted/50 flex items-center justify-center mb-4" :class="props.size === 'compact' ? 'w-14 h-14' : 'w-20 h-20'">
+      <component :is="props.icon ?? Inbox" class="text-muted-foreground" :class="props.size === 'compact' ? 'w-7 h-7' : 'w-10 h-10'" />
     </div>
     <p :class="props.size === 'compact' ? 'text-sm font-medium text-foreground max-w-sm' : 'text-base font-medium text-foreground max-w-md'">
       {{ title }}
