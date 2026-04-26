@@ -11,10 +11,7 @@ import { ComputerStatusHistoryService } from '@services/ComputerStatusHistorySer
 import { useComputersStore } from '@stores/ComputerStore';
 
 // -------------------------------
-// Class Definition
-// -------------------------------
 export class ComputerService {
-  // query methods (getAll, getById, stats, filters)
   static filterComputers(
     computers: ComputerInterface[] = this.getAll(),
     filters: { searchQuery?: string; status?: ComputerStatus | 'all'; userId?: number | 'all' } = {},

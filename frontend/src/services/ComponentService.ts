@@ -8,18 +8,19 @@ import type { ComponentInterface } from '@interfaces/ComponentInterface';
 import type { ComponentType } from '@app-types/Components';
 import type { CreateComponentDTO } from '@dtos/components/CreateComponentDTO';
 import type { EditComponentDTO } from '@dtos/components/EditComponentDTO';
-import axios from 'axios';
 
 // -------------------------------
-// Class Definition
+// Third-Party Imports
 // -------------------------------
+import axios from 'axios';
+
 export class ComponentService {
-  // query methods (getAll, getById, stats, filters)
   static async getAll(): Promise<ComponentInterface[]> {
     const response = await api.get('/components');
     if (!response.data) {
       throw new Error('Failed to get components');
     }
+
     return response.data as ComponentInterface[];
   }
 
@@ -89,8 +90,7 @@ export class ComponentService {
     return Array.from(counts.entries()).map(([type, count]) => ({ type, count }));
   }
 
-  // mutation methods (create, update, delete)
-    static async create(componentData: CreateComponentDTO): Promise<ComponentInterface> {
+  static async create(componentData: CreateComponentDTO): Promise<ComponentInterface> {
     try {
       const response = await api.post('/components', componentData);
       if (!response.data) {
