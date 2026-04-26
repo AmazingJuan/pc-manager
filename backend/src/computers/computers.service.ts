@@ -3,11 +3,13 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import { Computer } from '@computers/entities/computer.entity';
+import { Component } from '@components/entities/component.entity';
 import { ComponentsService } from '@components/components.service';
+import { Computer } from '@computers/entities/computer.entity';
 import { CreateComputerDto } from '@computers/dto/create-computer.dto';
 import { UpdateComputerDto } from '@computers/dto/update-computer.dto';
 import { User } from '@users/entities/user.entity';
+import { UserResponseDto } from '@users/dtos/user-response.dto';
 import { UsersService } from '@users/users.service';
 import { WarrantyDatesUtil } from '@utils/warranty-dates.util';
 
@@ -17,8 +19,6 @@ import { WarrantyDatesUtil } from '@utils/warranty-dates.util';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
-const defaultRelations = { user: true, components: true } as const;
 
 @Injectable()
 export class ComputersService {
@@ -37,11 +37,9 @@ export class ComputersService {
     if (createComputerDto.userId != null) {
       await this.usersService.assertUserExists(createComputerDto.userId);
     }
-    const components = await this.componentsService.findByIdsOrThrow(
-      createComputerDto.componentIds,
-    );
-
-    const { userId, ...scalars } = createComputerDto;
+    const { userId, componentIds, ...scalars } = createComputerDto;
+    const components =
+      await this.componentsService.findByIdsOrThrow(componentIds);
     const computer = this.computerRepository.create({
       ...scalars,
       notes: createComputerDto.notes ?? '',
@@ -53,11 +51,25 @@ export class ComputersService {
   }
 
   async findAll(): Promise<Computer[]> {
-    return this.computerRepository.find({ relations: defaultRelations });
+    return this.computerRepository.find();
   }
 
   async findOne(id: number): Promise<Computer> {
     return this.findByIdOrFail(id);
+  }
+
+  async findComponentsByComputerId(id: number): Promise<Component[]> {
+    await this.findByIdOrFail(id);
+    return this.componentsService.findByComputerId(id);
+  }
+
+  async findUserByComputerId(id: number): Promise<UserResponseDto | null> {
+    const computer = await this.findByIdOrFail(id);
+    if (computer.userId == null) {
+      return null;
+    }
+    const user = await this.usersService.findById(computer.userId);
+    return UserResponseDto.fromEntity(user);
   }
 
   async update(
@@ -71,7 +83,7 @@ export class ComputersService {
       computer.warrantyExpirationDate;
     WarrantyDatesUtil.assertWarrantyOnOrAfterPurchase(purchase, warranty);
 
-    const { componentIds, ...scalars } = updateComputerDto;
+    const { componentIds, userId, ...scalars } = updateComputerDto;
     Object.assign(
       computer,
       Object.fromEntries(
@@ -79,12 +91,12 @@ export class ComputersService {
       ),
     );
 
-    if (updateComputerDto.userId !== undefined) {
-      if (updateComputerDto.userId == null) {
+    if (userId !== undefined) {
+      if (userId == null) {
         computer.user = null;
       } else {
-        await this.usersService.assertUserExists(updateComputerDto.userId);
-        computer.user = { id: updateComputerDto.userId } as User;
+        await this.usersService.assertUserExists(userId);
+        computer.user = { id: userId } as User;
       }
     }
     if (componentIds !== undefined) {
@@ -104,7 +116,6 @@ export class ComputersService {
   private async findByIdOrFail(id: number): Promise<Computer> {
     const computer = await this.computerRepository.findOne({
       where: { id },
-      relations: defaultRelations,
     });
     if (!computer) {
       throw new NotFoundException('Computer not found');
