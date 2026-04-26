@@ -3,25 +3,32 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
+import { api } from '@api/client';
 import type { ComponentInterface } from '@interfaces/ComponentInterface';
 import type { ComponentType } from '@app-types/Components';
 import type { CreateComponentDTO } from '@dtos/components/CreateComponentDTO';
 import type { EditComponentDTO } from '@dtos/components/EditComponentDTO';
-import { HttpService } from '@services/HttpService';
+import axios from 'axios';
 
 // -------------------------------
 // Class Definition
 // -------------------------------
 export class ComponentService {
-  private static httpClient = new HttpService();
-
   // query methods (getAll, getById, stats, filters)
   static async getAll(): Promise<ComponentInterface[]> {
-    return this.httpClient.get<ComponentInterface[]>('/components');
+    const response = await api.get('/components');
+    if (!response.data) {
+      throw new Error('Failed to get components');
+    }
+    return response.data as ComponentInterface[];
   }
 
   static async getById(id: number): Promise<ComponentInterface> {
-    return this.httpClient.get<ComponentInterface>(`/components/${id}`);
+    const response = await api.get(`/components/${id}`);
+    if (!response.data) {
+      throw new Error('Failed to get component');
+    }
+    return response.data as ComponentInterface;
   }
 
   static filterComponents(
@@ -83,15 +90,52 @@ export class ComponentService {
   }
 
   // mutation methods (create, update, delete)
-  static async create(componentData: CreateComponentDTO): Promise<ComponentInterface> {
-    return this.httpClient.post<ComponentInterface>('/components', componentData);
+    static async create(componentData: CreateComponentDTO): Promise<ComponentInterface> {
+    try {
+      const response = await api.post('/components', componentData);
+      if (!response.data) {
+        throw new Error('Failed to create component');
+      }
+      return response.data as ComponentInterface;
+    } catch (error: unknown) {
+      if (!axios.isAxiosError(error)) {
+        throw ['Failed to create component'];
+      }
+
+      throw error.response?.data?.message;
+    }
+  }
+
+  static async delete(id: number): Promise<boolean> {
+    try {
+      const response = await api.delete(`/components/${id}`);
+      if (response.status !== 204) {
+        throw new Error('Failed to delete component');
+      }
+      return true;
+    } catch (error: unknown) {
+      if (!axios.isAxiosError(error)) {
+        throw ['Failed to delete component'];
+      }
+
+      throw error.response?.data?.message;
+    }
   }
 
   static async update(id: number, componentData: EditComponentDTO): Promise<ComponentInterface> {
-    return this.httpClient.patch<ComponentInterface>(`/components/${id}`, componentData);
-  }
+    try {
+      const response = await api.patch(`/components/${id}`, componentData);
+      if (!response.data) {
+        throw new Error('Failed to update component');
+      }
+      return response.data as ComponentInterface;
+    } catch (error: unknown) {
+      if (!axios.isAxiosError(error)) {
+        throw ['Failed to update component'];
+      }
 
-  static async delete(id: number): Promise<void> {
-    return this.httpClient.delete(`/components/${id}`);
+      throw error.response?.data?.message;
+    }
   }
 }
+
