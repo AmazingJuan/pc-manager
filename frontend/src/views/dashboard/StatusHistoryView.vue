@@ -40,7 +40,7 @@ const computerStatusHistoryStats = computed(() => ComputerStatusHistoryService.g
 // -------------------------------
 async function loadData(): Promise<void> {
   computers.value = await ComputerService.getAll();
-  computerStatusHistoryEntries.value = ComputerStatusHistoryService.getAll();
+  computerStatusHistoryEntries.value = await ComputerStatusHistoryService.getAll();
 }
 
 // -------------------------------

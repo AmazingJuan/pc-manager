@@ -5,6 +5,7 @@
 // -------------------------------
 import { ComponentsModule } from '@components/components.module';
 import { ComputersModule } from '@computers/computers.module';
+import { ComputersHistoryModule } from '@computers-history/computers-history.module';
 import { UsersModule } from '@users/users.module';
 
 // -------------------------------
@@ -30,6 +31,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     AuthModule,
     ComponentsModule,
     ComputersModule,
+    ComputersHistoryModule,
   ],
   controllers: [],
   providers: [],

@@ -20,6 +20,7 @@
       "@auth/*": ["./src/auth/*"],
       "@components/*": ["./src/components/*"],
       "@computers/*": ["./src/computers/*"],
+      "@computers-history/*": ["./src/computers-history/*"],
       "@utils/*": ["./src/utils/*"]
     },
     "incremental": true,

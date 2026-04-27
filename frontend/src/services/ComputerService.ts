@@ -148,7 +148,7 @@ export class ComputerService {
       }
       const updated = response.data;
       if (previous && previous.status !== updated.status) {
-        ComputerStatusHistoryService.record({ computerId: id, previousStatus: previous.status, newStatus: updated.status });
+        await ComputerStatusHistoryService.record({ computerId: id, previousStatus: previous.status, newStatus: updated.status });
       }
       return updated;
     } catch (error: unknown) {
