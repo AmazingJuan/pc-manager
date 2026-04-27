@@ -3,9 +3,9 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import { Computer } from '@computers/entities/computer.entity';
-import { ComputerStatusHistory } from '@computers-history/entities/computer-status-history.entity';
 import { CreateComputerStatusHistoryDto } from '@computers-history/dto/create-computer-status-history.dto';
+import { ComputerStatusHistory } from '@computers-history/entities/computer-status-history.entity';
+import { Computer } from '@computers/entities/computer.entity';
 
 // -------------------------------
 // Third-Party Imports

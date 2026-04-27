@@ -3,9 +3,9 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import { ComputerStatusHistory } from '@computers-history/entities/computer-status-history.entity';
 import { ComputersHistoryController } from '@computers-history/computers-history.controller';
 import { ComputersHistoryService } from '@computers-history/computers-history.service';
+import { ComputerStatusHistory } from '@computers-history/entities/computer-status-history.entity';
 
 // -------------------------------
 // Third-Party Imports

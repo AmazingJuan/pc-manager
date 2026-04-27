@@ -3,8 +3,8 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import type { ComputerStatus } from '@computers/types/computer-status.type';
 import { COMPUTER_STATUSES } from '@computers/constants';
+import type { ComputerStatus } from '@computers/types/computer-status.type';
 
 // -------------------------------
 // Third-Party Imports

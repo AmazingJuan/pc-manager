@@ -5,8 +5,8 @@
 // -------------------------------
 import { api } from '@api/client';
 import type { ComputerStatus } from '@app-types/Computer';
-import type { ComputerStatusHistoryInterface } from '@interfaces/ComputerStatusHistoryInterface';
 import type { RecordComputerStatusChange } from '@dtos/computerStatusHistory/RecordComputerStatusChangeDTO';
+import type { ComputerStatusHistoryInterface } from '@interfaces/ComputerStatusHistoryInterface';
 
 // -------------------------------
 export class ComputerStatusHistoryService {

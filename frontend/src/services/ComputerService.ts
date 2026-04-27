@@ -4,12 +4,12 @@
 // Own Imports
 // -------------------------------
 import { api } from '@api/client';
-import { ComputerStatusHistoryService } from '@services/ComputerStatusHistoryService';
-import type { ComponentInterface } from '@interfaces/ComponentInterface';
-import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import type { ComputerStatus } from '@app-types/Computer';
 import type { CreateComputerDTO } from '@dtos/computer/CreateComputerDTO';
 import type { EditComputerDTO } from '@dtos/computer/EditComputerDTO';
+import type { ComponentInterface } from '@interfaces/ComponentInterface';
+import type { ComputerInterface } from '@interfaces/ComputerInterface';
+import { ComputerStatusHistoryService } from '@services/ComputerStatusHistoryService';
 
 // -------------------------------
 // Third-Party Imports

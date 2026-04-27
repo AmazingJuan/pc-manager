@@ -4,8 +4,8 @@
 // Own Imports
 // -------------------------------
 import { ComponentsModule } from '@components/components.module';
-import { ComputersModule } from '@computers/computers.module';
 import { ComputersHistoryModule } from '@computers-history/computers-history.module';
+import { ComputersModule } from '@computers/computers.module';
 import { UsersModule } from '@users/users.module';
 
 // -------------------------------

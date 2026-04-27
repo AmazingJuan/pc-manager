@@ -3,14 +3,14 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
-import type { ComputerInterface } from '@interfaces/ComputerInterface';
-import { ComputerService } from '@services/ComputerService';
 import type { ComputerStatus } from '@app-types/Computer';
-import type { ComputerStatusHistoryInterface } from '@interfaces/ComputerStatusHistoryInterface';
-import { ComputerStatusHistoryService } from '@services/ComputerStatusHistoryService';
 import ComputerStatusHistoryFiltersSection from '@components/computerStatusHistory/ComputerStatusHistoryFiltersSectionComponent.vue';
 import ComputerStatusHistoryStatsSection from '@components/computerStatusHistory/ComputerStatusHistoryStatsSectionComponent.vue';
 import ComputerStatusHistoryTableSection from '@components/computerStatusHistory/ComputerStatusHistoryTableSectionComponent.vue';
+import type { ComputerInterface } from '@interfaces/ComputerInterface';
+import type { ComputerStatusHistoryInterface } from '@interfaces/ComputerStatusHistoryInterface';
+import { ComputerService } from '@services/ComputerService';
+import { ComputerStatusHistoryService } from '@services/ComputerStatusHistoryService';
 
 // -------------------------------
 // Third-Party Imports
