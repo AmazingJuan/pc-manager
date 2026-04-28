@@ -35,9 +35,7 @@ export class ComputersHistoryController {
   }
 
   @Get('computer/:computerId')
-  findByComputerId(
-    @Param('computerId', ParseIntPipe) computerId: number,
-  ) {
+  findByComputerId(@Param('computerId', ParseIntPipe) computerId: number) {
     return this.computersHistoryService.findByComputerId(computerId);
   }
 }
