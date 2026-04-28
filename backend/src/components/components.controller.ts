@@ -3,6 +3,8 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
+import { AdminRoleGuard } from '@users/guards/admin-role.guard';
+import { AuthGuard } from '@/auth/guards/auth.guard';
 import { CreateComponentDto } from '@components/dtos/create-component.dto';
 import { UpdateComponentDto } from '@components/dtos/update-component.dto';
 import { Component } from '@components/entities/component.entity';
@@ -21,9 +23,11 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 
 @Controller('components')
+@UseGuards(AuthGuard)
 export class ComponentsController {
   constructor(private readonly componentsService: ComponentsService) {}
 
@@ -33,6 +37,7 @@ export class ComponentsController {
   }
 
   @Post()
+  @UseGuards(AdminRoleGuard)
   create(@Body() createComponentDto: CreateComponentDto): Promise<Component> {
     return this.componentsService.create(createComponentDto);
   }
@@ -43,6 +48,7 @@ export class ComponentsController {
   }
 
   @Patch(':id')
+  @UseGuards(AdminRoleGuard)
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateComponentDto: UpdateComponentDto,
@@ -52,6 +58,7 @@ export class ComponentsController {
 
   @Delete(':id')
   @HttpCode(204)
+  @UseGuards(AdminRoleGuard)
   delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.componentsService.delete(id);
   }

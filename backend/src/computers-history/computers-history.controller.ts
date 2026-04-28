@@ -3,6 +3,8 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
+import { AdminRoleGuard } from '@users/guards/admin-role.guard';
+import { AuthGuard } from '@/auth/guards/auth.guard';
 import { ComputersHistoryService } from '@computers-history/computers-history.service';
 import { CreateComputerStatusHistoryDto } from '@computers-history/dto/create-computer-status-history.dto';
 
@@ -16,15 +18,18 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 
 @Controller('computers-history')
+@UseGuards(AuthGuard)
 export class ComputersHistoryController {
   constructor(
     private readonly computersHistoryService: ComputersHistoryService,
   ) {}
 
   @Post()
+  @UseGuards(AdminRoleGuard)
   create(@Body() dto: CreateComputerStatusHistoryDto) {
     return this.computersHistoryService.create(dto);
   }
