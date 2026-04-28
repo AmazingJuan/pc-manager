@@ -3,6 +3,7 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
+import { AuthModule } from '@/auth/auth.module';
 import { ComponentsModule } from '@components/components.module';
 import { Computer } from '@computers/entities/computer.entity';
 import { ComputersController } from '@computers/computers.controller';
@@ -19,6 +20,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [
     TypeOrmModule.forFeature([Computer]),
     UsersModule,
+    AuthModule,
     ComponentsModule,
   ],
   controllers: [ComputersController],

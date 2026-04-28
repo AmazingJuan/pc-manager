@@ -3,6 +3,8 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
+import { AdminRoleGuard } from '@users/guards/admin-role.guard';
+import { AuthGuard } from '@/auth/guards/auth.guard';
 import { ComputersService } from '@computers/computers.service';
 import { CreateComputerDto } from '@computers/dto/create-computer.dto';
 import { UpdateComputerDto } from '@computers/dto/update-computer.dto';
@@ -20,13 +22,16 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 
 @Controller('computers')
+@UseGuards(AuthGuard)
 export class ComputersController {
   constructor(private readonly computersService: ComputersService) {}
 
   @Post()
+  @UseGuards(AdminRoleGuard)
   create(@Body() createComputerDto: CreateComputerDto) {
     return this.computersService.create(createComputerDto);
   }
@@ -54,6 +59,7 @@ export class ComputersController {
   }
 
   @Patch(':id')
+  @UseGuards(AdminRoleGuard)
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateComputerDto: UpdateComputerDto,
@@ -62,6 +68,7 @@ export class ComputersController {
   }
 
   @Delete(':id')
+  @UseGuards(AdminRoleGuard)
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.computersService.remove(id);
   }

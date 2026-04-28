@@ -3,6 +3,8 @@
 // -------------------------------
 // Own Imports
 // -------------------------------
+import { AdminRoleGuard } from '@users/guards/admin-role.guard';
+import { AuthGuard } from '@/auth/guards/auth.guard';
 import { CreateUserDto } from '@users/dtos/create-user.dto';
 import { UpdateUserDto } from '@users/dtos/update-user.dto';
 import { UserResponseDto } from '@users/dtos/user-response.dto';
@@ -21,9 +23,11 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 
 @Controller('users')
+@UseGuards(AuthGuard, AdminRoleGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
