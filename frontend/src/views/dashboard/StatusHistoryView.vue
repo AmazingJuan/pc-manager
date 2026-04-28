@@ -11,10 +11,6 @@ import type { ComputerStatusHistoryInterface } from '@interfaces/ComputerStatusH
 import ComputerStatusHistoryStatsSection from '@components/computerStatusHistory/ComputerStatusHistoryStatsSectionComponent.vue';
 import { ComputerStatusHistoryService } from '@services/ComputerStatusHistoryService';
 import ComputerStatusHistoryTableSection from '@components/computerStatusHistory/ComputerStatusHistoryTableSectionComponent.vue';
-import type { ComputerInterface } from '@interfaces/ComputerInterface';
-import { ComputerService } from '@services/ComputerService';
-import type { ComputerStatusHistoryInterface } from '@interfaces/ComputerStatusHistoryInterface';
-import { ComputerStatusHistoryService } from '@services/ComputerStatusHistoryService';
 
 // -------------------------------
 // Third-Party Imports

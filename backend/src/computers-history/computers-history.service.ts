@@ -36,9 +36,9 @@ export class ComputersHistoryService {
     return this.historyRepository.find();
   }
 
-  async findByComputerId(
-    computerId: number,
-  ): Promise<ComputerStatusHistory[]> {
-    return this.historyRepository.find({ where: { computer: { id: computerId } } });
+  async findByComputerId(computerId: number): Promise<ComputerStatusHistory[]> {
+    return this.historyRepository.find({
+      where: { computer: { id: computerId } },
+    });
   }
 }
