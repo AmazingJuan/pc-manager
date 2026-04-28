@@ -9,8 +9,8 @@ import type { ComputerStatus } from '@computers/types/computer-status.type';
 // -------------------------------
 // Third-Party Imports
 // -------------------------------
-import { Type } from 'class-transformer';
 import { IsIn, IsInt, IsNotEmpty, IsString, Min } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateComputerStatusHistoryDto {
   @Type(() => Number)
