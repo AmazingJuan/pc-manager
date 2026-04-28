@@ -4,6 +4,7 @@
 // Own Imports
 // -------------------------------
 import { ComponentsModule } from '@components/components.module';
+import { ComputersHistoryModule } from '@computers-history/computers-history.module';
 import { ComputersModule } from '@computers/computers.module';
 import { UsersModule } from '@users/users.module';
 
@@ -40,6 +41,7 @@ import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
     AuthModule,
     ComponentsModule,
     ComputersModule,
+    ComputersHistoryModule,
   ],
   controllers: [],
   providers: [],

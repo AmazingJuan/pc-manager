@@ -4,12 +4,12 @@
 // Own Imports
 // -------------------------------
 import { api } from '@api/client';
-import { ComputerStatusHistoryService } from '@services/ComputerStatusHistoryService';
-import type { ComponentInterface } from '@interfaces/ComponentInterface';
-import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import type { ComputerStatus } from '@app-types/Computer';
 import type { CreateComputerDTO } from '@dtos/computer/CreateComputerDTO';
 import type { EditComputerDTO } from '@dtos/computer/EditComputerDTO';
+import type { ComponentInterface } from '@interfaces/ComponentInterface';
+import type { ComputerInterface } from '@interfaces/ComputerInterface';
+import { ComputerStatusHistoryService } from '@services/ComputerStatusHistoryService';
 
 // -------------------------------
 // Third-Party Imports
@@ -148,7 +148,7 @@ export class ComputerService {
       }
       const updated = response.data;
       if (previous && previous.status !== updated.status) {
-        ComputerStatusHistoryService.record({ computerId: id, previousStatus: previous.status, newStatus: updated.status });
+        await ComputerStatusHistoryService.record({ computerId: id, previousStatus: previous.status, newStatus: updated.status });
       }
       return updated;
     } catch (error: unknown) {

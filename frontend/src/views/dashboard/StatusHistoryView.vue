@@ -6,17 +6,22 @@
 import type { ComputerInterface } from '@interfaces/ComputerInterface';
 import { ComputerService } from '@services/ComputerService';
 import type { ComputerStatus } from '@app-types/Computer';
+import ComputerStatusHistoryFiltersSection from '@components/computerStatusHistory/ComputerStatusHistoryFiltersSectionComponent.vue';
+import type { ComputerStatusHistoryInterface } from '@interfaces/ComputerStatusHistoryInterface';
+import ComputerStatusHistoryStatsSection from '@components/computerStatusHistory/ComputerStatusHistoryStatsSectionComponent.vue';
+import { ComputerStatusHistoryService } from '@services/ComputerStatusHistoryService';
+import ComputerStatusHistoryTableSection from '@components/computerStatusHistory/ComputerStatusHistoryTableSectionComponent.vue';
+import type { ComputerInterface } from '@interfaces/ComputerInterface';
+import { ComputerService } from '@services/ComputerService';
 import type { ComputerStatusHistoryInterface } from '@interfaces/ComputerStatusHistoryInterface';
 import { ComputerStatusHistoryService } from '@services/ComputerStatusHistoryService';
-import ComputerStatusHistoryFiltersSection from '@components/computerStatusHistory/ComputerStatusHistoryFiltersSectionComponent.vue';
-import ComputerStatusHistoryStatsSection from '@components/computerStatusHistory/ComputerStatusHistoryStatsSectionComponent.vue';
-import ComputerStatusHistoryTableSection from '@components/computerStatusHistory/ComputerStatusHistoryTableSectionComponent.vue';
 
 // -------------------------------
 // Third-Party Imports
 // -------------------------------
-import { History } from 'lucide-vue-next';
 import { computed, onMounted, ref } from 'vue';
+import { History } from 'lucide-vue-next';
+
 
 // -------------------------------
 // Reactive Variables / Computed
@@ -40,7 +45,7 @@ const computerStatusHistoryStats = computed(() => ComputerStatusHistoryService.g
 // -------------------------------
 async function loadData(): Promise<void> {
   computers.value = await ComputerService.getAll();
-  computerStatusHistoryEntries.value = ComputerStatusHistoryService.getAll();
+  computerStatusHistoryEntries.value = await ComputerStatusHistoryService.getAll();
 }
 
 // -------------------------------
