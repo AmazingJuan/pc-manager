@@ -8,4 +8,8 @@ export default defineNuxtConfig({
       htmlAttrs: { lang: 'en' },
     },
   },
+  routeRules: {
+    '/computers': { ssr: true },
+    '/computers/**': { ssr: true },
+  },
 })
