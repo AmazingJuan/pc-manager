@@ -6,43 +6,37 @@
 import { ArticleService } from '~/services/article.service';
 
 // -------------------------------
-// Reactive Variables / Computed
+// Non-Reactive Variables
 const articles = ArticleService.getAll();
 
 // -------------------------------
 // Setup
-useTitleComplement(' - Blog articles');
+useTitleComplement(' - Blog');
 </script>
 
 <template>
   <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
     <header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <p class="text-xs font-semibold uppercase tracking-widest text-red-600">Blog</p>
-        <h1 class="mt-2 text-3xl font-semibold tracking-tight text-zinc-50 sm:text-4xl">Articles</h1>
+        <p class="text-xs font-semibold uppercase tracking-widest text-red-600">Articles</p>
+        <h1 class="mt-2 text-3xl font-semibold tracking-tight text-zinc-50 sm:text-4xl">Blog</h1>
+        <p class="mt-2 max-w-2xl text-sm text-zinc-400">Notes on inventory practices and lifecycle tracking.</p>
       </div>
-      <NuxtLink
-        to="/"
-        class="inline-flex items-center justify-center rounded-lg border border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:border-red-600 hover:text-red-500"
-      >
-        Back home
-      </NuxtLink>
+      <UiBackHomeLink />
     </header>
 
-    <ul class="mt-10 flex flex-col gap-6">
+    <ul class="mt-12 grid gap-4">
       <li v-for="article in articles" :key="article.id">
-        <article class="rounded-lg border border-zinc-800 bg-zinc-900 p-6 ring-1 ring-white/5 transition-colors hover:border-red-600/60">
-          <p class="text-xs text-zinc-500">{{ article.publishedAt }} · {{ article.author }}</p>
-          <h2 class="mt-2 text-xl font-semibold text-zinc-50">
-            <NuxtLink :to="`/blog/${article.slug}`" class="hover:text-red-500">
-              {{ article.title }}
-            </NuxtLink>
-          </h2>
-          <p class="mt-3 text-sm leading-relaxed text-zinc-400">
-            {{ article.overview }}
+        <NuxtLink
+          :to="`/blog/${article.slug}`"
+          class="group block rounded-xl border border-zinc-800 bg-zinc-900 p-6 ring-1 ring-white/5 transition-colors hover:border-red-600/80 hover:bg-zinc-900/90"
+        >
+          <h2 class="text-lg font-semibold text-zinc-50 group-hover:text-red-500">{{ article.title }}</h2>
+          <p class="mt-2 text-sm leading-relaxed text-zinc-400">{{ article.overview }}</p>
+          <p class="mt-4 text-xs text-zinc-500">
+            {{ article.publishedAt }} · {{ article.author }}
           </p>
-          <NuxtLink :to="`/blog/${article.slug}`" class="mt-4 inline-block text-sm font-medium text-red-500 hover:underline"> Read more </NuxtLink>
-        </article>
+        </NuxtLink>
       </li>
     </ul>
   </div>
