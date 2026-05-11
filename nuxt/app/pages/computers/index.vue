@@ -20,14 +20,9 @@ useTitleComplement(' - Computers inventory');
     <header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
         <p class="text-xs font-semibold uppercase tracking-widest text-red-600">Inventory</p>
-        <h1 class="mt-2 text-3xl                                                              font-semibold tracking-tight text-zinc-50 sm:text-4xl">Computers</h1>
+        <h1 class="mt-2 text-3xl font-semibold tracking-tight text-zinc-50 sm:text-4xl">Computers</h1>
       </div>
-      <NuxtLink
-        to="/"
-        class="inline-flex items-center justify-center rounded-lg border border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:border-red-600 hover:text-red-500"
-      >
-        Back home
-      </NuxtLink>
+      <UiBackHomeLink />
     </header>
 
     <div v-if="pending" class="mt-10 rounded-lg border border-zinc-800 bg-zinc-900 p-6 text-sm text-zinc-400">Loading computers...</div>
