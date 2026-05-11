@@ -4,5 +4,12 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss'],
   app: { head: { htmlAttrs: { lang: 'en' } } },
-  routeRules: { '/computers': { ssr: true }, '/computers/**': { ssr: true }, '/blog': { ssr: true }, '/blog/**': { ssr: true } },
+  routeRules: {
+    '/computers': { ssr: true },
+    '/computers/**': { ssr: true },
+    '/blog': { ssr: true },
+    '/blog/**': { ssr: true },
+    '/tools': { ssr: false },
+    '/tools/**': { ssr: false },
+  },
 });
