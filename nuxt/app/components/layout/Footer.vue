@@ -1,5 +1,10 @@
+<!-- Author: Juan Pablo Avendaño -->
+
 <script setup lang="ts">
-const currentYear = new Date().getFullYear()
+// -------------------------------
+// Non-Reactive Variables
+
+const currentYear = new Date().getFullYear();
 </script>
 
 <template>
@@ -13,26 +18,17 @@ const currentYear = new Date().getFullYear()
         <nav aria-label="Footer">
           <ul class="flex flex-wrap gap-x-6 gap-y-2">
             <li>
-              <NuxtLink
-                to="/blog"
-                class="text-sm text-zinc-400 underline-offset-4 transition-colors hover:text-red-600 hover:underline"
-              >
+              <NuxtLink to="/blog" class="text-sm text-zinc-400 underline-offset-4 transition-colors hover:text-red-600 hover:underline">
                 Blog
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink
-                to="/computers"
-                class="text-sm text-zinc-400 underline-offset-4 transition-colors hover:text-red-600 hover:underline"
-              >
+              <NuxtLink to="/computers" class="text-sm text-zinc-400 underline-offset-4 transition-colors hover:text-red-600 hover:underline">
                 Computers
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink
-                to="/tools"
-                class="text-sm text-zinc-400 underline-offset-4 transition-colors hover:text-red-600 hover:underline"
-              >
+              <NuxtLink to="/tools" class="text-sm text-zinc-400 underline-offset-4 transition-colors hover:text-red-600 hover:underline">
                 Tools
               </NuxtLink>
             </li>
