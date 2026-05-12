@@ -24,10 +24,10 @@ FROM node:22-bookworm-slim AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
-ENV PORT=8080
+ENV PORT=80
 
 COPY --from=build /app/.output ./.output
 
-EXPOSE 8080
+EXPOSE 80
 
 CMD ["node", ".output/server/index.mjs"]
